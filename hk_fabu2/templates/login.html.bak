@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <div class="center">
+        <h1>发布系统</h1>
+            <h4>请输入登录信息</h4>
+            <form name="login" action="/login/" method="POST" >
+            {% csrf_token %}
+                <input type="text" name="LoginName" class="form-control" placeholder="用户名" />
+                <input type="password" name="LoginPassword" class="form-control" placeholder="密码" />
+                <button type="submit">登 录</button>
+            </form>
+        <div>
+            <p style="color:red">{{ LoginErrMsg }}</p>
+        </div>
+    </div>
+</body>
+
+<style type="text/css">
+<!--
+body {TEXT-ALIGN: center;}
+.center { MARGIN-RIGHT: auto; MARGIN-LEFT: auto; }
+-->
+</style>
+</html>

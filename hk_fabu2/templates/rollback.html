@@ -1,0 +1,68 @@
+<html lang="en">
+<title>自动化版本发布系统</title>
+<html lang="en">
+{% load static %}
+<script src="{% static "js/jquery.js" %}"></script>
+<body bgcolor="#E8E8D0">
+    <div style="position: relative; left: 90%">
+        <a href="/logout">注销</a>
+    </div>
+    <div>
+        <form>
+            <div style="display: none" id="show_backupname_div">
+                <table border="1" id="show_backupname">
+                </table>
+            </div>
+            <div>
+                <h4>请选择项目模块</h4>
+                <select onchange="return GetProjectServerIP()" name="project_name" id="project_name" data-placeholder="请选择项目模块" >
+                    <option selected>=====请选择=====</option>
+                    {% for each_project in project_lists %}
+                    <option value="{{ each_project }}">{{ each_project }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit">提 交</button>
+        </form>
+    </div>
+</body>
+<script type="text/javascript">
+function GetProjectServerIP(){
+  var project_name=document.getElementById("project_name").value;
+
+    if (project_name != "=====请选择=====") {
+        $.ajax({
+            type: "Get",
+            url: "../GetBackupName/",
+            data: "project_name=" + project_name,
+            dataType: "json",
+            success: function (data) {
+                var project_name = data[0];
+                var backup_files = data[1];
+                $("#show_backupname_div").css("display", "block");
+                $("#show_backupname").empty();
+                $("#show_backupname").append("<caption>"+project_name+"</caption>");
+                $.each(backup_files, function (n, value) {
+                    $("#show_backupname").append("<tr><td>"+n+"</td></tr>");
+                    var name_list ="";
+                    for(var i=0;i<value.length;i++){
+                        name_list+= (i%2 == 0 && i>0?'<br />':'')+'<input type="radio" name="'+n+'" id="'+value[i]+'">'+value[i];
+                    }
+                    $("#show_backupname").append("<tr><td>"+name_list+"</td></tr>");
+                        }
+
+                )
+
+            },
+            error: function (err) {
+                                alert("wrong");
+            }
+        });
+
+    }
+}
+</script>
+<style type="text/css">
+    .center {background-color:gainsboro;width:520px;float:left;}
+</style>
+</html>

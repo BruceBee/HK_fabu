@@ -1,0 +1,135 @@
+{% include "base/template_head.html" %}
+
+
+<a id="iamtop"></a>
+<div class="row" id="formpost">
+    <div class="col-lg-2"><h5 class="smaller text-success">每次请求日志最后100条记录</h5></div>
+
+    <div class="col-lg-6">
+        <div class="row">
+            <form method="post">
+            {% csrf_token %}
+                <div class="col-lg-4">
+
+                    <select name="project_name" id="project_name" data-placeholder="请选择项目模块" class="chosen-select" >
+                        <option selected >=====请选择=====</option>
+                        {% for each_project in project_lists %}
+                        <option value="{{ each_project }}">{{ each_project }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-4 center">
+                    <input type="text" class="input-large" placeholder="日志文件名,默认catalina.out" name="logfilename">
+                </div>
+                <div class="col-lg-3">
+                    刷新间隔：
+                    <select name="flushtime" id="">
+                        <option value="0">手动</option>
+                        <option value="2">2秒</option>
+                        <option value="3">3秒</option>
+                        <option value="4">4秒</option>
+                        <option value="5">5秒</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-1">
+
+
+                    <button class="btn btn-sm btn-info" id="reqlog">
+                        <span class="bigger-110">提 交</span>
+                    </button></div>
+    <div class="col-lg-1" >
+
+                    <button class="btn btn-sm btn-info" id="stopflush" onclick="window.clearInterval(autoflush)">
+                        <span class="bigger-110">停止刷新</span>
+                    </button>
+                </div>
+    <div class="col-lg-2">
+        <a href="#iambottom">
+            <i class="ace-icon fa fa-angle-double-down "><h6>下翻到底</h6></i>
+        </a>
+    </div>
+    </div>
+
+    </div>
+
+<div class="row" id="displaylogs">
+
+</div>
+
+<a href="#"  class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+{% include "base/template_footer.html" %}
+
+<script>
+
+
+    if(!(navigator.userAgent.match(/webkit/i))){
+        $("#sidebar-collapse i:first").click();
+    }
+
+    function ajaxpost(formdate) {
+        $.ajax({
+                    type: "POST",
+                    url: "#",
+                    data: formdate,
+                    dataType: "json",
+                    success: function (data) {
+                        col_size = Math.floor(12/Object.keys(data).length);
+                              $("#displaylogs").empty();
+                            $.each(data, function (k,v) {
+                                var Newlogbox = $("<div>",{"class": "col-lg-" + col_size});
+                                var Newlogbox_box = $("<div>",{"class": "widget-box"});
+                                var Newlogbox_header = $("<div>",{"class": "widget-header widget-header-flat"});
+                                var Newlogbox_title = $("<h4>",{"class": "widget-title"});
+                                    Newlogbox_title.html(k);
+                                var Newlogbox_body = $("<div>",{"class": "widget-body"});
+                                var Newlogbox_main = $("<div>",{"class": "widget-main"});
+                                    Newlogbox_main.html(v.replace(/\n/g, "<br />"));
+
+                                    Newlogbox_main.appendTo(Newlogbox_body);
+                                    Newlogbox_title.appendTo(Newlogbox_header);
+                                    Newlogbox_box.append(Newlogbox_header).append(Newlogbox_body);
+                                    Newlogbox_box.appendTo(Newlogbox);
+                                    Newlogbox.appendTo($("#displaylogs"));
+
+                            });
+                    },
+                    error: function (err) {
+                                        alert("wrong");
+        }
+    });
+    }
+
+    $(window).on('resize.chosen', function() {
+        var w = $('.chosen-select').parent().width();
+        $('.chosen-select').siblings('.chosen-container').css({'width':w});
+    }).triggerHandler('resize.chosen');
+
+    $("#reqlog").click(function(){
+        formdate = $("form").serializeArray();
+        if(formdate[1].value == '=====请选择====='){
+            alert('请选择项目模块！');
+            return;
+        }else{
+                if(Number(formdate[3].value) == 0){ajaxpost(formdate);}else{
+                    ajaxpost(formdate);
+                     autoflush = setInterval("ajaxpost(formdate);", Number(formdate[3].value)*1000);
+
+                };
+        }
+    });
+
+    $("#stopflush").click(function () {
+        window.clearInterval(autoflush);
+    });
+
+    $("#")
+</script>
+
+	</body>
+</html>

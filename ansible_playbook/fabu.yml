@@ -1,0 +1,53 @@
+---
+- hosts: "{{ project_name }}"
+  vars:
+    #project_name: aaa
+    backup_path: /opt/backup/
+    date_time: "{{ backup_time }}"
+    #new_project_path: /home/zhengxupeng/ftp/zxp/
+  remote_user: tomcat
+
+  tasks:
+    - name: create /opt/backup/
+      file: dest=/opt/backup mode=755 state=directory
+
+    - name: stop tomcat
+      #shell: /opt/tomcat_{{ project_name }}/bin/shutdown.sh
+      shell: ps aux|grep tomcat_{{ project_name }}|grep -v grep |awk '{print $2}'|xargs -i kill -9 {}
+      tags:
+        - stop_tomcat
+      register: stop_tomcat_result
+
+    - name: backup
+      command: chdir=/opt/ /bin/tar -zcf {{ backup_path }}{{ project_name }}_{{ date_time }}.tar.gz tomcat_{{ project_name }}
+      tags:
+        - backup
+      register: backup_result
+      ignore_errors: True
+
+#    - name: delete old project
+#      file: path=/opt/tomcat_{{ project_name }} state=absent
+#      tags:
+#        - delete_old_project
+#      when: backup_result|success
+    
+    - name: sync file
+      unarchive: src={{ project_pack }} dest=/opt 
+      tags:
+        - sync_file
+      when: backup_result|success
+      register: sync_result
+      #ignore_errors: True
+
+    - name: Set JAVA_HOME 
+      lineinfile: dest=/opt/tomcat_{{ project_name }}/bin/setenv.sh line='export JAVA_HOME=/usr/java/jdk1.7.0_55' create=yes state=present mode=0555
+
+    - name: set all file in bin attributes 0555
+      file: path=/opt/tomcat_{{ project_name }}/bin  recurse=yes state=directory mode="u+x"
+
+    - name: start tomcat
+#      shell: nohup /opt/tomcat_{{ project_name }}/bin/startup.sh &
+      shell: chdir=/opt/tomcat_{{ project_name }}/bin/ nohup ./startup.sh &
+      tags:
+        - start_tomcat
+      when: stop_tomcat_result|success

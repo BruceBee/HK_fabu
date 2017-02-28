@@ -1,0 +1,480 @@
+{% include "base/template_head.html" %}
+{% load static %}
+
+
+<link rel="stylesheet" href="/static/css/paging.css">
+<!-- <link rel="stylesheet" href="/static/css/bootstrap-duallistbox.css">
+<link rel="stylesheet" href="/static/css/bootstrap-multiselect.css">
+<link rel="stylesheet" href="/static/css/select2.css"> -->
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/query.js"></script>
+<script type="text/javascript" src="/static/js/paging.js"></script>
+
+<style type="text/css">
+    h1,h2,h3,h4,h5,h6 {
+        font-family: Microsoft YaHei;
+    }
+</style>
+<!-- 百分百画图 -->
+<!-- <script src="{% static 'js/jquery.easypiechart.js' %}"></script> -->
+<script src="/static/js/jquery.easypiechart.js"></script>
+
+<div class="tab-content no-border padding-24">
+    <div id="home" class="tab-pane in active">
+        <div class="row">
+            <div class="col-xs-12 col-sm-3 center">
+                <div class="col-xs-12">
+                    <h4 class="blue">
+                        <span class="middle">{{ servername }}</span>
+                        <span class="label label-purple arrowed-in-right">
+                            <i class="ace-icon fa fa-circle smaller-80 align-middle"></i>
+                            online
+                        </span>
+                    </h4>
+                    <div class="profile-user-info">
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 服务器主机名 </div>
+
+                            <div class="profile-info-value">
+                                <span id='hostname'>同步中...</span>
+                            </div>
+                        </div>
+
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> IP地址</div>
+                            <div class="profile-info-value">
+                                <span id="privateip">同步中...</span>
+                            </div>
+                        </div>
+
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 操作系统版本 </div>
+                            <div class="profile-info-value">
+                                <span id="osversion">同步中...</span>
+                            </div>
+                        </div>
+
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 运行时间 </div>
+                            <div class="profile-info-value">
+                                <span id="uptime">同步中...</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 当前运行状态 </div>
+                            <div class="profile-info-value">
+                                <span id="serverstatus">-</span>
+                            </div>
+                        </div>
+                        <div class="profile-info-row">
+                            <div class="profile-info-name"> 主机描述 </div>
+                            <div class="profile-info-value">
+                                <span> {{ remark }}</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="space space-4"></div>
+
+                    <span class="btn btn-sm btn-block btn-success">
+                        <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                        <span class="bigger-110" onclick="rsynserverinfo()">立即同步更新主机信息</span>
+                    </span>
+                </div>
+
+                <div class="hr hr-16"></div>
+
+                <div class="col-xs-12">
+                    <div class="col-xs-12 col-sm-12">
+                        <div class="widget-box transparent">
+                            <div class="widget-header widget-header-small header-color-blue2">
+                                <h4 class="widget-title smaller pull-left">
+                                    <i class="ace-icon fa fa-lightbulb-o bigger-120"></i>
+                                    内存空间使用率
+                                </h4>
+                            </div>
+
+
+
+                            <div class="widget-body">
+                                <div class="widget-main padding-16">
+                                    <div class="clearfix" id='memzone'>
+                                        <div class="grid3 center" style="width: 50%">
+                                            <div class="easy-pie-chart percentage" id="realpercent01" data-percent="0" data-color="#CA5952">
+                                                <span class="percent" id="realpercent02" >0</span>%
+                                            </div>
+                                            <div class="space-2"></div>
+                                            <p>真实内存real</p>
+                                        </div>
+
+                                        <div class="grid3 center">
+                                            <div class="center easy-pie-chart percentage" id="swappercent01" data-percent="0" data-color="#59A84B">
+                                                <span class="percent" id="swappercent02">0</span>%
+                                            </div>
+
+                                            <div class="space-2"></div>
+                                            <p>交换swap</p>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr-16"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="widget-box transparent">
+                            <div class="widget-header widget-header-small header-color-blue2">
+                                <h4 class="widget-title smaller pull-left">
+                                    <i class="ace-icon fa fa-hdd-o bigger-120"></i>
+                                    硬盘空间使用率
+                                </h4>
+                            </div>
+
+                            <div class="widget-body">
+                                <div class="widget-main padding-16">
+                                    <!-- #section:pages/profile.skill-progress -->
+                                    <div class="profile-skills" id="diskprocess">
+                                    同步中...
+                                    </div>
+
+                                    <!-- /section:pages/profile.skill-progress -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div><!-- /.col -->
+
+            <div class="col-xs-12 col-sm-9">
+                <div class="widget-box transparent">
+                    <div class="widget-header widget-header-small">
+                    <h4 class="widget-title smaller">
+                        <i class="ace-icon fa fa-tasks bigger-110"></i>
+                        服务器详情
+                    </h4>
+                </div>
+
+                <div class="profile-user-info">
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 服务器主机名 </div>
+
+                        <div class="profile-info-value">
+                            <span id='hostname01'>同步中...</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> IP地址</div>
+
+                        <div class="profile-info-value">
+                            <span id="privateip01">同步中...</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> IP网关 </div>
+
+                        <div class="profile-info-value">
+                            <span id="gateway">同步中...</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> IP掩码 </div>
+
+                        <div class="profile-info-value">
+                            <span id="netmask">同步中...</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 物理地址(MAC) </div>
+
+                        <div class="profile-info-value">
+                            <span id="macaddress">同步中...</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 操作系统版本 </div>
+
+                        <div class="profile-info-value">
+                            <span id="os">同步中...</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 操作系统架构 </div>
+
+                        <div class="profile-info-value">
+                            <span id="osarch">同步中...</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 操作系统内核 </div>
+
+                        <div class="profile-info-value">
+                            <span id="oskernel">同步中...</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> python版本 </div>
+
+                        <div class="profile-info-value">
+                            <span id="pythonversion">同步中...</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> CPU信息 </div>
+
+                        <div class="profile-info-value">
+                            <span id="cpuinfo">同步中...</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 内存信息 </div>
+
+                        <div class="profile-info-value">
+                            <span id="meminfo">同步中...</span>
+                        </div>
+                    </div>
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 硬盘信息 </div>
+
+                        <div class="profile-info-value">
+                            <span id="diskinfo">同步中...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hr hr-8 dotted"></div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+
+        <div class="space-20"></div>
+
+
+    </div><!-- /#home -->
+</div>
+
+
+
+
+
+
+
+
+{% include "base/template_footer.html" %}
+
+<script>
+
+    $(document).ready(function(){
+        $("#navbar_child").removeClass("hidden").html("服务器详情");
+        rsynserverinfo();
+    })
+    $('.easy-pie-chart.percentage').each(function(){
+        var barColor = $(this).data('color') || '#555';
+        var trackColor = '#E2E2E2';
+        var size = parseInt($(this).data('size')) || 72;
+        $(this).easyPieChart({
+            barColor: barColor,
+            trackColor: trackColor,
+            scaleColor: false,
+            lineCap: 'butt',
+            lineWidth: parseInt(size/10),
+            animate:false,
+            size: size
+        }).css('color', barColor);
+    });
+
+
+    // $(document).ready(function(){
+    //   rsynserverinfo();
+    // });
+    function rsynserverinfo(){
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/rsynserverinfo/',
+            data:{'serverip':'{{ servername }}'},
+            dataType:'json',
+            success:function(val){
+                // console.log(val)
+                // console.log(val.ansible_facts.ansible_all_ipv4_addresses[0])
+
+                $("#hostname").html(val.ansible_facts.ansible_hostname)
+                $("#publicip").html('-')
+                $("#privateip").html(val.ansible_facts.ansible_all_ipv4_addresses[0])
+                $("#osversion").html(val.ansible_facts.ansible_lsb.description)
+
+                $("#serverstatus").html('良好')
+
+                $("#realpercent01").attr('data-percent','22')
+                $("#realpercent02").html(22)
+
+
+                $("#hostname01").html(val.ansible_facts.ansible_hostname)
+                $("#publicip01").html('-')
+                // $("#privateip01").html(val.ansible_facts.ansible_all_ipv4_addresses[0])
+                $("#gateway").html(val.ansible_facts.ansible_default_ipv4.gateway)
+                $("#netmask").html(val.ansible_facts.ansible_default_ipv4.netmask)
+                $("#macaddress").html(val.ansible_facts.ansible_default_ipv4.macaddress)
+                
+                
+
+                // $("#os").html(val.ansible_facts.ansible_distribution+'&nbsp;'+val.ansible_facts.ansible_distribution_version)
+                $("#os").html(val.ansible_facts.ansible_lsb.description)
+                $("#osarch").html(val.ansible_facts.ansible_architecture)
+                $("#oskernel").html(val.ansible_facts.ansible_kernel)
+                $("#pythonversion").html(val.ansible_facts.ansible_python_version)
+                // console.log(val.ansible_facts.ansible_interfaces[0])
+                // console.log(val.ansible_facts.ansible_default_ipv4.address)
+
+
+                // console.log(val.ansible_facts.ansible_processor.length)
+                // console.log(val.ansible_facts.ansible_memory_mb)
+                // console.log(val.ansible_facts.ansible_memory_mb)
+                // console.log('-----------'+val.ansible_facts.ansible_all_ipv4_addresses.length)
+                $("#privateip01").html("")
+                for(var i=0;i<val.ansible_facts.ansible_all_ipv4_addresses.length;i++){
+                    // console.log(val.ansible_facts.ansible_all_ipv4_addresses[i])
+                    $("#privateip01").append('<b>IP'+(i+1)+':</b>'+val.ansible_facts.ansible_all_ipv4_addresses[i]+';&nbsp;')
+                }
+
+                $("#cpuinfo").html("")
+                $("#cpuinfo").append('CPU个数：'+val.ansible_facts.ansible_processor.length/2+'个;<br>CPU型号：'+val.ansible_facts.ansible_processor[1]+';<br>')
+                // for(var i=0;i<val.ansible_facts.ansible_processor.length;i++){
+                //     $("#cpuinfo").append(val.ansible_facts.ansible_processor[i]+';<br>')
+                // }
+
+                $("#meminfo").html("")
+                for(x in val.ansible_facts.ansible_memory_mb){
+                    // console.log(x,val.ansible_facts.ansible_memory_mb[x])
+                    $("#meminfo").append('<b>'+x+':<br></b>')
+                    $("#meminfo").append('可用空间(free):&nbsp;'+(val.ansible_facts.ansible_memory_mb[x].free / 1024*1024).toFixed(2)+'&nbsp;M;<br>')
+                    $("#meminfo").append('总空间(total):&nbsp;'+(val.ansible_facts.ansible_memory_mb[x].total / 1024*1024).toFixed(2)+'&nbsp;M;<br>')
+                    $("#meminfo").append('已用空间(used):&nbsp;'+(val.ansible_facts.ansible_memory_mb[x].used / 1024*1024).toFixed(2)+'&nbsp;M;<br>')
+
+
+                    var mempercent = ((val.ansible_facts.ansible_memory_mb[x].used/val.ansible_facts.ansible_memory_mb[x].total)*100).toFixed(2)
+
+                    $("#"+x+"percent01").attr('data-percent',mempercent)
+                    $("#"+x+"percent02").html(mempercent)
+
+                };
+
+
+                // $("#meminfo").html(val.ansible_facts.ansible_memtotal_mb)
+
+                $("#diskinfo").html("")
+                for(var i=0;i<val.ansible_facts.ansible_mounts.length;i++){
+                    $("#diskinfo").append('文件系统:'+val.ansible_facts.ansible_mounts[i].device+';<br>文件类型:'+val.ansible_facts.ansible_mounts[i].fstype+';<br>读写权限：'+val.ansible_facts.ansible_mounts[i].options+';<br>挂载点:'+val.ansible_facts.ansible_mounts[i].mount+';<br>可用空间：'+(val.ansible_facts.ansible_mounts[i].size_available / (1024*1024*1024)).toFixed(2)+'G;<br>总空间：'+(val.ansible_facts.ansible_mounts[i].size_total / (1024*1024*1024)).toFixed(2)+'G;<br><hr>')
+                };
+
+
+                $("#diskprocess").html("")
+                for(var i=0;i<val.ansible_facts.ansible_mounts.length;i++){
+                    var usedpercent = (((val.ansible_facts.ansible_mounts[i].size_total -val.ansible_facts.ansible_mounts[i].size_available)/ val.ansible_facts.ansible_mounts[i].size_total) * 100).toFixed(2)
+
+                    $("#diskprocess").append('<div class="progress">\
+                                                <div class="progress-bar"  id=disk0'+i+' style="width:'+ usedpercent+'%">\
+                                                    <span class="pull-left">'+val.ansible_facts.ansible_mounts[i].mount+'</span>\
+                                                    <span class="pull-right">'+ usedpercent +'%</span>\
+                                                </div>\
+                                                <span class="pull-right green"><b><i class="fa fa-flag-checkered"></i></b></span>\
+                                            </div>')
+                    // console.log(usedpercent)
+
+                    if(usedpercent >= 90){
+                        // console.log('30')
+                        $("#disk0"+i+"").addClass('progress-bar-danger')
+                        // console.log("#disk0"+i+"")
+                    }else if (usedpercent >= 80){
+                        // console.log('20')
+                        $("#disk0"+i+"").addClass('progress-bar-warning')
+                    }else if (usedpercent >= 30){
+                        // console.log('10')
+                        $("#disk0"+i+"").addClass('progress-bar-success')
+                    }
+
+                }
+
+
+
+                
+             
+            },error:function(){
+                    console.log('同步失败')
+                    $("#serverstatus").html('<b class="red">异常</b>')
+                    $("#hostname").html('<b class="red">异常</b>')
+                    // $("#publicip").html('<b class="red">异常</b>')
+                    $("#privateip").html('<b class="red">异常</b>')
+                    $("#osversion").html('<b class="red">异常</b>')
+
+                    // $("#realpercent01").attr('data-percent','22')
+                    $("#realpercent02").html('<b class="red">异常</b>')
+
+
+                    $("#hostname01").html('<b class="red">异常</b>')
+                    // $("#publicip01").html('-')
+                    $("#privateip01").html('<b class="red">异常</b>')
+                    $("#gateway").html('<b class="red">异常</b>')
+                    $("#netmask").html('<b class="red">异常</b>')
+                    $("#macaddress").html('<b class="red">异常</b>')
+                    
+                    
+
+                    // $("#os").html(val.ansible_facts.ansible_distribution+'&nbsp;'+val.ansible_facts.ansible_distribution_version)
+                    $("#os").html('<b class="red">异常</b>')
+                    $("#osarch").html('<b class="red">异常</b>')
+                    $("#oskernel").html('<b class="red">异常</b>')
+                    $("#pythonversion").html('<b class="red">异常</b>')
+
+                    $("#meminfo").html('<b class="red">异常</b>')
+                    $("#cpuinfo").html('<b class="red">异常</b>')
+                    $("#diskinfo").html('<b class="red">异常</b>')
+                    $("#diskprocess").html('<b class="red">异常</b>')
+
+
+
+                }
+        });
+        uptime();
+    };
+
+    function uptime(){
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/uptime/',
+            data:{'serverip':'{{ servername }}'},
+            dataType:'text',
+            success:function(val){
+                // console.log(val)
+                $("#uptime").html(val)
+            },error:function () {
+                $("#uptime").html('<b class="red">异常</b>')
+
+            }
+        });
+
+        // $('.easy-pie-chart.percentage').each(function(){
+        //     var barColor = $(this).data('color') || '#555';
+        //     var trackColor = '#E2E2E2';
+        //     var size = parseInt($(this).data('size')) || 72;
+        //     $(this).easyPieChart({
+        //         barColor: barColor,
+        //         trackColor: trackColor,
+        //         scaleColor: false,
+        //         lineCap: 'butt',
+        //         lineWidth: parseInt(size/10),
+        //         animate:false,
+        //         size: size
+        //     }).css('color', barColor);
+        // });
+
+
+    };
+
+</script>

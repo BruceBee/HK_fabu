@@ -1,0 +1,2361 @@
+{% include "base/template_head.html" %}
+<link rel="stylesheet" href="/static/css/paging.css">
+<!-- <link rel="stylesheet" href="/static/css/bootstrap-duallistbox.css">
+<link rel="stylesheet" href="/static/css/bootstrap-multiselect.css">
+<link rel="stylesheet" href="/static/css/select2.css"> -->
+
+
+<!-- <link rel="stylesheet" href="/static/css/chosen.css" /> -->
+
+
+<!-- 左右多选css -->
+<link rel="stylesheet" href="/static/css/bootstrap-duallistbox.css" />
+<link rel="stylesheet" href="/static/css/bootstrap-multiselect.css" />
+<link rel="stylesheet" href="/static/css/select2.css" />
+<!-- 左右多选css -->
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/query.js"></script>
+<script type="text/javascript" src="/static/js/paging.js"></script>
+
+
+
+<!-- 左右多选js -->
+<script type="text/javascript" src="/static/js/jquery.bootstrap-duallistbox.js"></script>
+<script type="text/javascript" src="/static/js/jquery.raty.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="/static/js/select2.js"></script>
+<script type="text/javascript" src="/static/js/typeahead.jquery.js"></script>
+<!-- 左右多选js -->
+
+
+<!-- 树结构 -->
+<script type="text/javascript" src="/static/js/fuelux/fuelux.tree.js"></script>
+<!-- 树结构 -->
+
+
+<!-- <script type="text/javascript" src="/static/js/chosen.jquery.js"></script> -->
+
+
+
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+<!--                 <div class="page-header">
+                    <h1>项目模块管理</h1>
+
+                </div> -->
+                <!-- <h2 class="header"><b>项目模块管理</b></h2> -->
+                <ul class="list-unstyled spaced">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active">
+                                <a data-toggle="tab" href="#preview">
+                                    <i class="blue ace-icon fa fa-bars bigger-120"></i>
+                                    信息总览
+                                </a>
+                            </li>
+
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <i class="green ace-icon fa fa-server bigger-120"></i>
+                                    服务器信息 &nbsp;
+                                    <i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-info dropdown-100">
+                                    <li>
+                                        <a data-toggle="tab" href="#addserver"><i class="green ace-icon fa fa-plus-circle bigger-120"></i>&nbsp;&nbsp;&nbsp;新增服务器&nbsp;&nbsp;&nbsp;</a>
+                                    </li>
+
+                                    <li>
+                                        <a data-toggle="tab" href="#serverlist" onclick="GetServerList(1,10,'')"><i class="green ace-icon fa fa-list-ul bigger-120"></i>&nbsp;&nbsp;&nbsp;服务器列表&nbsp;&nbsp;&nbsp;</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <i class="orange ace-icon fa fa-tasks bigger-120"></i>
+                                    服务器组信息 &nbsp;
+                                    <i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-info dropdown-100">
+                                    <li>
+                                        <a data-toggle="tab" href="#addservergroup"> <i class="orange ace-icon fa fa-plus-circle bigger-120"></i>&nbsp;&nbsp;&nbsp;新增服务器组&nbsp;&nbsp;&nbsp;</a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a data-toggle="tab" href="#modulelist" onclick="GetModuleList(1,10,'')"><i class="orange ace-icon fa fa-list-ul bigger-120"></i>&nbsp;&nbsp;&nbsp;服务器组列表&nbsp;&nbsp;&nbsp;</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <i class="purple ace-icon fa fa-cubes bigger-110"></i>
+                                    模块信息 &nbsp;
+                                    <i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-info dropdown-100">
+                                    <li>
+                                        <a data-toggle="tab" href="#addmodule" onclick="LoadServerlist()"> <i class="purple ace-icon fa fa-plus-circle bigger-120"></i>&nbsp;&nbsp;&nbsp;新增模块&nbsp;&nbsp;&nbsp;</a>
+                                    </li>
+                                    
+                                    <li>
+                                        <a data-toggle="tab" href="#modulelist" onclick="GetModuleList(1,10,'')"><i class="purple ace-icon fa fa-list-ul bigger-120"></i>&nbsp;&nbsp;&nbsp;模块列表&nbsp;&nbsp;&nbsp;</a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="preview" class="tab-pane fade in active">
+
+
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                      
+                                        <div class="widget-box widget-color-blue2">
+                                            <div class="widget-header">
+                                                <h4 class="widget-title lighter smaller">服务器/组/模块结构</h4>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main padding-8">
+                                                    <ul id="tree1"></ul>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <!-- <div> -->
+                                        <div class="widget-box widget-color-green2">
+                                            <div class="widget-header">
+                                                <h4 class="widget-title lighter smaller">服务器详情</h4>
+                                            </div>
+
+                                            <!-- <div class="widget-body"> -->
+                                                <!-- <div class="widget-main padding-8"> -->
+                                                    
+                                                    <!-- <div class="tab-content no-border padding-24"> -->
+                                                        <div id="home" class="tab-pane in active">
+                                                            <div class="row">
+                                                                <div class="col-xs-12 col-sm-4 center">
+                                                                    <div class="col-xs-12">
+                                                                        <h4 class="blue">
+                                                                            <span class="middle" id="titlename">加载中...</span>
+                                                                            <!-- <span class="label label-purple arrowed-in-right">
+                                                                                <i class="ace-icon fa fa-circle smaller-80 align-middle"></i>
+                                                                                online
+                                                                            </span> -->
+                                                                        </h4>
+                                                                        <div class="profile-user-info">
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 服务器主机名 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id='hostname'>同步中...</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> IP地址</div>
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="privateip">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 操作系统版本 </div>
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="osversion">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 运行时间 </div>
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="uptime">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 当前运行状态 </div>
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="serverstatus">-</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 主机描述 </div>
+                                                                                <div class="profile-info-value">
+                                                                                    <span> {{ remark }}</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                        <div class="space space-4"></div>
+
+                                                                        <span class="btn btn-sm btn-block btn-success">
+                                                                            <i class="ace-icon fa fa-plus-circle bigger-120"></i>
+                                                                            <span class="bigger-110" onclick="rsynserverinfo($('#titlename').html().split('(')[0])">立即同步更新主机信息</span>
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <div class="hr hr-16"></div>
+
+                                                                    <div class="col-xs-12">
+                                                                        <div class="col-xs-12 col-sm-12">
+                                                                            <div class="widget-box transparent">
+                                                                                <div class="widget-header widget-header-small header-color-blue2">
+                                                                                    <h4 class="widget-title smaller pull-left">
+                                                                                        <i class="ace-icon fa fa-lightbulb-o bigger-120"></i>
+                                                                                        内存空间使用率
+                                                                                    </h4>
+                                                                                </div>
+
+
+
+                                                                                <div class="widget-body">
+                                                                                    <div class="widget-main padding-16">
+                                                                                        <div class="clearfix" id='memzone'>
+                                                                                            <div class="grid3 center" style="width: 50%">
+                                                                                                <div class="easy-pie-chart percentage" id="realpercent01" data-percent="0" data-color="#CA5952">
+                                                                                                    <span class="percent" id="realpercent02" >0</span>%
+                                                                                                </div>
+                                                                                                <div class="space-2"></div>
+                                                                                                <p>real</p>
+                                                                                            </div>
+
+                                                                                            <div class="grid3 center">
+                                                                                                <div class="center easy-pie-chart percentage" id="swappercent01" data-percent="0" data-color="#59A84B">
+                                                                                                    <span class="percent" id="swappercent02">0</span>%
+                                                                                                </div>
+
+                                                                                                <div class="space-2"></div>
+                                                                                                <p>swap</p>
+                                                                                                
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="hr hr-16"></div>
+
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="widget-box transparent">
+                                                                                <div class="widget-header widget-header-small header-color-blue2">
+                                                                                    <h4 class="widget-title smaller pull-left">
+                                                                                        <i class="ace-icon fa fa-hdd-o bigger-120"></i>
+                                                                                        硬盘空间使用率
+                                                                                    </h4>
+                                                                                </div>
+
+                                                                                <div class="widget-body">
+                                                                                    <div class="widget-main padding-16">
+                                                                                        <!-- #section:pages/profile.skill-progress -->
+                                                                                        <div class="profile-skills" id="diskprocess">
+                                                                                        同步中...
+                                                                                        </div>
+
+                                                                                        <!-- /section:pages/profile.skill-progress -->
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div><!-- /.col -->
+
+                                                                <div class="col-xs-12 col-sm-8">
+                                                                    <div class="widget-box transparent">
+                                                                        <div class="widget-header widget-header-small">
+                                                                            <h4 class="widget-title smaller">
+                                                                                <i class="ace-icon fa fa-tasks bigger-110"></i>
+                                                                                服务器详情
+                                                                            </h4>
+                                                                        </div>
+
+                                                                        <div class="profile-user-info">
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 服务器主机名 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id='hostname01'>同步中...</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> IP地址</div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="privateip01">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> IP网关 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="gateway">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> IP掩码 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="netmask">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 物理地址(MAC) </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="macaddress">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 操作系统版本 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="os">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 操作系统架构 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="osarch">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 操作系统内核 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="oskernel">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> python版本 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="pythonversion">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> CPU信息 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="cpuinfo">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 内存信息 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="meminfo">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="profile-info-row">
+                                                                                <div class="profile-info-name"> 硬盘信息 </div>
+
+                                                                                <div class="profile-info-value">
+                                                                                    <span id="diskinfo">同步中...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- <div class="hr hr-8 dotted"></div> -->
+                                                                    </div>
+                                                                </div><!-- /.col -->
+
+                                                            </div><!-- /.row -->
+
+                                                            <!-- <div class="space-20"></div> -->
+                                                        </div><!-- /#home -->
+                                                    <!-- </div> -->
+
+                                                <!-- </div> -->
+                                            <!-- </div> -->
+
+
+                                        </div>
+                                    </div><!-- /.col-sm-9 -->
+                                </div><!-- /.row -->
+
+
+                            </div><!-- /#preview -->
+
+
+                            <div id="addserver" class="tab-pane fade">
+                                <div class="page-header">
+                                    <!-- <h2> -->
+                                        服务器基本信息
+                                        <small>
+                                            <i class="ace-icon fa fa-angle-double-right"></i>
+                                            server Add
+                                        </small>
+                                    <!-- </h2> -->
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12">
+
+                                        <div id="serveraddalert" class="alert alert-block alert-success" style="display: none;">
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <i class="ace-icon fa fa-times"></i>
+                                            </button>
+                                            <i class="ace-icon fa fa-check bigger-120 green"></i><span id="serversuccessinfo"></span>
+                                        </div>
+
+
+                                        <!-- PAGE CONTENT BEGINS -->
+                                        <div class="form-horizontal" role="form" id="server">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 服务器名称 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="servername" placeholder="例如：hk_server_01" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='servername_msg' class="col-sm-3 hidden">
+                                                    <span class="red" style="text-"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;服务器名称已存在</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 服务器IP </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="serverip" placeholder="例如：10.0.0.1" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='serverip_msg' class="col-sm-3 hidden">
+                                                    <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;服务器IP已存在</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SSH端口 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="sshport" placeholder="例如：22" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='sshport_msg' class="col-sm-3 hidden">
+                                                    <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;端口有误</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> root登录密码 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="password" id="loginpasswd" placeholder="例如：*********" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='loginpasswd_msg' class="col-sm-3">
+                                                    <!-- <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;验证登录</span> -->
+                                                    <span class="btn btn-mini btn-success"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;验证登录</span>
+                                                    <!-- <span class="green"><i class="fa fa-check" aria-hidden="true">验证成功</i></span> -->
+                                                    <!-- <span class="red"><i class="fa fa-check" aria-hidden="true">验证失败</i></span> -->
+                                                </div>
+                                            </div>
+
+                                            <div class="space-4"></div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 服务器备注 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="serverremark" placeholder="例如：华康前置机01" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                            </div>
+
+                                            <div class="space-4"></div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 所属服务器组 </label>
+
+                                                <div class="col-sm-3" id='aaaa'>
+                                                    <!-- <input type="text" id="serverremark" placeholder="例如：华康前置机01" class="col-xs-12 col-sm-12" /> -->
+                                                    <!-- <select class="chosen-select"> -->
+                                                    <select class="form-control">
+                                                        <option selected >---默认服务器组---</option>
+                                                        <option >web服务器组1</option>
+                                                        <option >web服务器组2</option>
+                                                        <option >前置服务器组</option>
+                                                        <option >tomcat服务器组</option>
+                                                        <option >DB服务器组</option>
+                                                    </select>
+                                                    <!-- <select class="chosen-select form-control" id="form-field-select-3" data-placeholder="Choose a State...">
+                                                                <option value="">  </option>
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AL">Alabama</option>
+                                                                <option value="AL">Alabama</option>
+                                                            </select> -->
+
+
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+
+
+                                            <div class="form-group">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button class="btn btn-info" type="button" onclick="serversumbit()">
+                                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                                        服务器提交
+                                                    </button>
+
+                                                    &nbsp; &nbsp; &nbsp;
+                                                    <button class="btn" onclick="resetinput()">
+                                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                        重置输入
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                            <div id="addservergroup" class="tab-pane fade">
+                                <div class="page-header">
+                                    <!-- <h2> -->
+                                        服务器组基本信息
+                                        <small>
+                                            <i class="ace-icon fa fa-angle-double-right"></i>
+                                            servergroup Add
+                                        </small>
+                                    <!-- </h2> -->
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12">
+
+                                        <div id="serveraddalert" class="alert alert-block alert-success" style="display: none;">
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <i class="ace-icon fa fa-times"></i>
+                                            </button>
+                                            <i class="ace-icon fa fa-check bigger-120 green"></i><span id="serversuccessinfo"></span>
+                                        </div>
+
+
+                                        <!-- PAGE CONTENT BEGINS -->
+                                        <div class="form-horizontal" role="form" id="server">
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 服务器组名称 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="servername" placeholder="例如：hk_server_01" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='servername_msg' class="col-sm-3 hidden">
+                                                    <span class="red" style="text-"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;服务器名称已存在</span>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="space-4"></div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 服务器组备注 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="serverremark" placeholder="例如：华康前置机01" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="form-group">
+
+                                            <!-- <div class="col-sm-6"> -->
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 服务器选择 </label>
+                                                <div class="col-sm-3">
+                                                <!-- <div class="widget-box widget-color-blue2 col-sm-3"> -->
+                                                    <!-- <div class="widget-header">
+                                                        <h4 class="widget-title lighter smaller">服务器选择</h4>
+                                                    </div> -->
+
+                                                    <div class="widget-body">
+                                                        <div class="widget-main padding-8">
+                                                            <ul id="tree2"></ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <!-- </div> -->
+
+                                                <script type="text/javascript">
+                                                var $assets = "/static";//this will be used in fuelux.tree-sampledata.js
+                                                </script>
+
+                                            </div>
+
+
+
+
+                                            <div class="form-group">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button class="btn btn-info" type="button" onclick="serversumbit()">
+                                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                                        服务器组提交
+                                                    </button>
+
+                                                    &nbsp; &nbsp; &nbsp;
+                                                    <button class="btn" onclick="resetinput()">
+                                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                        重置输入
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div id="addmodule" class="tab-pane fade">
+                                <div class="page-header">
+                                    <!-- <h2> -->
+                                        模块基本信息
+                                        <small>
+                                            <i class="ace-icon fa fa-angle-double-right"></i>
+                                            Module Add
+                                        </small>
+                                    <!-- </h2> -->
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12">
+
+                                        <div id="moduleaddalert" class="alert alert-block alert-success" style="display: none;">
+                                            <button type="button" class="close" data-dismiss="alert">
+                                                <i class="ace-icon fa fa-times"></i>
+                                            </button>
+                                            <i class="ace-icon fa fa-check bigger-120 green"></i><span id="modulesuccessinfo"></span>
+                                        </div>
+
+
+                                        <!-- PAGE CONTENT BEGINS -->
+                                        <div class="form-horizontal" role="form">
+
+                                            <div class="form-group blue">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块名称 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="modulename" placeholder="例如：omweb" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='modulename_msg' class="col-sm-3 hidden">
+                                                    <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;模块名已存在</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group blue">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块端口 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="moduleport" placeholder="端口范围必须为80-65535" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='moduleport_msg' class="col-sm-3 hidden">
+                                                    <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;端口有误或端口已存在</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="space-4"></div>
+
+                                            <div class="form-group blue">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 模块备注 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="moduleremark" placeholder="例如：omweb模块的备注" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                            </div>
+
+                                           <div class="form-group blue">
+                                                <!-- <label class="control-label bolder blue">服务器选择</label> -->
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 服务器选择 </label>
+                                                <div class="col-sm-3">
+                                                    <!-- #section:custom/checkbox -->
+
+                                                    <div class="checkbox" id='serverlistcheckbox'>
+                                                        
+                               
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="form-group blue">
+
+											<!-- <div class="col-sm-6"> -->
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 服务器选择 </label>
+												<div class="col-sm-3">
+												<!-- <div class="widget-box widget-color-blue2 col-sm-3"> -->
+													<!-- <div class="widget-header">
+														<h4 class="widget-title lighter smaller">服务器选择</h4>
+													</div> -->
+
+													<div class="widget-body">
+														<div class="widget-main padding-8">
+															<ul id="tree3"></ul>
+														</div>
+													</div>
+												</div>
+											<!-- </div> -->
+
+    											<script type="text/javascript">
+    											var $assets = "/static";//this will be used in fuelux.tree-sampledata.js
+    											</script>
+
+											</div>
+
+
+
+
+
+
+
+
+                                            <div id="serverlistadd">
+                                                <div id='mserverlist_msg' class="col-md-offset-3 col-sm-3 hidden">
+                                                    <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;服务器IP输入有误</span>
+                                                </div>
+                                                <br>
+
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button class="btn btn-info btn-mini" type="button" onclick="modulesumbit()">
+                                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                                        模块提交
+                                                    </button>
+
+                                                    &nbsp; &nbsp; &nbsp;
+                                                    <button class="btn btn-mini" onclick="resetinput()">
+                                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                        重置输入
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div id="serverlist" class="tab-pane fade">
+                                <span style="float: left;color: green"><b>&nbsp;总记录数&nbsp;<span id='serverlistcount'></span>&nbsp;条</b></span>
+                                <div class="nav-search" style="float: right;">
+                                    <span class="input-icon">
+                                    <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input01" autocomplete="off" />
+                                    <i class="ace-icon fa fa-search nav-search-icon"></i>
+                                    </span>
+                                </div>
+                                <br>
+                                <hr>
+                                <div class="widget-body">
+                                    <div class="widget-main no-padding">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="thin-border-bottom">
+                                                <tr>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>服务器名称</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>服务器IP</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>SSH端口</th>
+                                                    <!-- <th><i class="ace-icon fa fa-caret-right blue"></i>SSH登录用户名</th> -->
+                                                    <!-- <th><i class="ace-icon fa fa-caret-right blue"></i>SSH登录密码</th> -->
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>服务器备注</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>服务器状态</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>操作</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id= 'ServerInfolist'>
+                                            </tbody>
+                                        </table>
+                                        
+
+                                    </div>
+
+                                </div>
+
+                                <br>
+                                <hr>
+                                <div id="pageToolbar01"></div>                                
+                                
+                            </div>
+
+                            <div id="modulelist" class="tab-pane fade">
+                                <span style="float: left;color: green"><b>&nbsp;总记录数&nbsp;<span id='previewlistcount'></span>&nbsp;条</b></span>
+                                <div class="nav-search" style="float: right;">
+                                    <span class="input-icon">
+                                    <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input02" autocomplete="off" />
+                                    <i class="ace-icon fa fa-search nav-search-icon"></i>
+                                    </span>
+                                </div>
+                                <br>
+                                <hr>
+                                <div class="widget-body">
+                                    <div class="widget-main no-padding">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="thin-border-bottom">
+                                                <tr>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>模块名称</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>模块备注</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>模块服务器</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>模块配置端口</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>SSH端口</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>当前状态</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>操作</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id= 'ProjectInfolist'>
+                                            </tbody>
+                                        </table>
+                                        
+
+                                    </div>
+
+                                </div>
+
+                                <br>
+                                <hr>
+                                <div id="pageToolbar02"></div>                                
+                                
+                            </div>
+
+
+
+                            <!-- <div id="pageToolbar"></div> -->
+                        </div>
+
+                    </div>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<div id='test' class="form-horizontal hidden" role="form">
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块名称 </label>
+
+        <div class="col-sm-3">
+            <input type="text" id="modulename" placeholder="例如：omweb" class="col-xs-12 col-sm-12" />
+        </div>
+        <div id='modulename_msg' class="col-sm-3 hidden">
+            <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;模块名已存在</span>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块端口 </label>
+
+        <div class="col-sm-3">
+            <input type="text" id="moduleport" placeholder="端口范围必须为80-65535" class="col-xs-12 col-sm-12" />
+        </div>
+        <div id='moduleport_msg' class="col-sm-3 hidden">
+            <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;端口有误或端口已存在</span>
+        </div>
+    </div>
+
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 模块备注 </label>
+
+        <div class="col-sm-3">
+            <input type="text" id="moduleremark" placeholder="例如：omweb模块的备注" class="col-xs-12 col-sm-12" />
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块服务器1 </label>
+
+        <div class="col-sm-3">
+            <input type="text" id="server_1" placeholder="例如：192.168.0.1" class="col-xs-12 col-sm-12" />
+        </div>
+        <div class="col-sm-3">
+            <button class="btn btn-success btn-xs" type="button">
+                <i class="fa fa-plus-square fa-x fa-fw" aria-hidden="true" onclick="addserverlist01()"></i>
+            </button>
+            <button class="btn btn-danger btn-xs" type="button">
+                <i class="fa fa-minus-square fa-x fa-fw" aria-hidden="true" onclick="delserverlist01()"></i>
+            </button>
+        </div>
+    </div>
+    <div class="space-4"></div>
+    <div id="serverlistadd01">
+        <div id='mserverlist_msg' class="col-md-offset-3 col-sm-3 hidden">
+            <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;服务器IP输入有误</span>
+        </div>
+        <br>
+
+    </div>
+</div>
+
+
+<div id='test01' class="row hidden">
+	<div class="col-xs-12">
+		<div class="form-horizontal" role="form">
+		    <div class="form-group">
+		        <label class="col-sm-3 control-label no-padding-right" for="form-field-1" id='clonenode1'>  </label>
+
+		        <div class="col-sm-9">
+		            <input type="text" id="modulename" placeholder="" class="col-xs-12 col-sm-12" />
+		        </div>
+
+		    </div>
+		    <div class="space-2"></div>
+
+		    <div class="form-group">
+		        <label class="col-sm-3 control-label no-padding-right" for="form-field-1" id='clonenode2'>  </label>
+
+		        <div class="col-sm-9">
+		            <input type="text" id="moduleport" placeholder="" class="col-xs-12 col-sm-12" />
+		        </div>
+		    </div>
+
+		    <div class="space-2"></div>
+
+		    <div class="form-group">
+		        <label class="col-sm-3 control-label no-padding-right" for="form-field-1" id='clonenode3'>  </label>
+
+		        <div class="col-sm-9">
+		            <input type="text" id="" placeholder="" class="col-xs-12 col-sm-12" />
+		        </div>
+		    </div>
+
+		    <div class="space-2"></div>
+
+			<div class="form-group hidden" id="ServerRemark">
+			    <label class="col-sm-3 control-label no-padding-right" for="form-field-2" id='clonenode4'> </label>
+
+			    <div class="col-sm-9">
+			        <input type="text" id="" placeholder="" class="col-xs-12 col-sm-12" />
+			    </div>
+			</div>
+			<div class="space-2"></div>	
+
+
+			<div class="form-group hidden" id="ServerListmultiple">
+				<label class="col-sm-3 control-label no-padding-right" for="duallist"> 下属服务器 </label>
+
+				<div class="col-sm-9">
+					<!-- #section:plugins/input.duallist -->
+					<select multiple="multiple" size="10" name="" id="duallist">
+					</select>
+
+					<!-- /section:plugins/input.duallist -->
+					<!-- <div class="hr hr-16 hr-dotted"></div> -->
+				</div>
+			</div>
+
+			<!-- <div class="space-2"></div> -->
+
+
+		</div>
+		
+	</div>
+
+</div>
+
+
+
+<!-- 多选框示例HTML
+<div class="form-group " >
+	<label class="col-sm-3 control-label no-padding-right" for="duallist"> 下属服务器 </label>
+
+	<div class="col-sm-9">
+
+		<select multiple="multiple" size="10" name="duallistbox_demo1[]" id="duallist">
+			<option value="option1">Option 1</option>
+			<option value="option2">Option 2</option>
+			<option value="option3" selected="selected">Option 3</option>
+			<option value="option4">Option 4</option>
+			<option value="option5">Option 5</option>
+			<option value="option6" selected="selected">Option 6</option>
+			<option value="option7">Option 7</option>
+			<option value="option8">Option 8</option>
+			<option value="option9">Option 9</option>
+			<option value="option0">Option 10</option>
+			<option value="option11" selected="selected">Option 11</option>
+		</select>
+
+
+		<div class="hr hr-16 hr-dotted"></div>
+	</div>
+</div> -->
+
+
+
+
+
+
+
+{% include "base/template_footer.html" %}
+
+<script>
+
+	//折叠level开始
+	jQuery(function($){
+
+
+		var sampleData = initiateDemoData();//see below
+
+
+		$('#tree1').ace_tree({
+			dataSource: sampleData['dataSource1'],
+			multiSelect: false,
+			cacheItems: true,
+			'open-icon' : 'ace-icon tree-minus',
+			'close-icon' : 'ace-icon tree-plus',
+			'selectable' : true,
+			'selected-icon' : 'ace-icon fa fa-check',
+			'unselected-icon' : 'ace-icon fa fa-times',
+			loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>'
+		});
+
+
+
+        $('#tree2').ace_tree({
+            dataSource: sampleData['dataSource1'],
+            multiSelect: true,
+            cacheItems: true,
+            'open-icon' : 'ace-icon tree-minus',
+            'close-icon' : 'ace-icon tree-plus',
+            'selectable' : true,
+            'selected-icon' : 'ace-icon fa fa-check',
+            'unselected-icon' : 'ace-icon fa fa-times',
+            loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>'
+        });
+        $('#tree3').ace_tree({
+            dataSource: sampleData['dataSource1'],
+            multiSelect: true,
+            cacheItems: true,
+            'open-icon' : 'ace-icon tree-minus',
+            'close-icon' : 'ace-icon tree-plus',
+            'selectable' : true,
+            'selected-icon' : 'ace-icon fa fa-check',
+            'unselected-icon' : 'ace-icon fa fa-times',
+            loadingHTML : '<div class="tree-loading"><i class="ace-icon fa fa-refresh fa-spin blue"></i></div>'
+        });
+
+
+		
+		
+		
+		//please refer to docs for more info
+		$('#tree1')
+		.on('loaded.fu.tree', function(e) {
+		})
+		.on('updated.fu.tree', function(e, result) {
+		})
+		// .on('selected.fu.tree', function(e,result) {
+        .on('selected.fu.tree', function(evt, data) {
+            // console.log("selected items: ", data.selected[0]['text']);
+            // console.log("selected items: ", data.selected[0]['text'].split('(')[1].split(')')[0]);
+            $("#titlename").html(data.selected[0]['text'])
+            // rsynserverinfo(data.selected[0]['text'].split('(')[1].split(')')[0]);
+            rsynserverinfo(data.selected[0]['text']);
+            // rsynserverinfo(data.selected[0]['text'].split('(')[0]);
+		})
+		.on('deselected.fu.tree', function(e) {
+		})
+		.on('opened.fu.tree', function(e) {
+		})
+		.on('closed.fu.tree', function(e) {
+            console.log('1')
+		});
+
+
+        //please refer to docs for more info
+        // $('#tree3')
+        // .on('loaded.fu.tree', function(e) {
+        // })
+        // .on('updated.fu.tree', function(e, result) {
+        // })
+        // // .on('selected.fu.tree', function(e,result) {
+        // .on('selected.fu.tree', function(evt, data) {
+        //     console.log("selected items: ", data.selected[0]['text']);
+        //     // console.log("selected items: ", data.selected[0]['text']);
+        //     console.log("selected items: ", data.selected[1]['text']);
+        //     console.log("selected items: ", data.selected[2]['text']);
+        //     // console.log("selected items: ", data.selected[0]['text'].split('(')[1].split(')')[0]);
+        //     $("#titlename").html(data.selected[0]['text'])
+        //     // rsynserverinfo(data.selected[0]['text'].split('(')[1].split(')')[0]);
+        //     rsynserverinfo(data.selected[0]['text'].split('(')[0]);
+        // })
+        // .on('deselected.fu.tree', function(e) {
+        // })
+        // .on('opened.fu.tree', function(e) {
+        // })
+        // .on('closed.fu.tree', function(e) {
+        //     console.log('1')
+        // });
+		
+		
+		function initiateDemoData(){
+			var tree_data = {
+				// 'default' : {text: '默认服务器组(11)', type: 'folder'}	,
+				// 'vehicles' : {text: 'web服务器组', type: 'folder'}	,
+				// 'rentals' : {text: '前置机服务器组', type: 'folder'}	,
+				// 'real-estate' : {text: 'Real Estate', type: 'folder'}	,
+				// 'pets' : {text: 'Pets', type: 'folder'}	,
+				// 'tickets' : {text: 'Tickets', type: 'item'}	,
+				// 'services' : {text: 'Services', type: 'item'}	,
+				// 'personals' : {text: 'Personals', type: 'item'}
+			}
+
+			$.ajax({
+	            type:'POST',
+	            async:false,
+	            url:'/projectinfo/getserverlist/',
+	            dataType:'json',
+	            success:function(val){
+
+                    //新建一级目录
+                    tree_data['default'] = {}
+                    tree_data['default']['text'] = '默认服务器组('+val.ServerList.length+')'
+                    tree_data['default']['type'] = 'folder'
+                    tree_data['default']['additionalParameters'] = {}
+                    tree_data['default']['additionalParameters']['children'] = {}
+
+
+	                for(var ServerIndex =0;ServerIndex<val.ServerList.length;ServerIndex++){
+	                
+	                	//二级目录
+	                    tree_data.default.additionalParameters['children'][val.ServerList[ServerIndex]["server_name"]] = {}
+                        // tree_data.default.additionalParameters['children'][val.ServerList[ServerIndex]["server_name"]]['text'] = val.ServerList[ServerIndex]["server_name"]+'('+val.ServerList[ServerIndex]['server_ip']+')'
+	                    tree_data.default.additionalParameters['children'][val.ServerList[ServerIndex]["server_name"]]['text'] = val.ServerList[ServerIndex]['server_ip']
+	                    tree_data.default.additionalParameters['children'][val.ServerList[ServerIndex]["server_name"]]['type'] = 'item'
+
+	                };
+
+                    //模块总组一级目录
+                    tree_data['MODULE'] = {}
+                    tree_data['MODULE']['text'] = '模块总表('+val.ModuleList.length+')'
+                    tree_data['MODULE']['type'] = 'folder'
+                    tree_data['MODULE']['additionalParameters'] = {}
+                    tree_data['MODULE']['additionalParameters']['children'] = {}
+
+                    for(var ModuleIndex = 0;ModuleIndex<val.ModuleList.length;ModuleIndex++){
+                        //模块总组二级目录
+                        tree_data.MODULE.additionalParameters['children'][val.ModuleList[ModuleIndex]["project_name"].split('[')[1].split(']')[0]] = {}
+                        tree_data.MODULE.additionalParameters['children'][val.ModuleList[ModuleIndex]["project_name"].split('[')[1].split(']')[0]]['text'] = val.ModuleList[ModuleIndex]["project_name"].split('[')[1].split(']')[0]+'('+(val.ModuleList[ModuleIndex]["project_server"].split(';').length-1)+')'
+                        tree_data.MODULE.additionalParameters['children'][val.ModuleList[ModuleIndex]["project_name"].split('[')[1].split(']')[0]]['type'] = 'folder'
+
+                        
+                        //模块总组三级目录
+                        tree_data['MODULE']['additionalParameters']['children'][val.ModuleList[ModuleIndex]["project_name"].split('[')[1].split(']')[0]]['additionalParameters'] = {}
+                        tree_data['MODULE']['additionalParameters']['children'][val.ModuleList[ModuleIndex]["project_name"].split('[')[1].split(']')[0]]['additionalParameters']['children'] = {}
+
+
+
+                        for(var SeverNode = 0; SeverNode < val.ModuleList[ModuleIndex]['project_server'].split(';').length-1;SeverNode++ ){
+                            // console.log(val.ModuleList[ModuleIndex]['project_server'].split(';')[SeverNode])
+
+                            tree_data['MODULE']['additionalParameters']['children'][val.ModuleList[ModuleIndex]["project_name"].split('[')[1].split(']')[0]]['additionalParameters']['children'][val.ModuleList[ModuleIndex]['project_server'].split(';')[SeverNode]] = {}
+                            tree_data['MODULE']['additionalParameters']['children'][val.ModuleList[ModuleIndex]["project_name"].split('[')[1].split(']')[0]]['additionalParameters']['children'][val.ModuleList[ModuleIndex]['project_server'].split(';')[SeverNode]]['text'] = val.ModuleList[ModuleIndex]['project_server'].split(';')[SeverNode]
+                            tree_data['MODULE']['additionalParameters']['children'][val.ModuleList[ModuleIndex]["project_name"].split('[')[1].split(']')[0]]['additionalParameters']['children'][val.ModuleList[ModuleIndex]['project_server'].split(';')[SeverNode]]['type'] = 'item'
+
+                        }
+                    }
+	            },error:function(){
+	                console.log('获取服务器列表失败')        
+	            }
+	        })
+            
+
+
+            //示例：完整添加三级目录
+            /***一级目录
+            tree_data['Test'] = {}
+            tree_data['Test']['text'] = 'Test'
+            tree_data['Test']['type'] = 'folder'
+            ***/
+
+            /***二级目录
+            tree_data['Test']['additionalParameters'] = {}
+            tree_data['Test']['additionalParameters']['children'] = {}
+            tree_data['Test']['additionalParameters']['children']['cars'] = {}
+            tree_data['Test']['additionalParameters']['children']['cars']['text'] = 'Cars'
+            tree_data['Test']['additionalParameters']['children']['cars']['type'] = 'folder'
+            ***/
+
+            /***三级目录
+            tree_data['Test']['additionalParameters']['children']['cars']['additionalParameters'] = {}
+            tree_data['Test']['additionalParameters']['children']['cars']['additionalParameters']['children'] = {}
+            tree_data['Test']['additionalParameters']['children']['cars']['additionalParameters']['children']['BMW'] = {}
+            tree_data['Test']['additionalParameters']['children']['cars']['additionalParameters']['children']['BMW']['text'] = 'BMW'
+            tree_data['Test']['additionalParameters']['children']['cars']['additionalParameters']['children']['BMW']['type'] = 'item'
+            ***/
+
+
+
+			// tree_data['vehicles']['additionalParameters'] = {
+			// 	'children' : {
+			// 		'cars' : {text: 'Cars', type: 'folder'},
+			// 		'motorcycles' : {text: 'Motorcycles', type: 'item'},
+			// 		'boats' : {text: 'Boats', type: 'item'}
+			// 	}
+			// }
+			// tree_data['vehicles']['additionalParameters']['children']['cars']['additionalParameters'] = {
+			// 	'children' : {
+			// 		'classics' : {text: 'Classics', type: 'item'},
+			// 		'convertibles' : {text: 'Convertibles', type: 'item'},
+			// 		'coupes' : {text: 'Coupes', type: 'item'},
+			// 		'hatchbacks' : {text: 'Hatchbacks', type: 'item'},
+			// 		'hybrids' : {text: 'Hybrids', type: 'item'},
+			// 		'suvs' : {text: 'SUVs', type: 'item'},
+			// 		'sedans' : {text: 'Sedans', type: 'item'},
+			// 		'trucks' : {text: 'Trucks', type: 'item'}
+			// 	}
+			// }
+
+			// tree_data['rentals']['additionalParameters'] = {
+			// 	'children' : {
+			// 		'apartments-rentals' : {text: 'Apartments', type: 'item'},
+			// 		'office-space-rentals' : {text: 'Office Space', type: 'item'},
+			// 		'vacation-rentals' : {text: 'Vacation Rentals', type: 'item'}
+			// 	}
+			// }
+			// tree_data['real-estate']['additionalParameters'] = {
+			// 	'children' : {
+			// 		'apartments' : {text: 'Apartments', type: 'item'},
+			// 		'villas' : {text: 'Villas', type: 'item'},
+			// 		'plots' : {text: 'Plots', type: 'item'}
+			// 	}
+			// }
+			// tree_data['pets']['additionalParameters'] = {
+			// 	'children' : {
+			// 		'cats' : {text: 'Cats', type: 'item'},
+			// 		'dogs' : {text: 'Dogs', type: 'item'},
+			// 		'horses' : {text: 'Horses', type: 'item'},
+			// 		'reptiles' : {text: 'Reptiles', type: 'item'}
+			// 	}
+			// }
+
+			var dataSource1 = function(options, callback){
+				var $data = null
+				if(!("text" in options) && !("type" in options)){
+					$data = tree_data;//the root tree
+					callback({ data: $data });
+					return;
+				}
+				else if("type" in options && options.type == "folder") {
+					if("additionalParameters" in options && "children" in options.additionalParameters)
+						$data = options.additionalParameters.children || {};
+					else $data = {}//no data
+				}
+				
+				if($data != null)//this setTimeout is only for mimicking some random delay
+					setTimeout(function(){callback({ data: $data });} , parseInt(Math.random() * 500) + 200);
+
+				//we have used static data here
+				//but you can retrieve your data dynamically from a server using ajax call
+				//checkout examples/treeview.html and examples/treeview.js for more info
+			}
+
+
+			
+			return {'dataSource1': dataSource1}
+		}
+
+	});
+    //折叠level结束
+
+
+
+    //同步获取服务器信息
+    function rsynserverinfo(ip){
+        $("#serverstatus").html('<b class="green">同步中</b>')
+        $("#hostname").html('<b class="green">同步中</b>')
+        // $("#publicip").html('<b class="red">异常</b>')
+        $("#privateip").html('<b class="green">同步中</b>')
+        $("#osversion").html('<b class="green">同步中</b>')
+        $("#uptime").html('<b class="green">同步中</b>')
+
+        // $("#realpercent01").attr('data-percent','22')
+        $("#realpercent02").html('<b class="green">同步中</b>')
+        $("#swappercent02").html('<b class="green">同步中</b>')
+
+
+        $("#hostname01").html('<b class="green">同步中</b>')
+        // $("#publicip01").html('-')
+        $("#privateip01").html('<b class="green">同步中</b>')
+        $("#gateway").html('<b class="green">同步中</b>')
+        $("#netmask").html('<b class="green">同步中</b>')
+        $("#macaddress").html('<b class="green">同步中</b>')
+        
+        
+
+        // $("#os").html(val.ansible_facts.ansible_distribution+'&nbsp;'+val.ansible_facts.ansible_distribution_version)
+        $("#os").html('<b class="green">同步中</b>')
+        $("#osarch").html('<b class="green">同步中</b>')
+        $("#oskernel").html('<b class="green">同步中</b>')
+        $("#pythonversion").html('<b class="green">同步中</b>')
+
+        $("#meminfo").html('<b class="green">同步中</b>')
+        $("#cpuinfo").html('<b class="green">同步中</b>')
+        $("#diskinfo").html('<b class="green">同步中</b>')
+        $("#diskprocess").html('<b class="green">同步中</b>')
+
+
+
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/rsynserverinfo/',
+            data:{'serverip':ip},
+            dataType:'json',
+            // dataType:'text',
+            success:function(val){
+                console.log(val)
+                // console.log(val.ansible_facts.ansible_all_ipv4_addresses[0])
+
+                $("#hostname").html(val.ansible_facts.ansible_hostname)
+                $("#publicip").html('-')
+                $("#privateip").html(val.ansible_facts.ansible_all_ipv4_addresses[0])
+                $("#osversion").html(val.ansible_facts.ansible_lsb.description)
+
+                $("#serverstatus").html('良好')
+
+                $("#realpercent01").attr('data-percent','22')
+                $("#realpercent02").html(22)
+                $("#swappercent02").attr('data-percent','22')
+                $("#swappercent02").html(22)
+
+                $("#hostname01").html(val.ansible_facts.ansible_hostname)
+                $("#publicip01").html('-')
+                // $("#privateip01").html(val.ansible_facts.ansible_all_ipv4_addresses[0])
+                $("#gateway").html(val.ansible_facts.ansible_default_ipv4.gateway)
+                $("#netmask").html(val.ansible_facts.ansible_default_ipv4.netmask)
+                $("#macaddress").html(val.ansible_facts.ansible_default_ipv4.macaddress)
+                
+                
+
+                // $("#os").html(val.ansible_facts.ansible_distribution+'&nbsp;'+val.ansible_facts.ansible_distribution_version)
+                $("#os").html(val.ansible_facts.ansible_lsb.description)
+                $("#osarch").html(val.ansible_facts.ansible_architecture)
+                $("#oskernel").html(val.ansible_facts.ansible_kernel)
+                $("#pythonversion").html(val.ansible_facts.ansible_python_version)
+
+                $("#privateip01").html("")
+                for(var i=0;i<val.ansible_facts.ansible_all_ipv4_addresses.length;i++){
+                    // console.log(val.ansible_facts.ansible_all_ipv4_addresses[i])
+                    $("#privateip01").append('<b>IP'+(i+1)+':</b>'+val.ansible_facts.ansible_all_ipv4_addresses[i]+';&nbsp;')
+                }
+
+                $("#cpuinfo").html("")
+                $("#cpuinfo").append('CPU个数：'+val.ansible_facts.ansible_processor.length/2+'个;<br>CPU型号：'+val.ansible_facts.ansible_processor[1]+';<br>')
+
+
+                $("#meminfo").html("")
+                for(x in val.ansible_facts.ansible_memory_mb){
+                    // console.log(x,val.ansible_facts.ansible_memory_mb[x])
+                    $("#meminfo").append('<b>'+x+':<br></b>')
+                    $("#meminfo").append('可用空间(free):&nbsp;'+(val.ansible_facts.ansible_memory_mb[x].free / 1024*1024).toFixed(2)+'&nbsp;M;<br>')
+                    $("#meminfo").append('总空间(total):&nbsp;'+(val.ansible_facts.ansible_memory_mb[x].total / 1024*1024).toFixed(2)+'&nbsp;M;<br>')
+                    $("#meminfo").append('已用空间(used):&nbsp;'+(val.ansible_facts.ansible_memory_mb[x].used / 1024*1024).toFixed(2)+'&nbsp;M;<br>')
+
+
+                    var mempercent = ((val.ansible_facts.ansible_memory_mb[x].used/val.ansible_facts.ansible_memory_mb[x].total)*100).toFixed(2)
+
+                    $("#"+x+"percent01").attr('data-percent',mempercent)
+                    $("#"+x+"percent02").html(mempercent)
+
+                };
+
+
+                $("#diskinfo").html("")
+                for(var i=0;i<val.ansible_facts.ansible_mounts.length;i++){
+                    $("#diskinfo").append('文件系统:'+val.ansible_facts.ansible_mounts[i].device+';<br>文件类型:'+val.ansible_facts.ansible_mounts[i].fstype+';<br>读写权限：'+val.ansible_facts.ansible_mounts[i].options+';<br>挂载点:'+val.ansible_facts.ansible_mounts[i].mount+';<br>可用空间：'+(val.ansible_facts.ansible_mounts[i].size_available / (1024*1024*1024)).toFixed(2)+'G;<br>总空间：'+(val.ansible_facts.ansible_mounts[i].size_total / (1024*1024*1024)).toFixed(2)+'G;<br><hr>')
+                };
+
+
+                $("#diskprocess").html("")
+                for(var i=0;i<val.ansible_facts.ansible_mounts.length;i++){
+                    var usedpercent = (((val.ansible_facts.ansible_mounts[i].size_total -val.ansible_facts.ansible_mounts[i].size_available)/ val.ansible_facts.ansible_mounts[i].size_total) * 100).toFixed(2)
+
+                    $("#diskprocess").append('<div class="progress">\
+                                                <div class="progress-bar"  id=disk0'+i+' style="width:'+ usedpercent+'%">\
+                                                    <span class="pull-left">'+val.ansible_facts.ansible_mounts[i].mount+'</span>\
+                                                    <span class="pull-right">'+ usedpercent +'%</span>\
+                                                </div>\
+                                                <span class="pull-right green"><b><i class="fa fa-flag-checkered"></i></b></span>\
+                                            </div>')
+                    // console.log(usedpercent)
+
+                    if(usedpercent >= 90){
+                        // console.log('30')
+                        $("#disk0"+i+"").addClass('progress-bar-danger')
+                        // console.log("#disk0"+i+"")
+                    }else if (usedpercent >= 80){
+                        // console.log('20')
+                        $("#disk0"+i+"").addClass('progress-bar-warning')
+                    }else if (usedpercent >= 30){
+                        // console.log('10')
+                        $("#disk0"+i+"").addClass('progress-bar-success')
+                    }
+
+                }
+
+
+
+                
+             
+            },error:function(){
+                    console.log('同步失败')
+                    $("#serverstatus").html('<b class="red">异常</b>')
+                    $("#hostname").html('<b class="red">异常</b>')
+                    // $("#publicip").html('<b class="red">异常</b>')
+                    $("#privateip").html('<b class="red">异常</b>')
+                    $("#osversion").html('<b class="red">异常</b>')
+
+                    // $("#realpercent01").attr('data-percent','22')
+                    $("#realpercent02").html('<b class="red">异常</b>')
+                    $("#swappercent02").html('<b class="red">异常</b>')
+
+
+                    $("#hostname01").html('<b class="red">异常</b>')
+                    // $("#publicip01").html('-')
+                    $("#privateip01").html('<b class="red">异常</b>')
+                    $("#gateway").html('<b class="red">异常</b>')
+                    $("#netmask").html('<b class="red">异常</b>')
+                    $("#macaddress").html('<b class="red">异常</b>')
+                    
+                    
+
+                    // $("#os").html(val.ansible_facts.ansible_distribution+'&nbsp;'+val.ansible_facts.ansible_distribution_version)
+                    $("#os").html('<b class="red">异常</b>')
+                    $("#osarch").html('<b class="red">异常</b>')
+                    $("#oskernel").html('<b class="red">异常</b>')
+                    $("#pythonversion").html('<b class="red">异常</b>')
+
+                    $("#meminfo").html('<b class="red">异常</b>')
+                    $("#cpuinfo").html('<b class="red">异常</b>')
+                    $("#diskinfo").html('<b class="red">异常</b>')
+                    $("#diskprocess").html('<b class="red">异常</b>')
+
+
+
+                }
+        });
+        uptime(ip);
+    };
+
+    //更新时间模块
+    function uptime(ip){
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/uptime/',
+            data:{'serverip':ip},
+            dataType:'text',
+            success:function(val){
+                // console.log(val)
+                $("#uptime").html(val)
+            },error:function () {
+                $("#uptime").html('<b class="red">异常</b>')
+
+            }
+        });
+
+        // $('.easy-pie-chart.percentage').each(function(){
+        //     var barColor = $(this).data('color') || '#555';
+        //     var trackColor = '#E2E2E2';
+        //     var size = parseInt($(this).data('size')) || 72;
+        //     $(this).easyPieChart({
+        //         barColor: barColor,
+        //         trackColor: trackColor,
+        //         scaleColor: false,
+        //         lineCap: 'butt',
+        //         lineWidth: parseInt(size/10),
+        //         animate:false,
+        //         size: size
+        //     }).css('color', barColor);
+        // });
+
+    };
+
+
+
+    //提交新增服务器
+    function serversumbit(){
+
+    	$("#servername_msg").addClass('hidden')
+    	$("#serverip_msg").addClass('hidden')
+        $("#sshport_msg").addClass('hidden')
+
+
+        var servername = $("#servername").val()
+        var serverip = $("#serverip").val()
+        var sshport = $("#sshport").val()
+        var loginpasswd = $("#loginpasswd").val()
+        var serverremark = $("#serverremark").val()
+
+        if(isNaN(sshport)){
+        	console.log('端口有误')
+        	$("#sshport_msg").removeClass('hidden')
+        }
+
+
+        // layer.msg(servername+serverip+sshport+loginpasswd+serverremark)
+
+    	var index = layer.load(0, {
+	          content :'<hr><b>生效中...</b>',
+	          shade: [0.1,'#fff'] //0.1透明度的白色背景
+	        });
+
+
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/addserver/',
+            data:{'servername':servername,'serverip':serverip,'sshport':sshport,'loginpasswd':loginpasswd,'serverremark':serverremark},
+            dataType:'text',
+            success:function(val){
+            	if(val == 'ServerNameExist'){
+            		console.log('服务器名称已存在')
+            		$("#servername_msg").removeClass('hidden')
+            	}else if(val == 'ServerIpExist'){
+            		console.log('服务器IP已存在')
+            		$("#serverip_msg").removeClass('hidden')
+            		
+            	}
+
+            	layer.close(index)
+                console.log(val)
+                $("#serveraddalert").css('display','block');
+                $("#serversuccessinfo").html('&nbsp;添加成功！！！&nbsp;服务器：'+servername+'&nbsp;添加成功！！！')
+                $("input").val("")
+
+            },error:function(){
+                console.log('新增服务器失败')
+            }
+        })
+    }
+
+    //获取服务器列表
+    function LoadServerlist(){
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/getserverlist/',
+            dataType:'json',
+            success:function(val){
+                // console.log(val)
+                // console.log(val.ServerList)
+                $("#serverlistcheckbox").html("")
+                for(var i =0;i<val.ServerList.length;i++){
+                    console.log(val.ServerList[i]['server_name']+'('+val.ServerList[i]['server_ip']+')')
+                    // $("#serverlistcheckbox").html()
+                    $("#serverlistcheckbox").append('<label>\
+                                                        <input name="form-field-checkbox" class="ace ace-checkbox-2" type="checkbox" id='+ val.ServerList[i]['server_ip']+'>\
+                                                        <span class="lbl">&nbsp;&nbsp;'+val.ServerList[i]['server_name']+'('+val.ServerList[i]['server_ip']+')'+'</span>\
+                                                    </label><br>')
+                }
+            },error:function(){
+                console.log('获取服务器列表失败')        
+            }
+        })
+    };
+
+    //提交新增模块
+    function modulesumbit(){
+        var modulename = $("#modulename").val()
+        var moduleremark = $("#moduleremark").val()
+        var moduleport = $("#moduleport").val()
+
+
+        console.log($('.tree-selected').text())
+        console.log($('.tree-selected').length)
+
+
+
+        // var moduleserverlist = $("#server_"+2+" input").val()
+        // var moduleserverlist = $("#server_1").val()+";"
+        var moduleserverlist = ""
+        $(":checked").each(function(){
+        	// console.log($(this).siblings().html())
+        	console.log($(this).attr('id'))
+        	moduleserverlist+=$(this).attr('id')+";"
+
+        })
+
+        if(modulename == "" || moduleremark == "" || moduleport == "" || moduleserverlist == ";"){
+            layer.msg('必填字段不能为空', {icon: 2});
+        }else{
+            //提交新增
+            $.ajax({
+                type:'POST',
+                url:'/projectinfo/addmodule/',
+                data:{'modulename':modulename,'moduleremark':moduleremark,'moduleport':moduleport,'moduleserverlist':moduleserverlist},
+                dataType:'json',
+                success:function(val){
+                    console.log(val)
+
+                    if(val == '1'){
+                        // $("#moduleport_msg").addClass("hidden");
+                        $("#modulename_msg").removeClass("hidden");
+                        // $("input").val("")
+                    }else if(val == '2'){
+                        // $("#modulename_msg").addClass("hidden");
+                        $("#moduleport_msg").removeClass("hidden");
+                        // $("input").val("")
+                    }else if(val == '3'){
+                        $("#mserverlist_msg").removeClass("hidden");
+                    }else{
+                        $("#moduleaddalert").css('display','block');
+                        $("#modulesuccessinfo").html('&nbsp;添加成功！！！&nbsp;模块名：'+modulename+'；模块端口：'+moduleport+'；模块备注：'+moduleremark+'；模块服务器：'+moduleserverlist)
+                        $("#modulename").val("");
+                        $("#moduleremark").val("");
+                        $("#moduleport").val("");
+                    }
+
+                },error:function(){
+                    console.log('新增失败')
+                }
+            })          
+        }
+
+        console.log('模块名:'+modulename)
+        console.log('模块备注:'+moduleremark)
+        console.log('模块端口:'+moduleport)
+        console.log('服务器列表:'+moduleserverlist)
+        // console.log('服务器数量:'+servercount)
+    };
+
+    //重置输入
+    function resetinput(){
+        $("input").val("")
+        $("#modulename_msg").addClass("hidden");
+        $("#moduleport_msg").addClass("hidden");
+        $("#mserverlist_msg").addClass("hidden");
+    };
+
+
+    //服务器查询输入按钮事件
+    $("#nav-search-input01").keydown(function(e) {  
+          if (e.keyCode == 13) {
+            // if($("#nav-search-input").val() != ""){
+                var k_words = $("#nav-search-input01").val()
+                // layer.alert($("#nav-search-input").val())
+                GetServerList(1,10,k_words)
+            // }
+
+          }
+      });
+
+
+
+    //获取服务器数据(全量状态+查询状态)
+    function GetServerList(s_page,page_size,k_words) {
+    	console.log('发送前---'+k_words)
+        //取出单页数据
+        function GetServerListInfo(s_page,page_size){
+        	var k_words = $("#nav-search-input01").val()
+            $.ajax({
+                type:'POST',
+                url:'/projectinfo/GetServerInfoList/',
+                data:{'s_page':s_page,'page_size':page_size,'k_words':k_words},
+                dataType:'json',
+                success:function(val){
+                    if(val == '302'){
+                        layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                    }else{
+                        console.log(val)
+                        console.log('加载完整数据')
+                        var detail = val.Server_data
+                        // $("#previewlist").html("")
+                        // $('#previewlistcount').html(detail.length)
+                        if(detail.length==0){
+                            $("#ServerInfolist").html('<tr><td colspan="12" style="text-align:center;">当前无记录</td></tr>')
+                        }else{
+                            $("#ServerInfolist").html("")
+                        }
+                        for (var i=0;i < detail.length;i++){
+                            // $("#per_publish_user").html(val.review_data[i].publish_user)
+                            // console.log(val.review_data[i].publish_user)
+                            var server_name = detail[i]['server_name']
+                            // console.log(project_name)
+                        
+                            $("#ServerInfolist").append("<tr>\
+                                    <td id='server_"+(server_name)+"_name'></td>\
+                                    <td id='server_"+(server_name)+"_ip'></td>\
+                                    <td id='server_"+(server_name)+"_port'></td>\
+                                    <td id='server_"+(server_name)+"_remark'></td>\
+                                    <td id='server_"+(server_name)+"_status'></td>\
+                                    <td id='server_"+(server_name)+"_action'></td></tr>")
+
+                            //加载数据
+
+                            // console.log(detail[i]['project_server'])
+                            $("#server_"+(server_name)+"_name").html('<a href="serverinfo/'+detail[i].server_name+'/"><span class="label label-success">'+detail[i].server_name+'</span></a>')
+                            $("#server_"+(server_name)+"_ip").html(detail[i].server_ip)
+                            $("#server_"+(server_name)+"_port").html(detail[i].ssh_port)
+                            $("#server_"+(server_name)+"_remark").html(detail[i].server_remark)
+                            if(detail[i].server_status == '1'){
+                                $("#server_"+(server_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-success">已启用</span>\
+                                                            </div>')
+                                $("#server_"+(server_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this,1)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="projectswitch(this)" disabled="disabled">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="projectswitch(this)">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }else{
+                                $("#project_"+(project_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-danger">已停用</span>\
+                                                            </div>')
+                                $("#project_"+(project_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this,1)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="projectswitch(this)">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="projectswitch(this)" disabled="disabled">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }                    
+                        }
+                        // $('#pageToolbar').html("");
+                        // $('#pageToolbar').Paging({pagesize:10,count:detail.length,callback:function(page,size,count){alert('1')}});
+                    }
+                },error:function(){
+                    layer.alert('数据请求失败,错误代码：102',{icon: 2})
+                }
+            })          
+        };
+
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/GetServerInfoCount/',
+            data:{'k_words':k_words},
+            dataType:'text',
+            success:function(val){
+                if(val == '303'){
+                    layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                }else{
+                    // console.log(val)
+                    $("#serverlistcount").html(val);
+                    GetServerListInfo(s_page,page_size);
+                    //加载页码
+                    $('#pageToolbar01').html("");
+                    $('#pageToolbar01').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                        //page:当前选择页码
+                        //size:当前每页显示数量
+                        //count：当前页码总数(含有多少个size)
+                        GetServerListInfo(page,10)
+                        }
+                    });
+                };
+            },error:function(){
+                layer.alert('数据请求失败,错误代码：103',{icon: 2})
+            }
+        });     
+
+    };
+    //取出单页数据(非查询状态)
+    function GetActionList(s_page,page_size) {
+        //取出单页数据
+        function GetActionListInfo(s_page,page_size){
+            $.ajax({
+                type:'POST',
+                url:'/projectinfo/GetProjectInfoList/',
+                data:{'s_page':s_page,'page_size':page_size},
+                dataType:'json',
+                success:function(val){
+                    if(val == '302'){
+                        layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                    }else{
+                        console.log(val)
+                        console.log('加载完整数据')
+                        var detail = val.ProjectInfo_data
+                        // $("#previewlist").html("")
+                        // $('#previewlistcount').html(detail.length)
+                        if(detail.length==0){
+                            $("#ProjectInfolist").html('<tr><td colspan="9" style="text-align:center;">当前无记录</td></tr>')
+                        }else{
+                            $("#ProjectInfolist").html("")
+                        }
+                        for (var i=0;i < detail.length;i++){
+                            // $("#per_publish_user").html(val.review_data[i].publish_user)
+                            // console.log(val.review_data[i].publish_user)
+                            var project_name = detail[i]['project_name'].slice(1,-1)
+                            // console.log(project_name)
+                        
+                            $("#ProjectInfolist").append("<tr>\
+                                    <td id='project_"+(project_name)+"_name'></td>\
+                                    <td id='project_"+(project_name)+"_msg'></td>\
+                                    <td id='project_"+(project_name)+"_serverlist'></td>\
+                                    <td id='project_"+(project_name)+"_port'></td>\
+                                    <td id='project_"+(project_name)+"_excuteport'></td>\
+                                    <td id='project_"+(project_name)+"_status'></td>\
+                                    <td id='project_"+(project_name)+"_action'></td></tr>")
+
+                            //加载数据
+
+                            // console.log(detail[i]['project_server'])
+                            $("#project_"+(project_name)+"_name").html('<span class="label label-success">'+detail[i].project_name.slice(1,-1)+'</span>')
+                            $("#project_"+(project_name)+"_msg").html(detail[i].project_msg.substring(1))
+                            $("#project_"+(project_name)+"_serverlist").html(detail[i].project_server)
+                            $("#project_"+(project_name)+"_port").html(detail[i].project_port)
+                            $("#project_"+(project_name)+"_excuteport").html('9055')
+                            if(detail[i].project_status == '1'){
+                                $("#project_"+(project_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-success">已启用</span>\
+                                                            </div>')
+                                $("#project_"+(project_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this,2)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="projectswitch(this)" disabled="disabled">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="projectswitch(this)">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }else{
+                                $("#project_"+(project_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-danger">已停用</span>\
+                                                            </div>')
+                                $("#project_"+(project_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this,2)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="projectswitch(this)">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="projectswitch(this)" disabled="disabled">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }                    
+                        }
+                        // $('#pageToolbar').html("");
+                        // $('#pageToolbar').Paging({pagesize:10,count:detail.length,callback:function(page,size,count){alert('1')}});
+                    }
+                },error:function(){
+                    layer.alert('数据请求失败,错误代码：102',{icon: 2})
+                }
+            })          
+        };
+
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/GetProjectInfoCount/',
+            dataType:'text',
+            success:function(val){
+                if(val == '303'){
+                    layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                }else{
+                    // console.log(val)
+                    $("#previewlistcount").html(val);
+                    GetActionListInfo(s_page,page_size);
+                    //加载页码
+                    $('#pageToolbar01').html("");
+                    $('#pageToolbar01').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                        //page:当前选择页码
+                        //size:当前每页显示数量
+                        //count：当前页码总数(含有多少个size)
+                        GetActionListInfo(page,10)
+                        }
+                    });
+                };
+            },error:function(){
+                layer.alert('数据请求失败,错误代码：103',{icon: 2})
+            }
+        });     
+
+    };
+
+    //模块查询输入按钮事件
+    $("#nav-search-input02").keydown(function(e) {  
+          if (e.keyCode == 13) {
+            // if($("#nav-search-input").val() != ""){
+                var k_words = $("#nav-search-input02").val()
+                // layer.alert($("#nav-search-input").val())
+                GetModuleList(1,10,k_words)
+            // }
+
+          }
+      });
+
+    //获取模块数据(全量状态+查询状态)
+    function GetModuleList(s_page,page_size,k_words) {
+        console.log('发送前---'+k_words)
+        //取出单页数据
+        function GetModuleListInfo(s_page,page_size){
+            var k_words = $("#nav-search-input02").val()
+            console.log('发送中---'+k_words)
+            $.ajax({
+                type:'POST',
+                url:'/projectinfo/GetModuleInfoList/',
+                data:{'s_page':s_page,'page_size':page_size,'k_words':k_words},
+                dataType:'json',
+                success:function(val){
+                    // console.log(val)
+                    if(val == '302'){
+                        layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                    }else{
+                        console.log(val)
+                        console.log('---------------------------')
+                        var detail = val.ProjectInfo_data
+                        console.log(detail)
+                        // $("#previewlist").html("")
+                        // $('#previewlistcount').html(detail.length)
+                        if(detail.length==0){
+                            $("#ProjectInfolist").html('<tr><td colspan="9" style="text-align:center;">当前无记录</td></tr>')
+                        }else{
+                            $("#ProjectInfolist").html("")
+                        }
+                        for (var i=0;i < detail.length;i++){
+                            // $("#per_publish_user").html(val.review_data[i].publish_user)
+                            // console.log(val.review_data[i].publish_user)
+                            var project_name = detail[i]['project_name'].slice(1,-1)
+                            // console.log(project_name)
+                        
+                            $("#ProjectInfolist").append("<tr>\
+                                    <td id='project_"+(project_name)+"_name'></td>\
+                                    <td id='project_"+(project_name)+"_msg'></td>\
+                                    <td id='project_"+(project_name)+"_serverlist'></td>\
+                                    <td id='project_"+(project_name)+"_port'></td>\
+                                    <td id='project_"+(project_name)+"_excuteport'></td>\
+                                    <td id='project_"+(project_name)+"_status'></td>\
+                                    <td id='project_"+(project_name)+"_action'></td></tr>")
+
+                            //加载数据
+
+                            // console.log(detail[i]['project_server'])
+                            $("#project_"+(project_name)+"_name").html('<span class="label label-success">'+detail[i].project_name.slice(1,-1)+'</span>')
+                            $("#project_"+(project_name)+"_msg").html(detail[i].project_msg.substring(1))
+                            $("#project_"+(project_name)+"_serverlist").html(detail[i].project_server)
+                            $("#project_"+(project_name)+"_port").html(detail[i].project_port)
+                            $("#project_"+(project_name)+"_excuteport").html('9055')
+                            if(detail[i].project_status == '1'){
+                                $("#project_"+(project_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-success">已启用</span>\
+                                                            </div>')
+                                $("#project_"+(project_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this,2)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="projectswitch(this)" disabled="disabled">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="projectswitch(this)">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }else{
+                                $("#project_"+(project_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-danger">已停用</span>\
+                                                            </div>')
+                                $("#project_"+(project_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this,2)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="projectswitch(this)">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="projectswitch(this)" disabled="disabled">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }                    
+                        }
+                        // $('#pageToolbar').html("");
+                        // $('#pageToolbar').Paging({pagesize:10,count:detail.length,callback:function(page,size,count){alert('1')}});
+                    }
+                },error:function(){
+                    layer.alert('数据请求失败,错误代码：102',{icon: 2})
+                }
+            })          
+        };
+
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/GetModuleInfoCount/',
+            data:{'k_words':k_words},
+            dataType:'text',
+            success:function(val){
+                if(val == '303'){
+                    layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                }else{
+                    // console.log(val)
+                    $("#previewlistcount").html(val);
+                    GetModuleListInfo(s_page,page_size);
+                    //加载页码
+                    $('#pageToolbar02').html("");
+                    $('#pageToolbar02').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                        //page:当前选择页码
+                        //size:当前每页显示数量
+                        //count：当前页码总数(含有多少个size)
+                        GetModuleListInfo(page,10)
+                        }
+                    });
+                };
+            },error:function(){
+                layer.alert('数据请求失败,错误代码：103',{icon: 2})
+            }
+        });     
+
+    };
+
+
+
+    //服务器、组、模块修改弹窗
+    function projectupdate(ths,type){
+        // var modulename= $(ths).parent().parent().attr("id").split("_")[1]
+        // console.log(modulename)
+        /**
+        type:
+        1-server update
+        2-module update
+        **/
+
+        var cloneDoucment = $("#test01").clone(true)
+        if(type == 1){
+			var hostname = $(ths).parent().parent().attr("id").split("server_")[1].split("_action")[0]
+			// var hostip = $(ths).parent().parent().siblings().attr("id","server_l_svr_81_ip").html()
+			var hostip = $("#server_"+hostname+"_ip").html()
+			var hostport = $("#server_"+hostname+"_port").html()
+			var hostremark = $("#server_"+hostname+"_remark").html()
+
+			// console.log(hostname)
+			// console.log(hostip)
+			// var cloneDoucment = $("#test01").clone()
+			// console.log(cloneDoucment.find('#modifyname').html())
+			cloneDoucment.find('#clonenode1').html('服务器名称')
+			// console.log(cloneDoucment.find('#clonenode1').siblings().children().attr('placeholder',hostname))
+			cloneDoucment.find('#clonenode1').siblings().children().attr('placeholder',hostname).attr("readonly","readonly")
+			
+
+			cloneDoucment.find('#clonenode2').html('服务器IP')
+			cloneDoucment.find('#clonenode2').siblings().children().attr('placeholder',hostip).attr("readonly","readonly")
+
+			cloneDoucment.find('#clonenode3').html('SSH端口')
+			cloneDoucment.find('#clonenode3').siblings().children().attr('placeholder',hostport)
+			// cloneDoucment.find('#clonenode3').siblings().children().attr('id','sshport')
+
+			// cloneDoucment.children().children().append($('#ServerRemark').children().html())
+			// console.log(cloneDoucment.find('#clonenode3').siblings().children().val())
+
+			cloneDoucment.find('#ServerRemark').removeClass('hidden')
+
+			cloneDoucment.find('#clonenode4').html('服务器备注')
+			cloneDoucment.find('#clonenode4').siblings().children().attr('placeholder',hostremark)
+			// cloneDoucment.find('#clonenode4').siblings().children().attr('id','remark')
+
+        	// console.log(hostname)
+	        layer.open({
+	            title: '服务器信息',
+	            area: ['500px', 'auto'],
+	            content: cloneDoucment.html(),
+	            yes: function(index,layero){
+	            	//do something
+	            	console.log('yes!!!')
+					console.log(hostname)
+					console.log(hostip)
+					console.log($(layero).find('#clonenode3').siblings().children().val())
+					console.log($(layero).find('#clonenode4').siblings().children().val())
+					
+
+	            	layer.close(index); //如果设定了yes回调，需进行手工关闭
+	            }
+	          });
+        }else{
+
+        	var modulename= $(ths).parent().parent().attr("id").split("_")[1]
+        	var moduleserverlist= $("#project_"+modulename+"_serverlist").html()
+        	var moduleremark= $("#project_"+modulename+"_msg").html()
+        	var modulerport= $("#project_"+modulename+"_port").html()
+
+        	var ServerListmultiple = $("#ServerListmultiple").clone()
+
+        	console.log('用户名称'+modulename)
+        	console.log('下属用户'+moduleserverlist)
+        	console.log('模块备注'+moduleremark)
+        	console.log('模块端口'+modulerport)
+
+			cloneDoucment.find('#clonenode1').html('模块名称')
+			// console.log(cloneDoucment.find('#clonenode1').siblings().children().attr('placeholder',modulename))
+			cloneDoucment.find('#clonenode1').siblings().children().attr('placeholder',modulename).attr("readonly","readonly")
+			
+
+			cloneDoucment.find('#clonenode2').html('模块端口')
+			cloneDoucment.find('#clonenode2').siblings().children().attr('placeholder',modulerport).attr("readonly","readonly")
+
+			cloneDoucment.find('#clonenode3').html('模块备注')
+			cloneDoucment.find('#clonenode3').siblings().children().attr('placeholder',moduleremark)
+
+			// cloneDoucment.find('#clonenode4').html('下属服务器')
+			// cloneDoucment.find('#clonenode4').siblings().children().attr('placeholder',moduleserverlist)
+
+			// $('#ServerListmultiple').appendTo(cloneDoucment.html()); 
+
+			cloneDoucment.find('#ServerListmultiple').removeClass('hidden')
+
+			$.ajax({
+	            type:'POST',
+	            async:false,//阻塞模式，加载所有的服务器列表
+	            url:'/projectinfo/getserverlist/',
+	            dataType:'json',
+	            success:function(val){
+	            	var myArray=new Array()
+	            	var youArray=new Array()
+	            	var testArray = new Array()
+	            	for(var aa =0; aa< moduleserverlist.split(";").length -1;aa++){
+				        	youArray.push(moduleserverlist.split(";")[aa])
+				        };
+
+	                for(var i =0;i<val.ServerList.length;i++){
+	                	
+	                	myArray.push(val.ServerList[i]['server_ip'])
+	                	testArray.push(val.ServerList[i]['server_ip'])
+
+
+				        for(var aa =0; aa< moduleserverlist.split(";").length -1;aa++){
+				        	if(val.ServerList[i]['server_ip'] == moduleserverlist.split(";")[aa]){
+				        		cloneDoucment.children().children().find('select').append('<option  selected="selected">'+val.ServerList[i]['server_ip']+'</option>')
+				        		testArray.pop()
+
+				        	}
+				        	
+						};
+
+	                };
+
+	                // console.log('testArray'+testArray.length)
+
+
+
+				    for(var i =0;i<testArray.length;i++){
+				    	//否则加载至待选
+	                	cloneDoucment.children().children().find('select').append('<option >'+testArray[i]+'</option>')
+				    }
+
+
+	            },error:function(){
+	                console.log('获取服务器列表失败')        
+	            }
+	        });
+
+			cloneDoucment.children().children().find('select').attr('name','duallistbox_demo1[]')
+			
+
+	        layer.open({
+	            title: '模块信息',
+	            area: ['600px', '700px'],
+	            // content: cloneDoucment.html(),
+	            content:cloneDoucment.html(),
+	            	yes: function(index, layero){
+	            		console.log('1')
+	            		var aa = new Array
+
+	            		$(layero).find('select option:selected').each(function(){
+						    aa.push($(this).text())
+						  });
+	            		// $(layero).find('select option:selected').html()
+	            		console.log(aa)
+	            	//do something
+	            	layer.close(index); //如果设定了yes回调，需进行手工关闭
+	            }
+	          });
+        }
+        
+        /**
+        layer.open({
+            title: '模块信息',
+            area: ['600px', 'auto'],
+            content: $("#test").html(),
+            yes: function(index, layero){
+            //do something
+            layer.close(index); //如果设定了yes回调，需进行手工关闭
+            }
+          });
+        **/
+
+
+        //左右多选		
+		jQuery(function($){
+		    var demo1 = $('select[name="duallistbox_demo1[]"]').bootstrapDualListbox({infoTextFiltered: '<span class="label label-purple label-lg">Filtered</span>'});
+			var container1 = demo1.bootstrapDualListbox('getContainer');
+			container1.find('.btn').addClass('btn-white btn-info btn-bold');
+
+			/**var setRatingColors = function() {
+				$(this).find('.star-on-png,.star-half-png').addClass('orange2').removeClass('grey');
+				$(this).find('.star-off-png').removeClass('orange2').addClass('grey');
+			}*/
+			$('.rating').raty({
+				'cancel' : true,
+				'half': true,
+				'starType' : 'i'
+				/**,
+				
+				'click': function() {
+					setRatingColors.call(this);
+				},
+				'mouseover': function() {
+					setRatingColors.call(this);
+				},
+				'mouseout': function() {
+					setRatingColors.call(this);
+				}*/
+			})//.find('i:not(.star-raty)').addClass('grey');
+			
+			
+			
+			
+			//////////////////
+			$('.multiselect').multiselect({
+			 enableFiltering: true,
+			 buttonClass: 'btn btn-white btn-primary',
+			 templates: {
+				button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"></button>',
+				ul: '<ul class="multiselect-container dropdown-menu"></ul>',
+				filter: '<li class="multiselect-item filter"><div class="input-group"><span class="input-group-addon"><i class="fa fa-search"></i></span><input class="form-control multiselect-search" type="text"></div></li>',
+				filterClearBtn: '<span class="input-group-btn"><button class="btn btn-default btn-white btn-grey multiselect-clear-filter" type="button"><i class="fa fa-times-circle red2"></i></button></span>',
+				li: '<li><a href="javascript:void(0);"><label></label></a></li>',
+				divider: '<li class="multiselect-item divider"></li>',
+				liGroup: '<li class="multiselect-item group"><label class="multiselect-group"></label></li>'
+			 }
+			});
+			
+			
+			///////////////////
+				
+			//typeahead.js
+			//example taken from plugin's page at: https://twitter.github.io/typeahead.js/examples/
+			var substringMatcher = function(strs) {
+				return function findMatches(q, cb) {
+					var matches, substringRegex;
+				 
+					// an array that will be populated with substring matches
+					matches = [];
+				 
+					// regex used to determine if a string contains the substring `q`
+					substrRegex = new RegExp(q, 'i');
+				 
+					// iterate through the pool of strings and for any string that
+					// contains the substring `q`, add it to the `matches` array
+					$.each(strs, function(i, str) {
+						if (substrRegex.test(str)) {
+							// the typeahead jQuery plugin expects suggestions to a
+							// JavaScript object, refer to typeahead docs for more info
+							matches.push({ value: str });
+						}
+					});
+
+					cb(matches);
+				}
+			 }
+
+			 $('input.typeahead').typeahead({
+				hint: true,
+				highlight: true,
+				minLength: 1
+			 }, {
+				name: 'states',
+				displayKey: 'value',
+				source: substringMatcher(ace.vars['US_STATES'])
+			 });
+				
+				
+			///////////////
+			
+			
+			//in ajax mode, remove remaining elements before leaving page
+			$(document).one('ajaxloadstart.page', function(e) {
+				$('[class*=select2]').remove();
+				$('select[name="duallistbox_demo1[]"]').bootstrapDualListbox('destroy');
+				$('.rating').raty('destroy');
+				$('.multiselect').multiselect('destroy');
+			});
+
+		});
+
+    };
+
+
+    //服务器、组、模块状态切换
+    function projectswitch(ths){
+        // layer.alert(ths.html())
+        var modulename= $(ths).parent().parent().attr("id").split("_")[1]
+        var serverlist= $("#project_"+$(ths).parent().parent().attr("id").split("_")[1]+"_serverlist").html()
+        var moduleaction= $(ths).attr('values')
+        // moduleaction:
+        // 0-停用模块
+        // 1-启用模块
+        // console.log(serverlist)
+        $.ajax({
+            type:'POST',
+            url:'/projectinfo/projectswitch/',
+            data:{'modulename':modulename,'moduleaction':moduleaction,'serverlist':serverlist},
+            dataType:'text',
+            success:function(val){
+                if(val == 'switched'){
+                    GetActionList(1,10)
+                }else{
+                    layer.alert(val,{icon: 2})
+                }
+                // console.log(val)
+                // GetActionList(1,10)
+            },error:function(){
+                layer.alert('操作失败',{icon: 2})
+            }
+        });
+    }
+
+</script>

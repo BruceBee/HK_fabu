@@ -1,0 +1,54 @@
+---
+- hosts: "{{ project_name }}"
+  gather_facts: no
+  vars:
+    date_time: "{{ backup_time }}"
+#    new_project_path: /home/zhengxupeng/ftp/zxp/
+  remote_user: tomcat
+
+  tasks:
+
+    - name: kill tomcat
+      shell: ps aux|grep tomcat_{{ project_name }}|grep -v grep|awk '{print $2}'|xargs -i kill -9 {}
+      ignore_errors: True
+
+    - name: delete old project
+      file: path=/opt/tomcat_{{ project_name }}/webapps state=absent
+      tags:
+        - delete_old_project
+      ignore_errors: True
+
+    - name: sync file
+      unarchive: src={{ project_pack }} dest=/opt/
+      tags:
+        - sync_file
+      register: sync_result
+
+    - name: Set JAVA_HOME 
+      lineinfile: dest=/opt/tomcat_{{ project_name }}/bin/setenv.sh line='export JAVA_HOME=/usr/java/jdk1.7.0_55' create=yes state=present mode=0555
+
+    - name: set all file in bin attributes 0555
+      file: path=/opt/tomcat_{{ project_name }}/bin  recurse=yes state=directory mode="u+x"
+
+    - name: replace port
+      replace:
+        dest=/opt/tomcat_{{ project_name }}/conf/server.xml
+        backup=yes
+        regexp={{ item.reg }}
+        replace={{ item.rep }}
+      with_items:
+        - {reg: '(Server port=)"\d+"( shutdown="SHUTDOWN")', rep: '\1"{{ project_port | int - 1 }}"\2'}
+        - {reg: '(Connector port=)"\d+"( protocol="HTTP/1.1")', rep: '\1"{{ project_port }}"\2'}
+        - {reg: '(redirectPort=)"\d+"', rep: '\1"{{ project_port | int + 1 }}"'}
+        - {reg: '(Connector port=)"\d+"( protocol="AJP/1.3")', rep: '\1"{{ project_port | int + 2 }}"\2'}
+
+    - name: start tomcat
+#      shell: nohup /opt/tomcat_{{ project_name }}/bin/startup.sh &
+      shell: chdir=/opt/tomcat_{{ project_name }}/bin/ nohup ./startup.sh &
+      tags:
+        - start_tomcat
+      when: sync_result|success
+      #register: restart_result
+      #ignore_errors: True
+#    - name: wait for tomcat to start 
+#      wait_for: port=8080

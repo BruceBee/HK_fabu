@@ -1,0 +1,496 @@
+{% include "base/template_head.html" %}
+<link rel="stylesheet" href="/static/css/paging.css">
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/query.js"></script>
+<script type="text/javascript" src="/static/js/paging.js"></script>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+            	<div class="page-header">
+					<h1>系统日志管理</h1>
+				</div>
+	            <!-- <h2 class="header"><b>系统日志管理</b></h2> -->
+	            <ul class="list-unstyled spaced">
+	            	<div class="tabbable">
+						<ul class="nav nav-tabs" id="myTab">
+							<li class="active">
+								<a data-toggle="tab" href="#syslogin" onclick="GetLoginList(1,10)">
+									<i class="blue ace-icon fa fa-history bigger-120"></i>
+									系统登录日志
+								</a>
+							</li>
+							<li >
+								<a data-toggle="tab" href="#forreview" onclick="GetActionList(1,10)">
+									<i class="orange ace-icon fa fa-wrench bigger-120"></i>
+									系统操作日志
+								</a>			
+							</li>
+						</ul>
+
+						<div class="tab-content">
+
+							<div id="syslogin" class="tab-pane fade in active">
+								<span style="float: left;color: green"><b>&nbsp;总记录数&nbsp;<span id='syslogincount'></span>&nbsp;条</b></span>
+								<div id="SearchBar">
+								<div class="nav-search" style="float: right;">
+									<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="sysloginlogsearch" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+									</span>
+								</div>									
+
+								</div>
+
+								<br>
+								<hr>
+								<div class="widget-body">
+			                        <div class="widget-main no-padding">
+			                            <table class="table table-bordered table-striped">
+			                                <thead class="thin-border-bottom">
+			                                    <tr>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>日志ID</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>用户</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>登录时间</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>登出时间</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>登录操作</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>登录IP</th>
+			                                    </tr>
+			                                </thead>
+
+			                                <tbody id= 'publishlist'>
+			                                </tbody>
+			                            </table>
+
+			                        </div>
+			                    </div>
+			                    <br>
+								<hr>			                    
+			                    <!-- <div id="pageToolbar"></div> -->
+							</div>
+
+							<div id="forreview" class="tab-pane fade">
+								<span style="float: left;color: green"><b>&nbsp;总记录数&nbsp;<span id='previewlistcount'></span>&nbsp;条</b></span>
+								<div class="nav-search" style="float: right;">
+									<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="sysactionlogsearch" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+									</span>
+								</div>
+								<br>
+								<hr>
+								<div class="widget-body">
+			                        <div class="widget-main no-padding">
+			                            <table class="table table-bordered table-striped">
+			                                <thead class="thin-border-bottom">
+			                                    <tr>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>操作日志ID</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>操作人员</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>操作时间</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>操作类型</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>操作模块</th>
+			                                        <th><i class="ace-icon fa fa-caret-right blue"></i>操作备注</th>
+			                                    </tr>
+			                                </thead>
+
+			                                <tbody id= 'previewlist'>
+			                                </tbody>
+			                            </table>
+
+			                        </div>
+			                    </div>
+			                    <br>
+								<hr>			                    
+			                    <!-- <div id="pageToolbar"></div> -->
+							</div>
+
+							<div id="pageToolbar"></div>
+						</div>
+
+					</div>
+
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% include "base/template_footer.html" %}
+<script>
+
+
+
+	$(document).ready(function(){
+		GetLoginList(1,10);
+	});
+
+	function GetLoginList(s_page,page_size) {
+		//取出单页数据
+		function GetLoginListInfo(s_page,page_size){
+			$.ajax({
+				type:'POST',
+				url:'/log/GetLoginList/',
+				data:{'s_page':s_page,'page_size':page_size},
+				dataType:'json',
+				success:function(val){
+					console.log(val)
+					console.log(val.LogQsetList)
+					var detail = val.LogQsetList
+					// $("#mypublistcount").html(val.page_total)
+					if(detail.length==0){
+						$("#publishlist").html('<tr><td colspan="9" style="text-align:center;">当前无记录</td></tr>')
+					}else{
+						$("#publishlist").html("")
+					}
+					// $('#mypublistcount').html(detail.length)
+
+					for (var i=0;i < detail.length;i++){
+						// $("#per_publish_user").html(val.review_data[i].publish_user)
+						// console.log(val.review_data[i].publish_user)
+						var publish_id = detail[i]['id']
+					
+					$("#publishlist").append("<tr>\
+							<td id='publish_"+(publish_id)+"_id'></td>\
+							<td id='publish_"+(publish_id)+"_Loginuser'></td>\
+							<td id='publish_"+(publish_id)+"_Logintime'></td>\
+							<td id='publish_"+(publish_id)+"_Logouttime'></td>\
+							<td id='publish_"+(publish_id)+"_Logaction'></td>\
+							<td id='publish_"+(publish_id)+"_LogIP'></td></tr>")
+
+					//加载数据
+
+					$("#publish_"+(publish_id)+"_id").html('<span class="badge">'+publish_id+'</span>')
+					$("#publish_"+(publish_id)+"_Loginuser").html(detail[i].Loginuser)
+					$("#publish_"+(publish_id)+"_Logintime").html(detail[i].Logintime)
+					$("#publish_"+(publish_id)+"_Logouttime").html(detail[i].Logouttime)
+					$("#publish_"+(publish_id)+"_Logaction").html(detail[i].Logaction)
+					$("#publish_"+(publish_id)+"_LogIP").html(detail[i].LogIP)
+					}
+				},error:function(){
+					console.log('error')
+				}
+			});		
+		};
+
+		//取出总页数
+		$.ajax({
+			type:'POST',
+			url:'/log/GetLoginPageCount/',
+			dataType:'text',
+			success:function(val){
+				$('#syslogincount').html(val)
+				// console.log(val)
+				GetLoginListInfo(s_page,page_size);
+
+				//加载页码
+				$('#pageToolbar').html("");
+				$('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+					//page:当前选择页码
+					//size:当前每页显示数量
+					//count：当前页码总数(含有多少个size)
+					GetLoginListInfo(page,10)
+					}
+				});
+			},error:function(){
+				console.log('error')
+			}
+		});	
+
+	};
+
+	function GetActionList(s_page,page_size) {
+		//取出单页数据
+		function GetActionListInfo(s_page,page_size){
+			$.ajax({
+				type:'POST',
+				url:'/log/GetActionList/',
+				data:{'s_page':s_page,'page_size':page_size},
+				dataType:'json',
+				success:function(val){
+					console.log(val)
+					var detail = val.ActionQsetList
+					// $("#previewlist").html("")
+					// $('#previewlistcount').html(detail.length)
+					if(detail.length==0){
+						$("#previewlist").html('<tr><td colspan="9" style="text-align:center;">当前无记录</td></tr>')
+					}else{
+						$("#previewlist").html("")
+					}
+					for (var i=0;i < detail.length;i++){
+						// $("#per_publish_user").html(val.review_data[i].publish_user)
+						// console.log(val.review_data[i].publish_user)
+						var review_id = detail[i]['id']
+					
+					$("#previewlist").append("<tr>\
+							<td id='review_"+(review_id)+"_id'></td>\
+							<td id='review_"+(review_id)+"_Actionuser'></td>\
+							<td id='review_"+(review_id)+"_Actiontime'></td>\
+							<td id='review_"+(review_id)+"_Actiontype'></td>\
+							<td id='review_"+(review_id)+"_Actionmodule'></td>\
+							<td id='review_"+(review_id)+"_Actioninfo'></td></tr>")
+
+					//加载数据
+
+					$("#review_"+(review_id)+"_id").html('<span class="badge">'+review_id+'</span>')
+					$("#review_"+(review_id)+"_Actionuser").html(detail[i].Actionuser)
+					$("#review_"+(review_id)+"_Actiontime").html(detail[i].Actiontime)
+					$("#review_"+(review_id)+"_Actiontype").html(detail[i].Actiontype)
+					$("#review_"+(review_id)+"_Actionmodule").html(detail[i].Actionmodule)
+					$("#review_"+(review_id)+"_Actioninfo").html(detail[i].Actioninfo)
+					
+					}
+					// $('#pageToolbar').html("");
+					// $('#pageToolbar').Paging({pagesize:10,count:detail.length,callback:function(page,size,count){alert('1')}});
+
+				},error:function(){
+					console.log('error')
+				}
+			})			
+		};
+
+		//取出总页数
+		$.ajax({
+			type:'POST',
+			url:'/log/GetActionPageCount/',
+			dataType:'text',
+			success:function(val){
+				$("#previewlistcount").html(val);
+				GetActionListInfo(s_page,page_size);
+				//加载页码
+				$('#pageToolbar').html("");
+				$('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+					//page:当前选择页码
+					//size:当前每页显示数量
+					//count：当前页码总数(含有多少个size)
+					GetActionListInfo(page,10)
+					}
+				});
+			},error:function(){
+				console.log('error')
+			}
+		});		
+
+
+	};
+
+  	$("#sysloginlogsearch").keydown(function(e) {  
+      if (e.keyCode == 13) {
+        // if($("#nav-search-input").val() != ""){
+            var k_words = $("#sysloginlogsearch").val()
+            // layer.alert($("#nav-search-input").val())
+            console.log('查询内容'+k_words)
+            GetLoginLogSearchList(1,10,k_words)
+      	}
+      });
+
+  	$("#sysactionlogsearch").keydown(function(e) {  
+      if (e.keyCode == 13) {
+        // if($("#nav-search-input").val() != ""){
+            var k_words = $("#sysactionlogsearch").val()
+            // layer.alert($("#nav-search-input").val())
+            console.log('查询内容'+k_words)
+            // GetUserSearchList(1,10,k_words)
+      	}
+      });
+
+  	//查询系统登录日志
+    function GetLoginLogSearchList(s_page,page_size,k_words){
+    //取出单页登录日志数据
+        function GetLoginLogSearcInfo(s_page,page_size){
+            var k_words = $("#sysloginlogsearch").val()
+            $.ajax({
+                type:'POST',
+                url:'/log/GetLoginLogSearchInfo/',
+                data:{'s_page':s_page,'page_size':page_size,'k_words':k_words},
+                dataType:'json',
+                success:function(val){
+                    console.log(val)
+                    // console.log(args)
+                    var detail = val.GetLoginLogSearchInfo_obj
+					if(detail.length==0){
+						$("#publishlist").html('<tr><td colspan="9" style="text-align:center;">当前无记录</td></tr>')
+					}else{
+						$("#publishlist").html("")
+					}
+					for (var i=0;i < detail.length;i++){
+						// $("#per_publish_user").html(val.review_data[i].publish_user)
+						// console.log(val.review_data[i].publish_user)
+						var publish_id = detail[i]['id']
+					
+					$("#publishlist").append("<tr>\
+							<td id='publish_"+(publish_id)+"_id'></td>\
+							<td id='publish_"+(publish_id)+"_Loginuser'></td>\
+							<td id='publish_"+(publish_id)+"_Logintime'></td>\
+							<td id='publish_"+(publish_id)+"_Logouttime'></td>\
+							<td id='publish_"+(publish_id)+"_Logaction'></td>\
+							<td id='publish_"+(publish_id)+"_LogIP'></td></tr>")
+
+					//加载数据
+
+					$("#publish_"+(publish_id)+"_id").html('<span class="badge">'+publish_id+'</span>')
+					$("#publish_"+(publish_id)+"_Loginuser").html(detail[i].Loginuser)
+					$("#publish_"+(publish_id)+"_Logintime").html(detail[i].Logintime)
+					$("#publish_"+(publish_id)+"_Logouttime").html(detail[i].Logouttime)
+					$("#publish_"+(publish_id)+"_Logaction").html(detail[i].Logaction)
+					$("#publish_"+(publish_id)+"_LogIP").html(detail[i].LogIP)
+					}
+                },error:function(){
+                    console.log('error')
+                }
+            });
+        };
+
+
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/log/GetLoginLogSearchCount/',
+            data:{'k_words':k_words},
+            dataType:'text',
+            success:function(val){
+            	console.log(val)
+            	$('#syslogincount').html(val)
+                GetLoginLogSearcInfo(s_page,page_size);
+                //加载页码
+                $('#pageToolbar').html("");
+                $('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                    //page:当前选择页码
+                    //size:当前每页显示数量
+                    //count：当前页码总数(含有多少个size)
+                    GetLoginLogSearcInfo(page,10)
+                    }
+                });
+            },error:function(){
+                console.log('error')
+            }
+        });
+
+    };
+
+  	//查询系统操作日志
+    function GetactionLogSearchList(args,s_page,page_size,k_words){
+    //取出单页操作日志数据
+        function GetLoginLogSearcInfo(args,s_page,page_size){
+            var k_words = $("#sysloginlogsearch").val()
+            $.ajax({
+                type:'POST',
+                url:'/softwaretest/GetActionSearchList/',
+                data:{'args':args,'s_page':s_page,'page_size':page_size,'k_words':k_words},
+                dataType:'json',
+                success:function(val){
+                    // console.log(val)
+                    // console.log(args)
+                    var detail = val.GetActionData
+                    // $('#reviewaccept').html(detail.length)
+                    if(detail.length==0){
+                        $("#reviewed_"+(args)).html('<tr><td colspan="10" style="text-align:center;">当前无记录</td></tr>')
+                    }else{
+                        $("#reviewed_"+(args)).html("")
+                    }
+                    // $("#reviewed_"+(args)).html("")
+                    for (var i=0;i < detail.length;i++){
+                        // $("#per_publish_user").html(val.review_data[i].publish_user)
+                        // console.log(val.review_data[i].publish_user)
+                        var test_id = detail[i]['publish_id']
+
+                            $("#reviewed_"+(args)).append("<tr>\
+                            <td id='reviewed_"+(args)+(test_id)+"_id'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_type'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_user'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_module'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_status'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_createtime'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_serverlist'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_review_owner'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_review_time'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_review_info'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_test_user'></td>\
+                            <td id='reviewed_"+(args)+(test_id)+"_test_time'></td></tr>")
+
+                            //加载数据
+
+                            $("#reviewed_"+(args)+(test_id)+"_id").html('<a href="/softwaretest/TestReport/'+(test_id)+'/"><span class="badge">'+test_id+'</span></a>')
+                            $("#reviewed_"+(args)+(test_id)+"_type").html(detail[i].publish_type)
+                            $("#reviewed_"+(args)+(test_id)+"_user").html(detail[i].publish_user)
+                            $("#reviewed_"+(args)+(test_id)+"_module").html(detail[i].publish_module)
+                            $("#reviewed_"+(args)+(test_id)+"_filename").html(detail[i].publish_filename)
+                            if(args == 1){
+                                $("#reviewed_"+(args)+(test_id)+"_status").html('<span class="badge badge-success">'+detail[i].publish_status+'</span>')
+                            }else{
+                                $("#reviewed_"+(args)+(test_id)+"_status").html('<span class="badge badge-danger">'+detail[i].publish_status+'</span>')
+                            }
+                            
+                            $("#reviewed_"+(args)+(test_id)+"_createtime").html(detail[i].create_time)
+                            $("#reviewed_"+(args)+(test_id)+"_serverlist").html(detail[i].publish_serverlist)
+                            $("#reviewed_"+(args)+(test_id)+"_review_owner").html(detail[i].review_owner)
+                            $("#reviewed_"+(args)+(test_id)+"_review_time").html(detail[i].review_time)
+                            $("#reviewed_"+(args)+(test_id)+"_review_info").html(detail[i].review_info.substring(0,10)+"..."+"<a href='/softwaretest/TestReport/"+(test_id)+"/'><span class='badge badge-info'>查看详情</span></a>")
+                            $("#reviewed_"+(args)+(test_id)+"_test_user").html(detail[i].test_user)
+                            $("#reviewed_"+(args)+(test_id)+"_test_time").html(detail[i].test_endtime)
+                    
+                    }
+                    // console.log(detail.length)
+                    return detail.length;
+                    // console.log(detail.length)
+
+                    // $('#pageToolbar').html("");
+                    // $('#pageToolbar').Paging({pagesize:10,count:val.page_total,callback:function(page,size,count){
+                    //  //page:当前选择页码
+                    //  //size:当前每页显示数量
+                    //  //count：当前页码总数(含有多少个size)
+                    //  console.log('当前页是第'+page+'页')
+                    //  }
+                    // });
+                },error:function(){
+                    console.log('error')
+                }
+            });
+        };
+
+
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/softwaretest/GetActionSearchListPageCount/',
+            data:{'args':args,'k_words':k_words},
+            dataType:'text',
+            success:function(val){
+                // args:
+                // 1-success
+                // 2-failed
+                if(args == '1'){
+                    $("#successcount").html(val)
+                }else{
+                    $("#failedcount").html(val)
+                }
+                GetAcceptSearchTestInfo(args,s_page,page_size);
+                //加载页码
+                $('#pageToolbar').html("");
+                $('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                    //page:当前选择页码
+                    //size:当前每页显示数量
+                    //count：当前页码总数(含有多少个size)
+                    GetAcceptSearchTestInfo(args,page,10)
+                    }
+                });
+            },error:function(){
+                console.log('error')
+            }
+        });
+
+    };
+
+
+
+
+
+	
+</script>
+
+<!-- 	</body>
+</html> -->

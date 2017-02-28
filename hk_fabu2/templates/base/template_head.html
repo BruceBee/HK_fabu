@@ -1,0 +1,519 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        {% load static %}
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+		<title>华康版本发布系统</title>
+
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<link href="{% static 'img/favicon.jpg' %}" rel="shortcut icon" />
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="{% static "css/bootstrap.css" %}" />
+
+		<link rel="stylesheet" href="{% static "css/font-awesome.css" %}" />
+        <link rel="stylesheet" href="{% static "css/chosen.css" %}" />
+
+        <link rel="stylesheet" href="{% static "plugins/layer/skin/default/layer.css" %}" />
+        <!-- 通知插件 -->
+        <link rel="stylesheet" href="{% static "plugins/toastr/css/toastr.css" %}" />
+
+		<!-- page specific plugin styles -->
+
+		<!-- text fonts -->
+		<link rel="stylesheet" href="{% static "css/ace-fonts.css" %}" />
+
+		<!-- ace styles -->
+		<link rel="stylesheet" href="{% static "css/ace.css" %}" class="ace-main-stylesheet" id="main-ace-style" />
+
+		<!--[if lte IE 9]>
+			<link rel="stylesheet" href="{% static "css/ace-part2.css" %}" class="ace-main-stylesheet" />
+		<![endif]-->
+
+		<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="{% static "css/ace-ie.css" %}" />
+		<![endif]-->
+
+		<!-- inline styles related to this page -->
+		<!-- echarts -->
+		
+		<link rel="stylesheet" href="{% static "font-awesome-4.7.0/css/font-awesome.css" %}" />
+
+
+		
+
+		<script src="{% static "js/echarts.min.js" %}"></script>
+		<script src="{% static "js/china.js" %}"></script>
+		<script src="{% static "js/jquery.js" %}"></script>
+
+
+		
+		<script src="{% static "plugins/layer/layer.js" %}"></script>
+
+		<!-- 通知插件toastr.js -->
+		<script src="{% static "plugins/toastr/js/toastr.js" %}"></script>
+
+		
+		<!-- ace settings handler -->
+		<script src="{% static "js/ace-extra.js" %}"></script>
+		
+
+
+		<!-- <script src="{% static "js/jquery.js" %}"></script> -->
+
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+		<!--[if lte IE 8]>
+		<script src="{% static "js/html5shiv.js" %}"></script>
+		<script src="{% static "js/respond.js" %}"></script>
+
+		<![endif]-->
+		<script type="text/javascript">
+			$(document).ready(function(){
+				disk_usage();
+
+				{% ifequal have_review '1' %}
+				review_notice();
+				{% endifequal %}
+				{% ifequal have_test '1' %}
+				test_notice();
+				{% endifequal %}
+				// console.log({{have_publish}})
+				// console.log({{have_review}})
+				// console.log({{have_test}})
+			});
+			//每十秒钟执行一次加载通知信息
+			{% ifequal have_review '1' %}
+			setInterval("review_notice()",10000);
+			{% endifequal %}
+			{% ifequal have_test '1' %}
+			setInterval("test_notice()",10000);
+			{% endifequal %}
+
+			//获取发布申请数量，加载web弹窗通知
+			function review_notice(){
+				$.ajax({
+					type: "POST",
+            		url: "/LoadNotice/",
+            		dataType: "json",
+            		success: function (data) {
+            			// console.log(data)
+            			var ForReviewCount = data.ForReviewCount
+            			var ForTestCount = data.ForTestCount
+            			// console.log(ForTestCount)
+            			if(ForReviewCount !=0){
+            				toastr.options = {
+							  "closeButton": true,
+							  "debug": false,
+							  "positionClass": "toast-top-right",
+							  "onclick": null,
+							  "showDuration": "300",
+							  "hideDuration": "1000",
+							  "timeOut": "5000",
+							  "extendedTimeOut": "1000",
+							  "showEasing": "swing",
+							  "hideEasing": "linear",
+							  "showMethod": "fadeIn",
+							  "hideMethod": "fadeOut"
+							}
+            				toastr.info("您有&nbsp;"+ForReviewCount+"&nbsp;条发布审核,"+"<a href='/review/'>前去审核</a>", "发布审核通知")
+            			};
+            		},
+		            error: function (err) {
+		                layer.alert("通知请求提交异常,错误代码：105",{icon: 2});
+		            }
+
+				})
+			};
+
+			//获取测试申请数量，加载web弹窗通知
+			function test_notice(){
+				$.ajax({
+					type: "POST",
+            		url: "/LoadNotice/",
+            		dataType: "json",
+            		success: function (data) {
+            			// console.log(data)
+            			var ForReviewCount = data.ForReviewCount
+            			var ForTestCount = data.ForTestCount
+            			// console.log(ForTestCount)
+            			if(ForTestCount !=0){
+            				toastr.options = {
+							  "closeButton": true,
+							  "debug": false,
+							  "positionClass": "toast-top-right",
+							  "onclick": null,
+							  "showDuration": "300",
+							  "hideDuration": "1000",
+							  "timeOut": "5000",
+							  "extendedTimeOut": "1000",
+							  "showEasing": "swing",
+							  "hideEasing": "linear",
+							  "showMethod": "fadeIn",
+							  "hideMethod": "fadeOut"
+							}
+            				toastr.info("您有&nbsp;"+ForTestCount+"&nbsp;条发布测试,"+"<a href='/softwaretest/'><b>前去测试</b></a>", "发布测试通知")
+            			}
+            		},
+		            error: function (err) {
+		                layer.alert("通知请求提交异常,错误代码：105",{icon: 2});
+		            }
+
+				})
+			};
+
+			//获取系统硬盘使用情况，加载首页导航出硬盘百分百
+			function disk_usage(){
+
+				$.ajax({
+					type: "POST",
+            		url: "/LoadDisk/",
+            		dataType: "json",
+            		success: function (data) {
+
+            			// console.log(data)
+            			var DiskInfo = data.DiskInfo
+            			var jsonLength=0;
+
+            			for(var DiskItem in DiskInfo){
+            				
+            				jsonLength++;
+
+            				$("#diskzone").append('<div style="float: right;margin-top: 5px;margin-left: 20px">\
+								<i class="ace-icon fa fa-hdd-o bigger-120"></i>&nbsp;&nbsp;|&nbsp;&nbsp;<span >'+DiskInfo[DiskItem][3]+'&nbsp;&nbsp;|</span>\
+								<div class="progress progress-small progress-striped active" style="float: right;width: 100px;margin-top: 7px;;margin-left: 5px">\
+									<div class="progress-bar" id=disk_'+jsonLength+' style="width: '+ DiskInfo[DiskItem][2]+'%;">'+DiskInfo[DiskItem][1]+'/'+DiskInfo[DiskItem][0]+'</div>\
+								</div>\
+							</div>')
+
+							if(DiskInfo[DiskItem][2] >= 90){
+								$("#disk_"+jsonLength+"").addClass('progress-bar-danger')
+							}else if(DiskInfo[DiskItem][2] >= 70){
+								$("#disk_"+jsonLength+"").addClass('progress-bar-warning')
+							}else if(DiskInfo[DiskItem][2] >= 20){
+								$("#disk_"+jsonLength+"").addClass('progress-bar-success')
+							}else{
+								$("#disk_"+jsonLength+"").addClass('progress-bar-info')
+							}
+
+
+            			}
+            			// console.log(data.DiskInfo['tmpfs'])
+
+            		},
+		            error: function (err) {
+		                layer.alert("获取系统硬盘使用数据失败,错误代码：105",{icon: 2});
+		            }
+
+				})
+
+
+				// $(".nav-search").append('<div style="float: right;margin-top: 5px;margin-left: 20px">\
+				// 				<span >/test&nbsp;&nbsp;|</span>\
+				// 				<div class="progress progress-small progress-striped active" style="float: right;width: 100px;margin-top: 7px;;margin-left: 5px">\
+				// 					<div class="progress-bar progress-bar-success" style="width: 44%;">6.9G/13G</div>\
+				// 				</div>\
+				// 			</div>')
+			}
+
+
+			function catchthisselect(ths){
+				console.log($(ths).children.attr("id"))
+			}
+		</script>		
+
+	</head>
+
+	<body class="no-skin">
+		<!-- #section:basics/navbar.layout -->
+		<div id="navbar" class="navbar navbar-default">
+			<script type="text/javascript">
+				try{ace.settings.check('navbar' , 'fixed')}catch(e){}
+				
+			</script>
+
+			<div class="navbar-container" id="navbar-container">
+
+
+
+
+
+
+
+				<!-- #section:basics/sidebar.mobile.toggle -->
+<!-- 				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+					<span class="sr-only">Toggle sidebar</span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+				</button> -->
+
+				<!-- /section:basics/sidebar.mobile.toggle -->
+				<div class="navbar-header pull-left">
+					<!-- #section:basics/navbar.layout.brand -->
+					<a href="/" class="navbar-brand">
+						<small>
+<!-- 							<i class="fa fa-leaf"></i> -->
+							<img src="/static/img/logo1.png" style="width: 100px;height: 25px">&nbsp;&nbsp;&nbsp;版本发布平台
+						</small>
+					</a>
+
+					<!-- /section:basics/navbar.layout.brand -->
+
+					<!-- #section:basics/navbar.toggle -->
+
+					<!-- /section:basics/navbar.toggle -->
+				</div>
+
+				<!-- #section:basics/navbar.dropdown -->
+				<div class="navbar-buttons navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+
+
+						<!-- #section:basics/navbar.user_menu -->
+						<li class="light-blue">
+							<a href="/logout/">
+<!-- 								<span class="user-info">
+									<small>Logout</small>{{ LoginName }}
+								</span> -->
+                                {{ LoginName }}&nbsp;<i class="ace-icon fa fa-power-off"></i>
+							</a>
+
+						</li>
+
+						<!-- /section:basics/navbar.user_menu -->
+					</ul>
+				</div>
+
+				<!-- /section:basics/navbar.dropdown -->
+			</div><!-- /.navbar-container -->
+		</div>
+		<!-- <br> -->
+		<!-- /section:basics/navbar.layout -->
+		<div class="main-container" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+			</script>
+
+			<!-- #section:basics/sidebar -->
+			<div id="sidebar" class="sidebar responsive">
+
+				<script type="text/javascript">
+					try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+				</script>
+
+				<!-- 首页快捷按键 -->
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+					<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+						<a href="/" class="btn btn-success">
+							<i class="ace-icon fa fa-signal"></i>
+						</a>
+
+						<a href="/" class="btn btn-info">
+							<i class="ace-icon fa fa-pencil"></i>
+						</a>
+
+						<!-- #section:basics/sidebar.layout.shortcuts -->
+						<a href="/" class="btn btn-warning">
+							<i class="ace-icon fa fa-users"></i>
+						</a>
+
+						<a href="/" class="btn btn-danger">
+							<i class="ace-icon fa fa-cogs"></i>
+						</a>
+
+						<!-- /section:basics/sidebar.layout.shortcuts -->
+					</div>
+
+					<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+						<span class="btn btn-success"></span>
+
+						<span class="btn btn-info"></span>
+
+						<span class="btn btn-warning"></span>
+
+						<span class="btn btn-danger"></span>
+					</div>
+				</div><!-- /.sidebar-shortcuts -->
+				<!-- 首页快捷按钮结束 -->
+
+
+				<ul class="nav nav-list" onclick="catchthisselect(this)">
+					<li class="highlight" id="dashboard">
+						<a href="/">
+							<i class="menu-icon fa fa-tachometer"></i>
+							<span class="menu-text"> 发布统计预览 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+
+					{% include "base/sidebar_for_admin.html" %}
+
+					{% ifequal have_publish '1' %}
+					<li class="highlight" id="Deployment">
+						<a href="/Deployment/">
+							<i class="menu-icon fa fa-list-alt"></i>
+							<span class="menu-text"> 系统发布 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+					{% endifequal %}
+
+					{% ifequal have_review '1' %}
+					<li class="highlight" id="review">
+						<a href="/review/">
+							<i class="menu-icon glyphicon glyphicon-check"></i>
+							<span class="menu-text"> 发布审核 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+					{% endifequal %}
+
+
+					{% ifequal have_test '1' %}
+					<li class="highlight" id="softwaretest">
+						<a href="/softwaretest/">
+							<i class="menu-icon glyphicon glyphicon-link"></i>
+							<span class="menu-text"> 系统测试 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+					{% endifequal %}
+
+					
+
+                    <li class="highlight" id="startstoprestart">
+						<a href="/startstoprestart/">
+							<i class="menu-icon glyphicon glyphicon-flash"></i>
+							<span class="menu-text"> 启停控制 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+
+                    <li class="highlight" id="mail">
+						<a href="/mail/">
+							<i class="menu-icon glyphicon glyphicon-envelope"></i>
+							<span class="menu-text"> 通知设置 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li>
+<!--                     <li class="highlight" id="usermanage">
+						<a href="/usermanage/">
+							<i class="menu-icon glyphicon glyphicon-user"></i>
+							<span class="menu-text"> 用户管理 </span>
+						</a>
+
+						<b class="arrow"></b>
+					</li> -->
+					{% include "base/usermanage_for_admin.html" %}
+					{% include "base/log_for_admin.html" %}
+                    <li class="highlight" id="showlogs">
+                        <a href="/showlogs/">
+                            <i class="menu-icon fa fa-pencil-square-o"></i>
+                            <span class="menu-text"> 日志查看 </span>
+                        </a>
+
+                        <b class="arrow"></b>
+                    </li>
+
+				</ul><!-- /.nav-list -->
+
+				<!-- #section:basics/sidebar.layout.minimize -->
+				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+					<i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+				</div>
+
+				<!-- /section:basics/sidebar.layout.minimize -->
+				<script type="text/javascript">
+					try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+				</script>
+			</div>
+
+			<!-- 导航面包屑 -->
+			<!-- /section:basics/sidebar -->
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs" id="breadcrumbs">
+						<script type="text/javascript">
+							try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+						</script>
+
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="/">首页</a>
+							</li>
+
+							<li>
+								<a href="{{ url }}">{{ navbar }}</a>
+							</li>
+							<li id="navbar_child" class="active hidden"></li>
+						</ul><!-- /.breadcrumb -->
+
+						<!-- #section:basics/content.searchbox -->
+
+<!--  						<div class="nav-search" id="nav-search">
+							<form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+							</form>
+						</div> -->
+
+
+						<div class="nav-search" id='diskzone' style="width: 80%;">
+
+<!-- 							<div style="float: right;margin-top: 5px;margin-left: 20px">
+								<span >/data01&nbsp;&nbsp;|</span>
+								<div class="progress progress-small progress-striped active" style="float: right;width: 100px;margin-top: 7px;;margin-left: 5px">
+									<div class="progress-bar progress-bar-success" style="width: 44%;">6.9G/13G</div>
+								</div>
+							</div>
+
+							<div style="float: right;margin-top: 5px;margin-left: 20px">
+								<span >/data02&nbsp;&nbsp;|</span>
+								<div class="progress progress-small progress-striped active" style="float: right;width: 100px;margin-top: 7px;;margin-left: 5px">
+									<div class="progress-bar progress-bar-info" style="width: 19%;">34M/194M</div>
+								</div>
+							</div>
+
+							<div style="float: right;margin-top: 5px;margin-left: 20px">
+								<span >/data03&nbsp;&nbsp;|</span>
+								<div class="progress progress-small progress-striped active" style="float: right;width: 100px;margin-top: 7px;;margin-left: 5px">
+									<div class="progress-bar progress-bar-warning" style="width: 75%;">75%</div>
+								</div>
+							</div>
+
+							<div style="float: right;margin-top: 5px;margin-left: 20px">
+								<span >/data04&nbsp;&nbsp;|</span>
+								<div class="progress progress-small progress-striped active" style="float: right;width: 100px;margin-top: 7px;;margin-left: 5px">
+									<div class="progress-bar progress-bar-danger" style="width: 99%;">99%</div>
+								</div>
+							</div> -->
+
+					
+						</div>
+
+
+						<!-- /section:basics/content.searchbox -->
+					</div>
+					<!-- 导航面包屑结束 -->
+
+					<div class="page-content">
+						<div class="row">
+							<div class="col-xs-12">
+								<!-- PAGE CONTENT BEGINS -->
+

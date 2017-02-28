@@ -1,0 +1,424 @@
+{% include "base/template_head.html" %}
+{% load static %}
+
+<link rel="stylesheet" href="/static/css/paging.css">
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/query.js"></script>
+<script type="text/javascript" src="/static/js/paging.js"></script>
+<script type="text/javascript" src="{% static "plugins/tinymce/js/tinymce/jquery.js" %}"></script>
+<script type="text/javascript" src="{% static "plugins/tinymce/js/tinymce/tinymce.min.js"%}"></script>
+<script type="text/javascript" src="{% static "plugins/tinymce/js/tinymce/jquery.tinymce.min.js"%}"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+            "table contextmenu directionality emoticons template textcolor paste fullpage textcolor"
+        ],
+
+
+        // toolbar1: "undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+        // toolbar2: " searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image media code | inserttime preview | forecolor backcolor",
+        // toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+
+        toolbar1: "undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect |\
+        searchreplace | bullist numlist | outdent indent blockquote",
+        toolbar2: "link unlink anchor image media code | inserttime preview | forecolor backcolor | table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+
+        menubar: false,
+        toolbar_items_size: 'small',
+
+        style_formats: [
+            {title: 'Bold text', inline: 'b'},
+            {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+            {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+            {title: 'Example 1', inline: 'span', classes: 'example1'},
+            {title: 'Example 2', inline: 'span', classes: 'example2'},
+            {title: 'Table styles'},
+            {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+        ],
+
+        templates: [
+            {title: 'Test template 1', publish_detail: 'Test 1'},
+            {title: 'Test template 2', publish_detail: 'Test 2'}
+        ],
+        language:'zh_CN'
+    });
+</script>
+<div class="row">
+
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+<!--                 <div class="page-header">
+                    <h1>测试总结</h1>
+                </div> -->
+                <!-- <h2 class="header"><b>测试总结</b></h2> -->
+                <ul class="list-unstyled spaced">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active">
+                                <a data-toggle="tab" href="#mytest" onclick="GetLastTestInfo()">
+                                    <i class="blue ace-icon fa fa-stethoscope bigger-120"></i>
+                                    测试验证
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" >
+                            <div id="mytest" class="tab-pane fade in active" style="width: 98%;margin:auto;">
+                                <div class="alert alert-block alert-info">
+                                    <button type="button" class="close" data-dismiss="alert">
+                                        <i class="ace-icon fa fa-times"></i>
+                                    </button>
+                                    当前流程状态为 <b>系统测试</b>,下一流程为 <b>测试结束</b>
+                                </div>
+
+
+
+                                <br>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>文件上传</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>文件名称：
+                                                    <b id="publish_filename" class="red">{{ publish_filename }}</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>上传时间：
+                                                    <b id="upload_time" class="red">{{ file_uploadtime }}</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>流程发起</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布ID：
+                                                    <b id="publish_id" class="red">{{ publish_id }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布类型：
+                                                    <b id="publish_type" class="red">{{ publish_type }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布时间：
+                                                    <b id="create_time" class="red">{{ create_time }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布人员：
+                                                    <b id="publish_user" class="red">{{ publish_user }}</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>模块名称：
+                                                    <b id="publish_module" class="red">{{ publish_module }}</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>发布审核</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>审核人员：
+                                                    <b id="review_owner" class="red">{{ review_owner }}</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>审核时间：
+                                                    <b id="review_time" class="red">{{ review_time }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>审核意见：
+                                                    <b class="green">同意发布</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>系统部署</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布状态：
+                                                    <b class="green">成功</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>开始时间：
+                                                    <b id="publish_stime" class="red">{{ publish_strtime }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束时间：
+                                                    <b id="publish_etime" class="red">{{ publish_endtime }}</b>
+                                                </li>                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-info arrowed-in arrowed-right">
+                                                <b>系统测试</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>测试人员：
+                                                    <b class="green">{{ LoginName }}</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>开始时间：
+                                                    <b id="publish_etime" class="red">-</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束时间：
+                                                    <b class="green">进行中</b>
+                                                </li>
+
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>测试结论：
+                                                    <b class="green">进行中</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-default arrowed-in arrowed-right">
+                                                <b>发布完成</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束状态：
+                                                    <b class="grey">未开始</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束时间：
+                                                    <b class="grey">未开始</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-2"></div>                                        
+
+                                <div class="row">
+                                    <div class="col-md-12 pricing-box">
+                                        <div class="widget-box widget-color-red3">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>发布详情</b></h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <div class="profile-user-info profile-user-info-striped">
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 发布主机 </div>
+                                                            <div class="profile-info-value">
+                                                                <b class="red">{{ publish_serverlist }}</b>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 发布详情 </div>
+
+                                                            <div class="profile-info-value">
+                                                                {% autoescape off %}
+                                                                <span >{{ publish_detail }}</span>
+                                                                {% endautoescape %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-box widget-color-orange">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>审批意见</b></h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <div class="profile-user-info profile-user-info-striped">
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 审核意见 </div>
+                                                            <div class="profile-info-value">
+                                                                <span >{{ publish_status }}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 审核补充意见 </div>
+                                                            <div class="profile-info-value">
+                                                                {% autoescape off %}
+                                                                <span >{{ review_info }}</span>
+                                                                {% endautoescape %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-box widget-color-blue">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>测试总结</b></h5>
+                                            </div>
+                                            <form name="EndTest" action="/softwaretest/EndTest/" method="POST" >
+                                                <input style="display:none;" name="test_id" id="test_id" value="{{ publish_id }}"></input>
+                                                <div class="widget-body">
+                                                    <div class="widget-main">
+                                                        <div class="profile-user-info profile-user-info-striped">        
+                                                            <div class="profile-info-row">
+                                                                <div class="profile-info-name"> 测试意见 </div>
+                                                                <div class="profile-info-value">
+                                                                    <span class="editable">
+                                                                        <select name="test_action" id="test_action">
+                                                                            <option value="-1" active>------请选择------</option>
+                                                                            <option value="1">1-测试完成，通过</option>
+                                                                            <option value="2">2-测试完成，不通过</option>
+                                                                            <option value="3">3-其他</option>
+                                                                        </select>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="profile-info-row">
+                                                                <div class="profile-info-name"> 测试总结 </div>
+                                                                <div class="profile-info-value">
+                                                                    
+                                                                    <textarea class="autosize-transition form-control" rows="20" cols="100" name="test_info" id="test_info" placeholder="请补充发布信息,例如：1、更新了某某bug...">
+                                                                    <b style="font-family: 'Microsoft YaHei';color: red">
+                                                                    1、支持直接复制excel表格,建议表格宽度设置为1;<br>
+                                                                    2、excel表格总宽度请保持在1000px以内;<br>
+                                                                    3、发布时请将本说明信息清空!</b></textarea>
+                                                                    <div class="space-2"></div>
+                                                                    <input value="提 交" type="button" class="btn btn-primary pull-right" onclick="TestSubmit()"></input>
+                                                            
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7 col-lg-offset-1">
+
+        <div class="row">
+            <div class="col-lg-12">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+{% include "base/template_footer.html" %}
+<script>
+    $(document).ready(function(){
+        $("#navbar_child").removeClass("hidden").html("测试验证");
+        // $("#navbar_child").html("发布审核")
+    })
+
+    function TestSubmit(){
+        // var review_info = $("#test_info").val()
+        var test_info = tinyMCE.get('test_info').getContent();
+        var test_action = $("#test_action").find("option:selected").attr("value")
+
+        layer.msg(test_info)
+        layer.msg(test_action)
+        var index = layer.load(0, {
+              content :'<hr><b>提交中...</b>',
+              shade: [0.1,'#fff'] //0.1透明度的白色背景
+            });
+        $("form").submit()
+    }
+
+    // function GetLastTestInfo(){
+    //     var item_list = ['publish_id','publish_status','publish_type','publish_module','publish_filename','publish_user','create_time','publish_serverlist','publish_detail','review_owner','review_time','review_info']
+    //     //取出LastTestInfo
+    //     console.log($("#publish_id").html())
+    //     var test_id = $("#publish_id").html()
+    //     $.ajax({
+    //         type:'POST',
+    //         url:'/softwaretest/TestHandleData/',
+    //         data:{'test_id':test_id},
+    //         dataType:'json',
+    //         success:function(val){
+    //             console.log(val)
+    //             // console.log(val.LastSoftwareTest)
+    //             // console.log(val.LastSoftwareTest[0]['publish_id'])
+    //             console.log(val.LastSoftwareTest[0][item_list[0]])
+
+    //             for(var i =0;i<item_list.length;i++){
+    //                 $("#"+(item_list[i])+"").html(val.LastSoftwareTest[0][item_list[i]])
+    //             }
+    //         },error:function(){
+    //             console.log('error')
+    //         }
+    //     }); 
+    // };
+
+
+
+    // $(document).ready(function(){
+    //     GetLastTestInfo();
+    // });
+
+    
+</script>

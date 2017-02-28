@@ -1,0 +1,40 @@
+from __future__ import unicode_literals
+from django.db import models
+
+# Create your models here.
+
+
+class HaproxyGroup(models.Model):
+    GroupID = models.CharField(max_length=40, primary_key=True)
+    GroupName = models.CharField(max_length=40, unique=True)
+    GroupDisplayName = models.CharField(max_length=40)
+
+    def __unicode__(self):
+        return '%s|%s' % (self.GroupName, self.GroupDisplayName)
+
+
+class HaproxyServer(models.Model):
+    ServerID = models.CharField(max_length=40, primary_key=True)
+    ServerIP = models.GenericIPAddressField()
+    ServerPort = models.SmallIntegerField()
+    GroupID = models.ForeignKey(HaproxyGroup, on_delete=models.CASCADE)
+
+
+class TCPForward(models.Model):
+    TCPForwardID = models.CharField(max_length=40, primary_key=True)
+    TCPForwardName = models.CharField(max_length=40)
+    GroupID = models.ForeignKey(HaproxyGroup, on_delete=models.CASCADE)
+
+
+class ACLRule(models.Model):
+    ACLRuleID = models.CharField(max_length=40, primary_key=True)
+    ACLName = models.CharField(max_length=40)
+    GroupID = models.ForeignKey(HaproxyGroup, on_delete=models.CASCADE, null=True)
+    TCPForwardID = models.ForeignKey(TCPForward, on_delete=models.CASCADE, null=True)
+
+
+class BackenCluster(models.Model):
+    BackenID = models.CharField(max_length=40, primary_key=True)
+    BackenClusterName = models.CharField(max_length=40)
+    GroupID = models.ForeignKey(HaproxyGroup, on_delete=models.CASCADE)
+    TCPForwardID = models.ForeignKey(TCPForward, on_delete=models.CASCADE)

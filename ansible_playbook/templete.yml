@@ -1,0 +1,16 @@
+---
+- hosts: "{{ project_name }}"
+#  gather_facts: no
+  vars:
+    date_time: "{{ vars }}"
+  remote_user: tomcat
+
+  tasks:
+    - name: name
+      file: 
+      tags:
+        - name
+      register: result
+      when: xxxx|success
+      ignore_errors: True
+

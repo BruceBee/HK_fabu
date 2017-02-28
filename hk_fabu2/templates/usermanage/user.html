@@ -1,0 +1,743 @@
+{% include "base/template_head.html" %}
+<link rel="stylesheet" href="/static/css/paging.css">
+<!-- <link rel="stylesheet" href="/static/css/bootstrap-duallistbox.css">
+<link rel="stylesheet" href="/static/css/bootstrap-multiselect.css">
+<link rel="stylesheet" href="/static/css/select2.css"> -->
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/query.js"></script>
+<script type="text/javascript" src="/static/js/paging.js"></script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-header">
+                    <h1>用户管理</h1>
+
+                </div>
+                <!-- <h2 class="header"><b>项目模块管理</b></h2> -->
+                <ul class="list-unstyled spaced">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active">
+                                <a data-toggle="tab" href="#mypublist">
+                                    <i class="blue ace-icon fa fa-user-plus bigger-120"></i>
+                                    新增用户
+                                </a>
+                            </li>
+                            <li >
+                                <a data-toggle="tab" href="#forreview" onclick="GetUserSearchList(1,10,'')">
+                                    <i class="orange ace-icon fa fa-users bigger-120"></i>
+                                    用户列表
+                                </a>            
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <div id="mypublist" class="tab-pane fade in active">
+                                <div class="page-header">用户基本信息</div>
+
+                                <div class="row">
+                                    <div class="col-xs-12">
+
+	                                    <div id="addalert" class="alert alert-block alert-info" style="display: none;">
+	                                        <button type="button" class="close" data-dismiss="alert">
+	                                            <i class="ace-icon fa fa-times"></i>
+	                                        </button>
+	                                        <i class="ace-icon fa fa-umbrella bigger-120 blue"></i><span id="successinfo"></span>
+	                                    </div>
+
+
+                                        <!-- PAGE CONTENT BEGINS -->
+                                        <div class="form-horizontal" role="form">
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 用户名 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="username" placeholder="例如：admin" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='user_msg' class="col-sm-3 hidden">
+                                                    <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;用户名已存在</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 密码 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="password" id="userpasswd" placeholder="请输入密码" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='moduleport_msg' class="col-sm-3 hidden">
+                                                    <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;密码不能少于8位</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 密码确认 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="password" id="comfirmpasswd" placeholder="密码确认" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                                <div id='passwd_msg' class="col-sm-3 hidden">
+                                                    <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;密码不一致</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="space-4"></div>
+
+<!--                                             <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> FTP路径 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="ftppath" placeholder="例如：/home/ftp/admin" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                            </div> -->
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 是否有发布权限 </label>
+
+                                                <div class="col-sm-3">
+                                                    <label id="have_publish" >
+                                                        <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" />
+                                                        <span class="lbl"></span>
+                                                    </label>
+
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 是否有审核权限 </label>
+
+                                                <div class="col-sm-3">
+                                                    <label id="have_review">
+                                                        <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" />
+                                                        <span class="lbl"></span>
+                                                    </label>
+
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 是否有测试权限 </label>
+
+                                                <div class="col-sm-3">
+                                                    <label id="have_test" >
+                                                        <input name="switch-field-1" class="ace ace-switch ace-switch-6" type="checkbox" />
+                                                        <span class="lbl"></span>
+                                                    </label>
+
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 备注信息 </label>
+
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="remark" placeholder="例如：admin是管理员账号" class="col-xs-12 col-sm-12" />
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button class="btn btn-success" type="button" onclick="useraddsumbit()">
+                                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                                        提交新增
+                                                    </button>
+
+                                                    &nbsp; &nbsp; &nbsp;
+                                                    <button class="btn btn-info" onclick="resetinput()">
+                                                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                                                        重置输入
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div id="forreview" class="tab-pane fade">
+                                <span style="float: left;color: green"><b>&nbsp;总记录数&nbsp;<span id='previewlistcount'></span>&nbsp;条</b></span>
+                                <div class="nav-search" style="float: right;">
+                                    <span class="input-icon">
+                                    <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                                    <i class="ace-icon fa fa-search nav-search-icon"></i>
+                                    </span>
+                                </div>
+                                <br>
+                                <hr>
+                                <div class="widget-body">
+                                    <div class="widget-main no-padding">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="thin-border-bottom">
+                                                <tr>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>用户名称</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>用户密码&nbsp;&nbsp;<i class="fa fa-eye-slash" aria-hidden="true" onclick="layer.alert('1')"></i></th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>对应FTP路径</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布权限</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>审核权限</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>测试权限</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>备注</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>当前状态</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>操作</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id= 'ProjectInfolist'>
+                                            </tbody>
+                                        </table>
+                                        
+
+                                    </div>
+
+                                </div>
+
+                                <br>
+                                <hr>
+                                <div id="pageToolbar"></div>                                
+                                
+                            </div>
+
+                            <!-- <div id="pageToolbar"></div> -->
+                        </div>
+
+                    </div>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<div id='test' class="form-horizontal hidden" role="form">
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块名称 </label>
+
+        <div class="col-sm-9">
+            <input type="text" id="modulename" placeholder="例如：omweb" class="col-xs-12 col-sm-12" />
+        </div>
+        <div id='modulename_msg' class="col-sm-3 hidden">
+            <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;模块名已存在</span>
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块端口 </label>
+
+        <div class="col-sm-9">
+            <input type="text" id="moduleport" placeholder="端口范围必须为80-65535" class="col-xs-12 col-sm-12" />
+        </div>
+        <div id='moduleport_msg' class="col-sm-3 hidden">
+            <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;端口有误或端口已存在</span>
+        </div>
+    </div>
+
+    <div class="space-4"></div>
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 模块备注 </label>
+
+        <div class="col-sm-9">
+            <input type="text" id="moduleremark" placeholder="例如：omweb模块的备注" class="col-xs-12 col-sm-12" />
+        </div>
+    </div>
+    <div class="space-4"></div>
+
+
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块服务器1 </label>
+
+        <div class="col-sm-7">
+            <input type="text" id="server_1" placeholder="例如：192.168.0.1" class="col-xs-12 col-sm-12" />
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-success btn-xs" type="button">
+                <i class="fa fa-plus-square fa-x fa-fw" aria-hidden="true" onclick="addserverlist01()"></i>
+            </button>
+            <button class="btn btn-danger btn-xs" type="button">
+                <i class="fa fa-minus-square fa-x fa-fw" aria-hidden="true" onclick="delserverlist01()"></i>
+            </button>
+        </div>
+    </div>
+    <div class="space-4"></div>
+    <div id="serverlistadd01">
+    	<div id='mserverlist_msg' class="col-md-offset-3 col-sm-3 hidden">
+            <span class="red"><i class="fa fa-times" aria-hidden="true"></i>&nbsp;服务器IP输入有误</span>
+        </div>
+        <br>
+
+    </div>
+</div>
+
+
+
+
+{% include "base/template_footer.html" %}
+
+<script>
+    var servercount = 1;
+    // var servercount01 = 1;
+
+    function addserverlist(){
+        servercount+=1;
+        $("#serverlistadd").append('<div id="server_'+servercount+'" class="form-group"><label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 模块服务器'+servercount+' </label>\
+                                                <div class="col-sm-3">\
+                                                    <input type="text" placeholder="例如：192.168.0.'+servercount+'" class="col-xs-12 col-sm-12" />\
+                                                </div></div>')
+        console.log(servercount)
+    };
+
+    function delserverlist(){
+
+        // $("#serverlistadd").empty()
+        if(servercount != 1){
+            $("#server_"+servercount).remove();
+            servercount -= 1
+        }
+        console.log(servercount)
+    };
+
+
+    function useraddsumbit(){
+        var username = $("#username").val()
+        var userpasswd = $("#userpasswd").val()
+        var comfirmpasswd = $("#comfirmpasswd").val()
+        // var ftpath = $("#ftppath").val()
+        var have_publish = ($("#have_publish input[type='checkbox']").is(':checked') == true) ? '1' :  '0';
+        var have_review = ($("#have_review input[type='checkbox']").is(':checked') == true) ? '1' :  '0';
+        var have_test = ($("#have_test input[type='checkbox']").is(':checked') == true) ? '1' :  '0';
+        var remark = $("#remark").val()
+
+        $("#passwd_msg").addClass("hidden");
+        $("#user_msg").addClass("hidden");
+        if(username == "" || userpasswd == "" || comfirmpasswd == "" || remark == ""){
+            layer.msg('必填字段不能为空', {icon: 2});
+        }else if(userpasswd != comfirmpasswd){
+        	// layer.msg('两次输入的密码不一致', {icon: 2});
+        	$("#passwd_msg").removeClass("hidden");
+        }else{
+	        $.ajax({
+	            type:'POST',
+	            url:'/usermanage/UserCheck/',
+	            data:{'username':username},
+	            dataType:'text',
+	            success:function(val){
+	            	console.log(val)
+	            	if(val != 0){
+	            		// layer.msg('用户名已存在', {icon: 2});
+	            		$("#user_msg").removeClass("hidden");
+	            	}else{
+	            		$.ajax({
+	            			type:'POST',
+	            			url:'/usermanage/UserAdd/',
+	            			data:{'username':username,'userpasswd':userpasswd,'have_publish':have_publish,'have_review':have_review,'have_test':have_test,'remark':remark},
+	            			dataType:'text',
+	            			success:function(val){
+	            				console.log(val)
+	            				if(val == 'success'){
+	            					$("#addalert").css('display','block');
+	            					$("#successinfo").html('&nbsp;添加成功！！！&nbsp;用户名：'+username+'；发布权限：'+have_publish+'；审核权限：'+have_review+'；测试权限：'+have_test)
+	            					// $("#username").val("");
+	            					// $("#userpasswd").val("");
+	            					// $("#comfirmpasswd").val("")
+	            					// $("#remark").val("")
+	            					$("input").val("")
+
+
+
+
+	            				}else{
+	            					layer.msg('新建用户失败,'+val, {icon: 2});
+	            				}
+	            			},error:function(){
+	            				console.log('添加用户失败')
+	            			}
+	            		})
+	            	}
+
+	            	// if(val == '1'){
+	            	// 	$("#modulename_msg").removeClass("hidden");
+	            	// }else if(val == '2'){
+	            	// 	$("#moduleport_msg").removeClass("hidden");
+	            	// }else if(val == '3'){
+	            	// 	$("#mserverlist_msg").removeClass("hidden");
+	            	// }else{
+		            //     $("#addalert").css('display','block');
+		            //     $("#successinfo").html('&nbsp;添加成功！！！&nbsp;模块名：'+modulename+'；模块端口：'+moduleport+'；模块备注：'+moduleremark+'；模块服务器：'+moduleserverlist)
+		            //     $("#modulename").val("");
+		            //     $("#moduleremark").val("");
+		            //     $("#moduleport").val("");
+		            //     $("#server_1").val("");
+	            	// }
+
+	            },error:function(){
+	                console.log('新增失败')
+	            }
+	        })        	
+        }
+
+        console.log('用户名:'+username)
+        console.log('密码:'+userpasswd)
+        console.log('确认密码:'+comfirmpasswd)
+        // console.log('ftp路径:'+ftppath)
+        console.log('发布权限:'+have_publish)
+        console.log('审核权限:'+have_review)
+        console.log('测试权限:'+have_test)
+        console.log('备注:'+remark)
+    };
+
+    function resetinput(){
+    	$("input").val("")
+    	$("#modulename_msg").addClass("hidden");
+    	$("#moduleport_msg").addClass("hidden");
+    	$("#mserverlist_msg").addClass("hidden");
+    };
+
+    function GetUserList(s_page,page_size) {
+        //取出单页数据
+        function GetUserListInfo(s_page,page_size){
+            $.ajax({
+                type:'POST',
+                url:'/usermanage/GetUserList/',
+                data:{'s_page':s_page,'page_size':page_size},
+                dataType:'json',
+                success:function(val){
+                    console.log(val)
+                    if(val == '302'){
+                        layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                    }else{
+                        // console.log(val)
+                        var detail = val.UserInfo_obj
+                        // $("#previewlist").html("")
+                        // $('#previewlistcount').html(detail.length)
+                        if(detail.length==0){
+                            $("#ProjectInfolist").html('<tr><td colspan="9" style="text-align:center;">当前无记录</td></tr>')
+                        }else{
+                            $("#ProjectInfolist").html("")
+                        }
+                        for (var i=0;i < detail.length;i++){
+                            // $("#per_publish_user").html(val.review_data[i].publish_user)
+                            // console.log(val.review_data[i].publish_user)
+                            var user_name = detail[i]['user']
+                            // console.log(project_name)
+                        
+                            $("#ProjectInfolist").append("<tr>\
+                                    <td id='"+(user_name)+"_user'></td>\
+                                    <td id='"+(user_name)+"_passwd'></td>\
+                                    <td id='"+(user_name)+"_ftppath'></td>\
+                                    <td id='"+(user_name)+"_havepublish'></td>\
+                                    <td id='"+(user_name)+"_havereview'></td>\
+                                    <td id='"+(user_name)+"_havetest'></td>\
+                                    <td id='"+(user_name)+"_remark'></td>\
+                                    <td id='"+(user_name)+"_status'></td>\
+                                    <td id='"+(user_name)+"_action'></td></tr>")
+
+                            //加载数据
+
+                            // console.log(detail[i]['project_server'])
+                            $("#"+(user_name)+"_user").html(detail[i].user)
+                            $("#"+(user_name)+"_passwd").html('**********')
+                            $("#"+(user_name)+"_ftppath").html(detail[i].ftp_path)
+                            $("#"+(user_name)+"_remark").html(detail[i].remark)
+                            if(detail[i].have_publish == '0'){
+                                $("#"+(user_name)+"_havepublish").html('<span><i class="red ace-icon fa fa-times-circle bigger-120"></i></span>')
+                            }else{
+                                $("#"+(user_name)+"_havepublish").html('<span><i class="green ace-icon fa fa-check-circle bigger-120"></i></span>')
+                            }
+                            if(detail[i].have_review == '0'){
+                                $("#"+(user_name)+"_havereview").html('<span><i class="red ace-icon fa fa-times-circle bigger-120"></i></span>')
+                            }else{
+                                $("#"+(user_name)+"_havereview").html('<span><i class="green ace-icon fa fa-check-circle bigger-120"></i></span>')
+                            }
+                            if(detail[i].have_test == '0'){
+                                $("#"+(user_name)+"_havetest").html('<span><i class="red ace-icon fa fa-times-circle bigger-120"></i></span>')
+                            }else{
+                                $("#"+(user_name)+"_havetest").html('<span><i class="green ace-icon fa fa-check-circle bigger-120"></i></span>')
+                            }                            
+                            // $("#"+(user_name)+"_havereview").html(detail[i].have_review)
+                            // $("#"+(user_name)+"_havetest").html(detail[i].have_test)
+                            if(detail[i].user_status == '1'){
+                            	$("#"+(user_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-success">已启用</span>\
+                                                            </div>')
+                            	$("#"+(user_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="UserStatusSwitch(this)" disabled="disabled">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="UserStatusSwitch(this)">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }else{
+                            	$("#"+(user_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-danger">已停用</span>\
+                                                            </div>')
+                            	$("#"+(user_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="UserStatusSwitch(this)">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="UserStatusSwitch(this)" disabled="disabled">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }                    
+                        }
+                        // $('#pageToolbar').html("");
+                        // $('#pageToolbar').Paging({pagesize:10,count:detail.length,callback:function(page,size,count){alert('1')}});
+                    }
+                },error:function(){
+                    layer.alert('数据请求失败,错误代码：102',{icon: 2})
+                }
+            })          
+        };
+
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/usermanage/GetUserListCount/',
+            dataType:'text',
+            success:function(val){
+                if(val == '303'){
+                    layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                }else{
+                    // console.log(val)
+                    $("#previewlistcount").html(val);
+                    GetUserListInfo(s_page,page_size);
+                    //加载页码
+                    $('#pageToolbar').html("");
+                    $('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                        //page:当前选择页码
+                        //size:当前每页显示数量
+                        //count：当前页码总数(含有多少个size)
+                        GetUserListInfo(page,10)
+                        }
+                    });
+                };
+            },error:function(){
+                layer.alert('数据请求失败,错误代码：103',{icon: 2})
+            }
+        });     
+
+
+    };
+
+    $("#nav-search-input").keydown(function(e) {  
+          if (e.keyCode == 13) {
+            // if($("#nav-search-input").val() != ""){
+                var k_words = $("#nav-search-input").val()
+                // layer.alert($("#nav-search-input").val())
+                console.log('查询内容'+k_words)
+                GetUserSearchList(1,10,k_words)
+            // }
+
+          }
+      });
+
+    function GetUserSearchList(s_page,page_size,k_words) {
+        //取出单页数据
+        console.log('第一次'+k_words)
+        function GetUserSearchListInfo(s_page,page_size){
+            var k_words = $("#nav-search-input").val()
+            console.log('第二次'+k_words)
+            $.ajax({
+                type:'POST',
+                url:'/usermanage/GetUserSearchList/',
+                data:{'s_page':s_page,'page_size':page_size,'k_words':k_words},
+                dataType:'json',
+                success:function(val){
+                    console.log('查询的结果')
+                    console.log(val)
+                    if(val == '302'){
+                        layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                    }else{
+                        // console.log(val)
+                        var detail = val.UserInfo_obj
+                        // $("#previewlist").html("")
+                        // $('#previewlistcount').html(detail.length)
+                        if(detail.length==0){
+                            $("#ProjectInfolist").html('<tr><td colspan="9" style="text-align:center;">当前无记录</td></tr>')
+                        }else{
+                            $("#ProjectInfolist").html("")
+                        }
+                        for (var i=0;i < detail.length;i++){
+                            // $("#per_publish_user").html(val.review_data[i].publish_user)
+                            // console.log(val.review_data[i].publish_user)
+                            var user_name = detail[i]['user']
+                            // console.log(project_name)
+                        
+                            $("#ProjectInfolist").append("<tr>\
+                                    <td id='"+(user_name)+"_user'></td>\
+                                    <td id='"+(user_name)+"_passwd'></td>\
+                                    <td id='"+(user_name)+"_ftppath'></td>\
+                                    <td id='"+(user_name)+"_havepublish'></td>\
+                                    <td id='"+(user_name)+"_havereview'></td>\
+                                    <td id='"+(user_name)+"_havetest'></td>\
+                                    <td id='"+(user_name)+"_remark'></td>\
+                                    <td id='"+(user_name)+"_status'></td>\
+                                    <td id='"+(user_name)+"_action'></td></tr>")
+
+                            //加载数据
+
+                            // console.log(detail[i]['project_server'])
+                            $("#"+(user_name)+"_user").html(detail[i].user)
+                            $("#"+(user_name)+"_passwd").html('**********')
+                            $("#"+(user_name)+"_ftppath").html(detail[i].ftp_path)
+                            $("#"+(user_name)+"_remark").html(detail[i].remark)
+                            if(detail[i].have_publish == '0'){
+                                $("#"+(user_name)+"_havepublish").html('<span><i class="red ace-icon fa fa-times-circle bigger-120"></i></span>')
+                            }else{
+                                $("#"+(user_name)+"_havepublish").html('<span><i class="green ace-icon fa fa-check-circle bigger-120"></i></span>')
+                            }
+                            if(detail[i].have_review == '0'){
+                                $("#"+(user_name)+"_havereview").html('<span><i class="red ace-icon fa fa-times-circle bigger-120"></i></span>')
+                            }else{
+                                $("#"+(user_name)+"_havereview").html('<span><i class="green ace-icon fa fa-check-circle bigger-120"></i></span>')
+                            }
+                            if(detail[i].have_test == '0'){
+                                $("#"+(user_name)+"_havetest").html('<span><i class="red ace-icon fa fa-times-circle bigger-120"></i></span>')
+                            }else{
+                                $("#"+(user_name)+"_havetest").html('<span><i class="green ace-icon fa fa-check-circle bigger-120"></i></span>')
+                            }                            
+                            // $("#"+(user_name)+"_havereview").html(detail[i].have_review)
+                            // $("#"+(user_name)+"_havetest").html(detail[i].have_test)
+                            if(detail[i].user_status == '1'){
+                                $("#"+(user_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-success">已启用</span>\
+                                                            </div>')
+                                $("#"+(user_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="UserStatusSwitch(this)" disabled="disabled">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="UserStatusSwitch(this)">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }else{
+                                $("#"+(user_name)+"_status").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <span class="label label-danger">已停用</span>\
+                                                            </div>')
+                                $("#"+(user_name)+"_action").html('<div class="hidden-sm hidden-xs btn-group">\
+                                                                <button class="btn btn-xs btn-info" onclick="projectupdate(this)">\
+                                                                    修改\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-success" values="1" onclick="UserStatusSwitch(this)">\
+                                                                    启用\
+                                                                </button>\
+                                                                <button class="btn btn-xs btn-danger" values="0" onclick="UserStatusSwitch(this)" disabled="disabled">\
+                                                                    停用\
+                                                                </button>\
+                                                            </div>')
+                            }                    
+                        }
+                        // $('#pageToolbar').html("");
+                        // $('#pageToolbar').Paging({pagesize:10,count:detail.length,callback:function(page,size,count){alert('1')}});
+                    }
+                },error:function(){
+                    layer.alert('数据请求失败,错误代码：102',{icon: 2})
+                }
+            })          
+        };
+
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/usermanage/GetUserSearchCount/',
+            data:{'k_words':k_words},
+            dataType:'text',
+            success:function(val){
+                console.log('查询数量'+val)
+                if(val == '303'){
+                    layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                }else{
+                    // console.log(val)
+                    $("#previewlistcount").html(val);
+                    GetUserSearchListInfo(s_page,page_size);
+                    //加载页码
+                    $('#pageToolbar').html("");
+                    $('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                        //page:当前选择页码
+                        //size:当前每页显示数量
+                        //count：当前页码总数(含有多少个size)
+                        GetUserSearchListInfo(page,10)
+                        }
+                    });
+                };
+            },error:function(){
+                layer.alert('数据请求失败,错误代码：103',{icon: 2})
+            }
+        });     
+
+    };
+
+    function projectupdate(ths){
+        var modulename= $(ths).parent().parent().attr("id").split("_")[1]
+        // layer.alert('项目修改id:'+modulename)
+        layer.open({
+        	title: '模块信息',
+        	area: ['600px', 'auto'],
+		    content: $("#test").html(),
+		    yes: function(index, layero){
+		    //do something
+		    layer.close(index); //如果设定了yes回调，需进行手工关闭
+		    }
+		  });
+    };
+
+    function UserStatusSwitch(ths){
+        // layer.alert(ths.html())
+        var username= $(ths).parent().parent().attr("id").split("_")[0]
+        // var serverlist= $("#project_"+$(ths).parent().parent().attr("id").split("_")[1]+"_serverlist").html()
+        //userstatus代表切换以后的状态
+        var status= $(ths).attr('values')
+        console.log(username)
+        console.log(status)
+        // userstatus:
+        // 0-停用账号
+        // 1-启用账号
+		// console.log(serverlist)
+		$.ajax({
+            type:'POST',
+            url:'/usermanage/UserStatusSwitch/',
+            data:{'username':username,'status':status},
+            dataType:'text',
+            success:function(val){
+                if(val == 'Switched'){
+                    GetUserList(1,10)
+                }else{
+                    layer.alert(val,{icon: 2})
+                }
+                // console.log(val)
+                // GetActionList(1,10)
+            },error:function(){
+                layer.alert('操作失败',{icon: 2})
+            }
+        });
+    }
+
+</script>

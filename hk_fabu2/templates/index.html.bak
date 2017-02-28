@@ -1,0 +1,176 @@
+<html lang="en">
+<title>自动化版本发布系统</title>
+<html lang="en">
+{% load static %}
+<script src="{% static "js/jquery.js" %}"></script>
+<body bgcolor="#E8E8D0" class="font-chs">
+<div style="position: relative; left: 80%">
+    <a href="/logout">{{ LoginName }} 注销</a>
+    <br /><a href="/projectinfo" style="display: {{ foradmin }}">项目模块信息</a>
+</div>
+<table border="0" align="center">
+<tr>
+<td>
+<div>
+    <div style="width:320px;float:left;">
+        <h1>发布操作</h1>
+
+            <form name="login" action="/" method="POST" >
+            {% csrf_token %}
+                <p>
+                    <h4>1. 全新部署(无备份，端口自动修改)：
+                    <input type="checkbox" name="newfabu"></h4>
+                </p>
+                <p>
+                    <h4>2. 请选择欲发布的压缩文件</h4>
+                    <select name="project_pack" id="project_pack" data-placeholder="选择欲发布的压缩文件" >
+                        <option selected>=====请选择=====</option>
+                        {% for each_file in project_pack %}
+                        <option value="{{ each_file }}">{{ each_file }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+                <P>
+                    <h4>3. 此压缩包的MD5值：</h4>
+                <input name="md5check" id="md5check" size="30" maxlength="32" />
+                </P>
+                <p>
+                <h4>4. 请选择项目模块</h4>
+                <select onchange="return GetProjectServerIP()" name="project_name" id="project_name" data-placeholder="请选择项目模块" >
+                    <option selected>=====请选择=====</option>
+                    {% for each_project in project_lists %}
+                    <option value="{{ each_project }}">{{ each_project }}</option>
+                    {% endfor %}
+                </select>
+                </p>
+                <button type="submit">确 认</button>
+            </form>
+
+<div>
+    <table border="1" style="display: none">
+        <thead bgcolor="#808080">
+		<caption><font color="red">！！发布生效IP！！</font></caption>
+        <tr>
+            <th>模块名</th>
+            <th>模块端口</th>
+            <th>目标服务器</th>
+        </tr>
+        </thead>
+        <tbody id="showserver">
+
+        </tbody>
+    </table>
+</div>
+<a href="/startstoprestart/">前往启停重启页面</a>
+    </div>
+
+<td>
+<div style="background-color:gainsboro;width:520px;float:left;">
+        <h1>压缩包规范</h1>
+        1.只支持zip, tar, tar.gz, tgz这几种压缩包</br></br>
+        2.Windows下建议使用7z命令行进行zip压缩。</br>
+        命令为：7z  a  模块目录</br>
+        支持多个单文件：7z  a  模块父目录/路/径/文件  模块父目录/路/径2/文件</br></br>
+        3.模块目录统一命名规范，模块名为英文/英文+数字：tomcat_模块名</br></br>
+        4.压缩包内统一目录结构。最顶层父目录文件夹名字为tomcat_模块名</br>
+        <pre class="font-mono">
+
+  ####################压缩包####################
+  #                                           #
+  #  tomcat_userapi/                          #
+  #      ├── conf/                            #
+  #      │   └── a.txt                        #
+  #      ├── lib/                             #
+  #      └── webapps/                         #
+  #              ├── docs/                    #
+  #              │   ├── aio.html             #
+  #              ├── examples/                #
+  #              │   ├── index.html           #
+  #              │   ├── jsp/                 #
+  #              │   │   └── async/           #
+  #              │   │       └── async1.jsp   #
+  #              ├── host-manager/            #
+  #              │   ├── images/              #
+  #              │   │   ├── add.gif          #
+  #              │   │   └── asf-logo.gif     #
+  #              └── ROOT/                    #
+  #                  └── index.jsp            #
+  #                                           #
+  #############################################
+    </pre>
+</div>
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<div>
+<table border="0">
+    <thead bgcolor="#808080">
+    <tr>
+        <th>发布者</th>
+        <th>模块名</th>
+        <th>压缩包文件名</th>
+        <th>目标服务器</th>
+        <th>发布状态</th>
+        <th>发布时间</th>
+    </tr>
+    </thead>
+    <tbody>
+            {% for i in Deployment_log %}
+                <tr>
+                    <td>{{ i.user }}</td>
+                    <td>{{ i.project_name }}</td>
+                    <td>{{ i.deployment_pack }}</td>
+                    <td>{{ i.dest_server }}</td>
+                    <td>{{ i.state }}</td>
+                    <td>{{ i.ctime|date:"Y/m/d" }} {{ i.ctime|time:"H:i" }}</td>
+                </tr>
+            {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+</td>
+</tr>
+</table>
+
+
+</body>
+<script type="text/javascript">
+function GetProjectServerIP(){
+  var project_name=document.getElementById("project_name").value;
+    if (project_name != "=====请选择=====") {
+        $.ajax({
+            type: "Get",
+            url: "GetProjectServerIP/",
+            data: "project_name=" + project_name,
+            dataType: "json",
+            success: function (data) {
+                if (data.project_name == project_name) {
+                      $("#showserver").parent().show();
+                      $("#showserver").empty();
+                      $("#showserver").append("<tr><td>"+data.project_name+"</td><td>"
+                              +data.project_port+"</td><td>"
+                              +data.project_server+"</td></tr");
+                }
+            },
+            error: function (err) {
+                                alert("wrong");
+            }
+        });
+                return false;
+    }else{$("#showserver").parent().hide();}
+}
+$(document).ready(function () {
+    $("#showserver").parent().hide();
+})
+</script>
+<style type="text/css">
+{#    body { margin:0; padding:0; font-family:'Hiragino Sans GB','Microsoft Yahei',"WenQuanYi Micro Hei",SimSun,Tahoma,Arial,Helvetica,STHeiti; }#}
+
+body { font-family:"Microsoft YaHei", "Hiragino Sans GB", "WenQuanYi Micro Hei"}
+.font-mono { margin:0; padding:0; font-family: Menlo, Consolas, "Source Code Pro", Inconsolata, Monaco, "Courier New"}
+
+{#    body { margin:0; padding:0; font-family:"WenQuanYi Micro Hei",SimSun,Tahoma,Arial,Helvetica,STHeiti; }#}
+</style>
+</html>

@@ -1,0 +1,1 @@
+ansible-playbook copynewfabu.yml --extra-vars "project_name=hktest project_pack=/home/ftp/kaifa1/tomcat_hktest.zip project_port=9800 backup_time=456465465"

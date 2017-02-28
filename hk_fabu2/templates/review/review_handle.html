@@ -1,0 +1,295 @@
+{% include "base/template_head.html" %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+            	<!-- <div class="page-header">
+                    <h1>发布详情</h1>
+                </div> -->
+	            <!-- <h2 class="header"><b>发布审核</b></h2> -->
+	            <ul class="list-unstyled spaced">
+	            	<div class="tabbable">
+						<ul class="nav nav-tabs" id="myTab">
+							<li class="active">
+								<a data-toggle="tab" href="#home">
+									<i class="green ace-icon fa fa-home bigger-120"></i>
+									发布详情 &nbsp;
+								</a>			
+							</li>
+						</ul>
+
+						<div class="tab-content">
+							<div id="home" class="tab-pane fade in active">
+								<div class="alert alert-block alert-info">
+									<button type="button" class="close" data-dismiss="alert">
+										<i class="ace-icon fa fa-times"></i>
+									</button>
+									当前流程状态为 <b>{{ publish_status }}</b>,下一流程为 <b>等待是否发布</b>
+								</div>
+
+
+								{% if is_editable == "False" %}
+								<a class="btn btn-danger btn-mini" style="float: right;" onclick="PublishCancle()">取消发布</a>
+								{% endif %}
+								<br>
+								<hr>
+								<div class="widget-body">
+			                        <div class="widget-main no-padding">
+									    <div>
+						                    <ul class="steps">
+						                        <li data-step="1" class="active">
+						                            <span class="step">1</span>
+						                            <span class="title">压缩文件上传</span>
+						                        </li>
+						                        <li data-step="2" class="active">
+						                            <span class="step">2</span>
+						                            <span class="title">流程发起</span>
+						                        </li>
+						                        <li data-step="3">
+						                            <span class="step">3</span>
+						                            <span class="title">发布审核</span>
+						                        </li>
+						                        <li data-step="4">
+						                            <span class="step">4</span>
+						                            <span class="title">系统部署</span>
+						                        </li>
+						                       	<li data-step="5">
+							                        <span class="step">5</span>
+							                        <span class="title">系统测试</span>
+							                    </li>
+							                    <li data-step="6">
+							                        <span class="step">6</span>
+							                        <span class="title">发布完成</span>
+							                    </li>
+						                    </ul>
+						                </div>
+						                <hr>
+
+						                <form name="review_publish" action="/review/review_publish/" method="POST">
+						                	<div class="row">
+									            <div class="col-md-12 pricing-box">
+			                                        <div class="widget-box widget-color-red3">
+			                                            <div class="widget-header">
+			                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>发布详情</b></h5>
+			                                            </div>
+
+			                                            <div class="widget-body">
+			                                                <div class="widget-main">
+							                                    <div class="profile-user-info profile-user-info-striped">
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 发布状态 </div>
+
+																		<div class="profile-info-value">
+																			<span class="badge badge-warning">{{ publish_status }}</span>
+																		</div>
+																	</div>
+
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 发布ID </div>
+
+																		<div class="profile-info-value">
+																			<span class="editable" id="city"><input style="height: 25px" type="text" name="publish_id" id="publish_id" readOnly="true" value="{{ publish_id }}"></span>
+																		</div>
+																	</div>
+
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 部署类型 </div>
+
+																		<div class="profile-info-value">
+																			<span class="editable">{{ publish_type }}</span>
+																		</div>
+																	</div>
+
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 发布者 </div>
+
+																		<div class="profile-info-value">
+																			<span class="editable">{{ publish_user }}</span>
+																		</div>
+																	</div>
+
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 模块名称 </div>
+
+																		<div class="profile-info-value">
+																			<span class="editable">{{ publish_module }}</span>
+																		</div>
+																	</div>
+
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 压缩文件包 </div>
+
+																		<div class="profile-info-value">
+																			<span class="editable">{{ publish_filename }}</span>
+																		</div>
+																	</div>
+
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 发起时间 </div>
+
+																		<div class="profile-info-value">
+																			<span class="editable">{{ create_time }}</span>
+																		</div>
+																	</div>
+
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 发布主机 </div>
+
+																		<div class="profile-info-value">
+																			<span class="editable">{{ publish_serverlist }}</span>
+																		</div>
+																	</div>
+
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 发布信息 </div>
+
+																		<div class="profile-info-value">
+																			{% autoescape off %}
+																			<span class="editable">{{ publish_detail }}</span>
+																			{% endautoescape %}
+																		</div>
+																	</div>
+																</div>
+			                                                </div>
+
+			                                            </div>
+			                                        </div>
+			                                        {% if is_editable == "True" %}
+			                                        <div class="widget-box widget-color-orange">
+			                                            <div class="widget-header">
+			                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>审核详情</b></h5>
+			                                            </div>
+
+			                                            <div class="widget-body">
+			                                                <div class="widget-main">
+							                                    <div class="profile-user-info profile-user-info-striped">
+																	
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 审核意见 </div>
+
+																		<div class="profile-info-value">
+																			<span class="editable">
+																				<select name="publish_action" id="publish_action">
+											                    					<option value="-1" active>------请选择------</option>
+											                    					<option value="0">0-通过,发布</option>
+											                    					<option value="1">1-不通过,停止发布</option>
+										                    					</select>
+									                    					</span>
+																		</div>
+																	</div>
+																	
+																	<div class="profile-info-row">
+																		<div class="profile-info-name"> 审核信息补充 </div>
+
+																		<div class="profile-info-value">
+																			<span class="editable">
+																				<textarea name="review_info" id="review_info" rows="5" cols="100" placeholder="请输入审核补充信息..."></textarea>
+																				<div class="space-2"></div>
+																				<input type="button" name="" class="btn btn-success" onclick="SubmitPublish()" value="提交"></input>
+													                  			<input type="button" name="" class="btn btn-danger" onclick="window.location.reload()" value="取消"></input>
+																			</span>
+																		</div>
+																	</div>
+
+																	
+																</div>
+			                                                </div>
+
+			                                            </div>
+			                                        </div>
+			                                        {% endif %}
+			                                    </div>
+						                	</div>	
+										</form>
+
+
+			                        </div>
+			                    </div>
+
+							</div>
+
+
+
+						</div>
+					</div>
+
+
+
+				</ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% include "base/template_footer.html" %}
+
+<script>
+
+	$(document).ready(function(){
+		{% if is_editable == "True" %}
+		$("#navbar_child").removeClass("hidden").html("发布审核");
+		{% else %}
+		$("#navbar_child").removeClass("hidden").html("发布详情");
+		{% endif %}
+		// $("#navbar_child").html("发布审核")
+	})
+
+
+	{% if is_editable == "True" %}
+	function SubmitPublish(){
+		var review_info = $("#review_info").val()
+
+		var review_action = $("#publish_action").find("option:selected").attr("value")
+		if(review_info == ""){
+			layer.alert('审核信息补充不能为空',{icon: 2})
+		}else if(review_action =='-1'){
+			layer.alert('请选择审核意见',{icon: 2})
+		}else if(review_action =='1'){
+			// console.log(review_info)
+			// console.log(review_action)
+			$("form").submit()
+			// var url ='/review/publish_report/{{ publish_id }}';
+			// window.location.href=url;
+		}else{
+			//loading层
+	        var index = layer.load(0, {
+	          content :'<hr><b>发布中...</b>',
+	          shade: [0.1,'#fff'] //0.1透明度的白色背景
+	        });
+			// layer.close(index);
+			$("form").submit()
+		}
+	};
+	
+	{% endif %}
+
+	{% if is_editable == "False" %}
+	function PublishCancle(){
+		layer.msg('当前的id是：{{ publish_id }}')
+		var publish_id = {{ publish_id }}
+        $.ajax({
+            type:'POST',
+            url:'/review/publish_cancle/',
+            dataType:'text',
+            data:{'publish_id':publish_id},
+            success:function(text){
+            	console.log(text)
+            	if(text=='1'){
+            		window.location.href='/review/'
+            	}else{
+            		layer.alert('取消失败,错误信息：'+text);
+            	}
+            },error:function(){
+                layer.alert('取消失败,请联系系统管理员');
+            }
+        });
+	}
+	{% endif %}
+	// $(document).ready(function(){
+	// 	alert($("#publish_detail").html());
+	// })
+	
+</script>
+
+<!-- 	</body>
+</html> -->

@@ -1,0 +1,116 @@
+{% include "base/template_head.html" %}
+
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="error-container">
+            <div class="well">
+                <h1 class="grey lighter smaller">
+                {% if status == 'Done' %}
+                    <span class="bigger-125" style="color: royalblue">
+                        <i class="ace-icon fa fa-check"></i>&nbsp;添加成功
+                    </span>
+                {% else %}
+                    <span class="bigger-125" style="color: red">
+                        <i class="ace-icon fa fa-times"></i>&nbsp;添加失败
+                    </span>
+                {% endif %}
+                </h1>
+                <hr />
+                <div style="float: right; width: 300px;height: 300px;position: relative;">
+                    {% if status == 'Done' %}
+                    <div style="position: absolute;border-radius: 50%;border: 5px double royalblue ;left:100px;top:10px;width:200px;height:200px;padding:1px;color:#999999;">
+                    	<div style="position: absolute;transform: rotate(-45deg);border-radius: 50%;border: 5px dotted royalblue ; margin-top: 5px;margin-left: 5px; width:180px;height:180px;padding:1px;color:#999999;">
+	                         <div style="height: 100px;line-height: 40px;margin-top: 20px;color: royalblue;text-align: center;font-size: 30px;font-family: "微软雅黑";">
+	                               <div>
+	                               <i class="fa fa-star"></i>
+	                               <i class="fa fa-star"></i>
+	                               <i class="fa fa-star"></i>
+	                               <i class="fa fa-star"></i>
+	                               </div>
+	                               <hr style="margin:auto;width:100px;height:2px;border:2px;background-color: royalblue; "/>
+	                               <p style="margin-top:0px;margin-bottom:1px; font-size: 20px;">ID:{{ publish_id }}</p>
+	                               <hr style="margin:auto;width:100px;height:2px;border:2px;background-color: royalblue; "/>
+	                               <div>添加成功</div>
+	                         </div>
+                    	</div>
+                    </div>
+                    {% else %}
+                    <div style="position: absolute;border-radius: 50%;border: 5px double red ;left:100px;top:10px;width:200px;height:200px;padding:1px;color:#999999;">
+	                    <div style="position: absolute;transform: rotate(-45deg);border-radius: 50%;border: 5px dotted red ; margin-top: 5px;margin-left: 5px; width:180px;height:180px;padding:1px;color:#999999;">
+	                         <div style="height: 100px;line-height: 40px;margin-top: 20px;color: red;text-align: center;font-size: 30px;font-family: "微软雅黑";">
+	                               <div>
+	                               <i class="fa fa-star"></i>
+	                               <i class="fa fa-star"></i>
+	                               <i class="fa fa-star"></i>
+	                               <i class="fa fa-star"></i>
+	                               </div>
+	                               <hr style="margin:auto;width:100px;height:2px;border:2px;background-color: red; "/>
+	                               <p style="margin-top:0px;margin-bottom:1px; font-size: 20px;">ID:{{ publish_id }}</p>
+	                               <hr style="margin:auto;width:100px;height:2px;border:2px;background-color: red; "/>
+	                               <div>添加失败</div>
+	                         </div>
+	                    </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+
+                <!-- <h3 class="lighter smaller">We looked everywhere but we couldn't find it!</h3> -->
+                
+                {% if status == 'Done' %}
+                    <p><h4 style="color:blue">执行状态:success</h4></p>
+                {% else %}
+                    <p><h4 style="color:red">执行状态:{{ RunPlaybookState }}</h4></p>
+                {% endif %}
+                
+                <p>发布ID:{{ publish_id }}</p>
+                <p>执行代码:{{ status }}</p>
+                <p>返回详情:{{ output_list }}</p>
+
+                <div>
+
+                    <div class="space"></div>
+                    <h4 class="smaller">如果您在发布过程中出现了发布失败，为完善发布系统，请您务必协助:</h4>
+
+                    <ul class="list-unstyled spaced inline bigger-110 margin-15">
+                        <li>
+                            <i class="ace-icon fa fa-hand-o-right blue"></i>
+                            将当前报错界面进行<b class="red">截图</b>反馈给运维工程师
+                        </li>
+
+                        <li>
+                            <i class="ace-icon fa fa-hand-o-right blue"></i>
+                            其他您认为可以快速甩锅的方式...
+                        </li>
+                    </ul>
+                </div>
+
+                <hr />
+                <div class="space"></div>
+
+                <div class="center">
+                    <a href="/projectinfo/" class="btn btn-grey">
+                        <i class="ace-icon fa fa-arrow-left"></i>
+                        继续添加
+                    </a>
+                    <a href="/projectinfo/" class="btn btn-info">
+                        <!-- <i class="ace-icon fa fa-arrow-left"></i> -->
+                        前去发布
+                    </a>
+
+                    <a href="/projectinfo/" class="btn btn-primary">
+                        <i class="ace-icon fa fa-arrow-right"></i>
+                        查看详情
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- /section:pages/error -->
+
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div><!-- /.row -->
+{% include "base/template_footer.html" %}

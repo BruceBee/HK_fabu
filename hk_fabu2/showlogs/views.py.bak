@@ -1,0 +1,85 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+from django.shortcuts import render
+from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponseRedirect
+from public.publicfunction import read_project_name
+from public.publicvar import *
+import multiprocessing
+import commands
+import os
+import json
+
+
+all_log_output = {}
+
+
+def check_and_read_log(logfilename):
+    strip_list = logfilename.strip('/').split('/')
+
+    nfs_path = strip_list[0]
+    serverip = strip_list[1]
+    project_name = strip_list[2]
+    logfile = strip_list[-1]
+    path_with_serverip = '/' + nfs_path + '/' + serverip
+    path_with_projectname = path_with_serverip + '/' + project_name
+    path_full = path_with_projectname + '/logs/' + logfile
+    mount_path = '/' + nfs_path
+    mount_cmd = 'sudo mount %s:%s %s' % (serverip, mount_path, path_with_serverip)
+
+    if os.path.isfile(path_full):
+        status, logoutput = commands.getstatusoutput('tail -100 %s' % path_full)
+        return {serverip: logoutput}
+    else:
+        if not os.path.exists(path_with_serverip):
+            # 检查以IP命名的文件夹是否存在
+            os.makedirs(path_with_serverip)
+
+        dir_list = os.listdir(path_with_serverip)
+        if len(dir_list) > 0 and project_name not in dir_list:
+            # 对应服务器logs目录已经挂载但无对应项目日志
+            return {serverip: '无此项目模块的日志信息！\n如果此项目模块在日志查看功能上线之前就已部署，则需要全新部署一次来激活功能！'}
+        elif len(dir_list) == 0:
+            status, output = commands.getstatusoutput(mount_cmd)
+            if status != 0:
+                return {serverip: output}
+
+        if os.path.isfile(path_full):
+            status, logoutput = commands.getstatusoutput('tail -100 %s' % path_full)
+            global all_log_output
+            all_log_output[serverip] = logoutput
+            # return {serverip: logoutput}
+        else:
+            return {serverip: '日志文件不存在！'}
+
+
+
+def showlogs(request):
+    # 用户未登录跳转
+    if 'LoginName' not in request.session:
+        return HttpResponseRedirect('/login')
+    if request.method == 'GET':
+        return render(request, "showlogs.html", {'project_lists': read_project_name(),
+                                                 'LoginName': request.session['LoginName']})
+
+    else:
+        project_name = request.POST['project_name']
+        logfilename = request.POST['logfilename']
+        getserver = read_project_name(project_name)
+        tmppath = os.path.join('/logs', logfilename)
+        path_lists = [os.path.join(TOMCAT_LOG_PATH_MOUNT, ip) + '/tomcat_' + project_name + tmppath for ip in getserver]
+        
+        global all_log_output
+        all_log_output = {}
+        
+        p = multiprocessing.Pool(len(path_lists))       # 使用多进程
+        p.map(check_and_read_log, path_lists)        # 使用多进程
+        p.close()
+
+        # logs = map(check_and_read_log, path_lists)        # 单进程
+
+
+        return HttpResponse(json.dumps(all_log_output))
+
+
+

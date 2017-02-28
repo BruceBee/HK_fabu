@@ -1,0 +1,43 @@
+#!/bin/bash
+
+start() {
+cd /home/fabu/hk_fabu2
+#uwsgi --http :8000 --chdir /home/fabu/hk_fabu2 --module django_wsgi --daemonize uwsgi.log --pidfile uwsgi.pid
+uwsgi --ini mysite_uwsgi.ini --daemonize uwsgi.log --pidfile uwsgi.pid
+}
+
+stop() {
+cd /home/fabu/hk_fabu2
+uwsgi --stop uwsgi.pid
+}
+
+restart() {
+stop
+sleep 1
+start
+}
+
+reload() {
+cd /home/fabu/hk_fabu2
+uwsgi --reload uwsgi.pid
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    restart
+    ;;
+  reload)
+    reload
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|reload}" 
+    exit 1
+esac
+
+exit $?

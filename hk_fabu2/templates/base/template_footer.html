@@ -1,0 +1,166 @@
+
+								<!-- PAGE CONTENT ENDS -->
+                                {% load static %}
+
+					</div><!-- /.page-content -->
+				</div>
+			</div><!-- /.main-content -->
+
+<!-- 			<div class="footer">
+				<div class="footer-inner"> -->
+
+<!-- 			<div>
+				<div>
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">发布系统</span>
+							华康技术部 2016
+						</span>
+					</div>
+				</div>
+			</div> -->
+
+
+			<div class="footer">
+				<div class="footer-inner">
+					<!-- #section:basics/footer -->
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">发布系统</span>
+							华康技术部 &copy; 2016-2017
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="http://www.hk515.com/" target="_blank">
+								<i class="ace-icon fa fa-home light-green bigger-130"></i>
+							</a>
+							<a href="#">
+								<i class="ace-icon fa fa-qq light-blue bigger-110"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-weixin text-primary bigger-110"></i>
+							</a>
+
+							<a href="http://weibo.com/jiuyibao515?refer_flag=1001030101_&is_all=1" target="_blank">
+								<i class="ace-icon fa fa-weibo orange bigger-110"></i>
+							</a>
+						</span>
+					</div>
+
+					<!-- /section:basics/footer -->
+				</div>
+			</div>
+
+
+
+
+
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script type="text/javascript">
+			window.jQuery || document.write("<script src='{% static "js/jquery.js" %}'>"+"<"+"/script>");
+		</script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script type="text/javascript">
+ window.jQuery || document.write("<script src='{% static "js/jquery1x.js" %}'>"+"<"+"/script>");
+</script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='{% static "js/jquery.mobile.custom.js" %}'>"+"<"+"/script>");
+		</script>
+		<script src="{% static "js/bootstrap.js" %}"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<!-- ace scripts -->
+		<script src="{% static "js/ace/elements.scroller.js" %}"></script>
+		<script src="{% static "js/ace/elements.colorpicker.js" %}"></script>
+		<script src="{% static "js/ace/elements.fileinput.js" %}"></script>
+		<script src="{% static "js/ace/elements.typeahead.js" %}"></script>
+		<script src="{% static "js/ace/elements.wysiwyg.js" %}"></script>
+		<script src="{% static "js/ace/elements.spinner.js" %}"></script>
+		<script src="{% static "js/ace/elements.treeview.js" %}"></script>
+		<script src="{% static "js/ace/elements.wizard.js" %}"></script>
+		<script src="{% static "js/ace/elements.aside.js" %}"></script>
+		<script src="{% static "js/ace/ace.js" %}"></script>
+		<script src="{% static "js/ace/ace.ajax-content.js" %}"></script>
+		<script src="{% static "js/ace/ace.touch-drag.js" %}"></script>
+		<script src="{% static "js/ace/ace.sidebar.js" %}"></script>
+		<script src="{% static "js/ace/ace.sidebar-scroll-1.js" %}"></script>
+		<script src="{% static "js/ace/ace.submenu-hover.js" %}"></script>
+		<script src="{% static "js/ace/ace.widget-box.js" %}"></script>
+		<script src="{% static "js/ace/ace.settings.js" %}"></script>
+		<script src="{% static "js/ace/ace.settings-rtl.js" %}"></script>
+		<script src="{% static "js/ace/ace.settings-skin.js" %}"></script>
+		<script src="{% static "js/ace/ace.widget-on-reload.js" %}"></script>
+		<!-- 禁止搜索框自动匹配 -->
+		<!-- <script src="{% static "js/ace/ace.searchbox-autocomplete.js" %}"></script> -->
+
+		<!-- inline scripts related to this page -->
+
+		<!-- the following scripts are used in demo only for onpage help and you don't need them -->
+		<link rel="stylesheet" href="{% static "css/ace.onpage-help.css" %}" />
+		<link rel="stylesheet" href="{% static "docs/assets/js/themes/sunburst.css" %}" />
+
+		<script type="text/javascript"> ace.vars['base'] = '..'; </script>
+		<script src="{% static "js/ace/elements.onpage-help.js" %}"></script>
+		<script src="{% static "js/ace/ace.onpage-help.js" %}"></script>
+        <script src="{% static "js/chosen.jquery.js" %}"></script>
+		<script src="{% static "docs/assets/js/rainbow.js" %}"></script>
+		<script src="{% static "docs/assets/js/language/generic.js" %}"></script>
+		<script src="{% static "docs/assets/js/language/html.js" %}"></script>
+		<script src="{% static "docs/assets/js/language/css.js" %}"></script>
+		<script src="{% static "docs/assets/js/language/javascript.js" %}"></script>
+
+        <script>
+
+            // $(document).ready(function () {
+            //     path = location.pathname;
+            //     if(path == '/'){
+            //         $("#dashboard").addClass('active');
+            //     }else{
+            //         path = path.replace(/\//g,'');
+            //         $("#"+path).addClass('active');
+            //     }
+            // });
+
+            path = location.pathname;
+            // console.log('原路径：'+path)
+            // console.log('剪切路径：'+path.split('/')[1])
+
+            $(document).ready(function () {
+                path = location.pathname;
+                if(path.split('/')[1] == ''){
+                    $("#dashboard").addClass('active');
+                }else{
+                    // path = path.replace(/\//g,'');
+                    $("#"+path.split('/')[1]).addClass('active');
+                }
+            });
+
+        </script>
+        <style type="text/css">
+            body {  font-family:'Hiragino Sans GB','Microsoft Yahei',"WenQuanYi Micro Hei",SimSun,Tahoma,Arial,Helvetica,STHeiti; }
+            .font-mono {  font-family: Menlo, Consolas, "Source Code Pro", Inconsolata, Monaco, "Courier New"}
+        </style>
+        <script>
+            $(".chosen-select").chosen();
+        </script>
+		<script>
+        $(window).on('resize.chosen', function() {
+        var w = $('.chosen-select').parent().width();
+        $('.chosen-select').siblings('.chosen-container').css({'width':w});
+            $('input').siblings('.input-xlarge').css({'width':w});
+    }).triggerHandler('resize.chosen');
+		</script>
+
+
+

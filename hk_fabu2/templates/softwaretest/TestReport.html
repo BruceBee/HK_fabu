@@ -1,0 +1,374 @@
+{% include "base/template_head.html" %}
+{% load static %}
+
+
+<div class="row">
+
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+<!--                 <div class="page-header">
+                    <h1>测试报告</h1>
+                </div> -->
+                <!-- <h2 class="header"><b>测试报告</b></h2> -->
+                <ul class="list-unstyled spaced">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active">
+                                <a data-toggle="tab" href="#mytest">
+                                    <i class="blue ace-icon fa fa-stethoscope bigger-120"></i>
+                                    发布ID：{{ publish_id }}
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content" >
+                            <div id="mytest" class="tab-pane fade in active" style="width: 98%;margin:auto;">
+                                <button class="btn btn-primary btn-mini" style="float: left;"><a style="color: white" href="/softwaretest/">继续测试</a></button>
+
+                                <li class="dropdown" style="float: right;">
+                                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                        导出审核报告&nbsp;
+                                        <i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+                                    </a>
+
+                                    <ul class="dropdown-menu dropdown-info dropdown-100">
+                                        <li>
+                                            <a data-toggle="tab" onclick="downData('1')"><i class="green ace-icon fa fa-file-word-o bigger-120"></i>&nbsp;&nbsp;&nbsp;word&nbsp;</a>
+                                        </li>
+
+                                        <li>
+                                            <a data-toggle="tab" onclick="downData('2')"><i class="red ace-icon fa fa-file-excel-o bigger-120"></i>&nbsp;&nbsp;&nbsp;excel&nbsp;</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <br>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>文件上传</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>文件名称：
+                                                    <b class="red">{{ publish_filename }}</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>上传时间：
+                                                    <b class="red">{{ file_uploadtime }}</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>流程发起</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布ID：
+                                                    <b class="red">{{ publish_id }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布类型：
+                                                    <b class="red">{{ publish_type }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布时间：
+                                                    <b class="red">{{ create_time }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布人员：
+                                                    <b class="red">{{ publish_user }}</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>模块名称：
+                                                    <b class="red">{{ publish_module }}</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>发布审核</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>审核人员：
+                                                    <b id="review_owner" class="red">{{ review_owner }}</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>审核时间：
+                                                    <b id="review_time" class="red">{{ review_time }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>审核意见：
+                                                    <b class="green">同意发布</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>系统部署</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布状态：
+                                                    <b class="green">成功</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>开始时间：
+                                                    <b id="publish_stime" class="red">{{ publish_strtime }}</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束时间：
+                                                    <b id="publish_etime" class="red">{{ publish_endtime }}</b>
+                                                </li>                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>系统测试</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>测试人员：
+                                                    <b class="green">{{ test_user }}</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>开始时间：
+                                                    <b id="publish_etime" class="red">{{ test_starttime }}</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束时间：
+                                                    <b class="red">{{ test_endtime }}</b>
+                                                </li>
+
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>测试结论：
+                                                    <b class="green">{{ test_status }}</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>发布完成</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束状态：
+                                                    <b class="red">已完成</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束时间：
+                                                    <b class="grey">{{ test_endtime }}</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-2"></div>                                        
+
+                                <div class="row">
+                                    <div class="col-md-12 pricing-box">
+                                        <div class="widget-box widget-color-red3">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>发布详情</b></h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <div class="profile-user-info profile-user-info-striped">
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 发布主机 </div>
+                                                            <div class="profile-info-value">
+                                                                <b class="red">{{ publish_serverlist }}</b>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 发布详情 </div>
+
+                                                            <div class="profile-info-value">
+                                                                {% autoescape off %}
+                                                                <span >{{ publish_detail }}</span>
+                                                                {% endautoescape %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-box widget-color-orange">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>审批意见</b></h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <div class="profile-user-info profile-user-info-striped">
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 审核意见 </div>
+                                                            <div class="profile-info-value">
+                                                                <span >{{ publish_status }}</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 审批补充意见 </div>
+                                                            <div class="profile-info-value">
+                                                                {% autoescape off %}
+                                                                <span>{{ review_info }}</span>
+                                                                {% endautoescape %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="widget-box widget-color-blue">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>测试总结</b></h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <div class="profile-user-info profile-user-info-striped">
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 测试意见 </div>
+                                                            <div class="profile-info-value">
+                                                                <span >{{ test_status }}</span>
+                                                                <span >【意见说明：0:待测试；1:测试完成，通过；2:测试完成，不通过；3:其他】</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="profile-info-row">
+                                                            <div class="profile-info-name"> 测试总结 </div>
+                                                            <div class="profile-info-value">
+                                                                {% autoescape off %}
+                                                                <span >{{ test_detail }}</span>
+                                                                {% endautoescape %}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+       <!--                                              <div class="row">
+                                                        {% autoescape off %}
+                                                        <div class="col-lg-12">
+                                                            {{ test_detail }}
+                                                        </div>
+                                                        {% endautoescape %}
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                       
+                                <!-- <div id="pageToolbar"></div> -->
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </ul>
+
+
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7 col-lg-offset-1">
+
+        <div class="row">
+            <div class="col-lg-12">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+{% include "base/template_footer.html" %}
+<script>
+
+    $(document).ready(function(){
+        $("#navbar_child").removeClass("hidden").html("测试报告");
+        // $("#navbar_child").html("发布审核")
+    })
+
+
+    function downData(downloadtype){
+        //downloadtype:
+        // 1,word格式
+        // 2,excel格式
+
+        var downloadID = {{ publish_id }}
+
+
+        $.ajax({
+            type:'POST',
+            url:'/review/DownloadReport/',
+            dataType:'text',
+            data:{'downloadID':downloadID,'downloadtype':downloadtype},
+            success:function(text){
+                // console.log(text)
+                //text='doc201612201111'
+                //text='xls201612201111'
+                var url ='/review/Downloadaction/'+text;
+                window.location.href=url;
+                // layer.alert('导出成功')
+            },error:function(){
+                layer.alert('导出失败');
+            }
+        });
+        
+    }
+
+    
+</script>

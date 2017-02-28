@@ -1,0 +1,32 @@
+{% if LoginName == 'admin' %}
+{#管理员专用begin#}
+
+<li class="highlight" id="haproxyedit">
+	<a href="/haproxyedit/">
+		<i class="menu-icon glyphicon glyphicon-header"></i>
+		<span class="menu-text"> Haproxy配置 </span>
+	</a>
+
+	<b class="arrow"></b>
+</li>
+
+<li class="highlight" id="projectinfo">
+	<a href="/projectinfo/">
+		<i class="menu-icon glyphicon glyphicon-th"></i>
+		<span class="menu-text"> 项目模块管理 </span>
+	</a>
+
+	<b class="arrow"></b>
+</li>
+
+<li class="highlight" id="processmanage">
+	<a href="/processmanage/">
+		<i class="menu-icon glyphicon glyphicon-tasks"></i>
+		<span class="menu-text"> 进程管理 </span>
+	</a>
+
+	<b class="arrow"></b>
+</li>
+
+{#管理员专用end#}
+{% endif %}

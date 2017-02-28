@@ -1,0 +1,128 @@
+{% include "base/template_head.html" %}
+
+
+<a id="iamtop"></a>
+<div class="row" id="formpost">
+    <div class="col-lg-2"><h5 class="smaller text-success">每次请求日志最后100条记录</h5></div>
+
+    <div class="col-lg-6">
+        <div class="row">
+            <form method="post">
+            {% csrf_token %}
+                <div class="col-lg-4">
+
+                    <select name="project_name" id="project_name" data-placeholder="请选择项目模块" class="chosen-select" >
+                        <option selected >=====请选择=====</option>
+                        {% for each_project in project_lists %}
+                        <option value="{{ each_project }}">{{ each_project }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-lg-4 center">
+                    <input type="text" class="input-large" placeholder="日志文件名,比如 catalina.out" name="logfilename">
+                </div>
+                <div class="col-lg-3">
+                    刷新间隔：
+                    <select name="flushtime" id="">
+                        <option value="0">手动</option>
+                        <option value="2">2秒</option>
+                        <option value="3">3秒</option>
+                        <option value="4">4秒</option>
+                        <option value="5">5秒</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-1">
+
+
+                    <button class="btn btn-sm btn-info" id="reqlog">
+                        <span class="bigger-110">提 交</span>
+                    </button></div>
+    <div class="col-lg-1" >
+
+                    <button class="btn btn-sm btn-info" id="stopflush" onclick="window.clearInterval(autoflush)">
+                        <span class="bigger-110">停止刷新</span>
+                    </button>
+                </div>
+    <div class="col-lg-2">
+        <a href="#iambottom">
+            <i class="ace-icon fa fa-angle-double-down "><h6>下翻到底</h6></i>
+        </a>
+    </div>
+    </div>
+
+    </div>
+
+<div class="row" id="displaylogs">
+
+</div>
+
+<a href="#iamtop"  class="btn-scroll-up btn btn-sm btn-inverse display">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+{% include "base/template_footer.html" %}
+
+<script>
+
+
+    if(!(navigator.userAgent.match(/webkit/i))){
+        $("#sidebar-collapse i:first").click();
+    }
+
+    function ajaxpost(formdate) {
+        $.ajax({
+                    type: "POST",
+                    url: "#",
+                    data: formdate,
+                    dataType: "json",
+                    success: function (data) {
+                        col_size = Math.floor(12/data.length);
+                        $.each(data, function () {
+                            $.each(this, function (k,v) {
+                                $("#displaylogs").empty();
+                                $("#displaylogs").append("<div class='col-lg-" + col_size + "'></div>")
+                                        .find("div").append("<div class='widget-box'></div>")
+                                .find("div").append("<div class='widget-header widget-header-flat'></div>")
+                                .find("div").append("<h4 class='widget-title'>" + k + "</h4>")
+                                .parent().append("<div class='widget-body'></div>")
+                                .children("div.widget-body")
+                                        .append("<div class='widget-main'>" + v.replace(/\n/g, "<br />") + "</div>");
+                            });
+                        })
+                    },
+                    error: function (err) {
+                                        alert("wrong");
+        }
+    });
+    }
+
+    $(window).on('resize.chosen', function() {
+        var w = $('.chosen-select').parent().width();
+        $('.chosen-select').siblings('.chosen-container').css({'width':w});
+    }).triggerHandler('resize.chosen');
+
+    $("#reqlog").click(function(){
+        formdate = $("form").serializeArray();
+        if(formdate[1].value == '=====请选择=====' ||formdate[2].value == ""){
+            alert('请选择项目模块并填写日志文件名！');
+            return;
+        }else{
+                if(Number(formdate[3].value) == 0){ajaxpost(formdate);}else{
+                    ajaxpost(formdate);
+                     autoflush = setInterval("ajaxpost(formdate);", Number(formdate[3].value)*1000);
+
+                };
+        }
+    });
+
+    $("#stopflush").click(function () {
+        window.clearInterval(autoflush);
+    });
+</script>
+
+	</body>
+</html>
+

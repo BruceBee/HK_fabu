@@ -1,0 +1,435 @@
+{% include "base/template_head.html" %}
+<link rel="stylesheet" href="/static/css/paging.css">
+
+<link rel="stylesheet" type="text/css" href="/static/plugins/select/css/style.css">
+<script type="text/javascript" src="/static/plugins/select/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">  
+    var $172 = $;//新的命名  
+</script> 
+<script type="text/javascript" src="/static/plugins/select/js/script.js"></script>
+
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/query.js"></script>
+<script type="text/javascript" src="/static/js/paging.js"></script>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-header">
+                    <h1>进程管理</h1>
+                </div>
+                <ul class="list-unstyled spaced">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active">
+                                <a data-toggle="tab" href="#home">
+                                    <i class="green ace-icon fa fa-list-ul bigger-120"></i>
+                                    进程管理详细信息
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="home" class="tab-pane fade in active">
+
+
+                                <ul class="select">
+                                    <li class="select-list">
+                                        <dl id="select1">
+                                            <dt>模块名称：</dt>
+                                            <dd class="select-all selected"><a style="text-decoration:none;cursor:pointer" onclick="Multiselect(this,'noupdate');">全部模块</a></dd>
+                                        </dl>
+                                    </li>
+                                    <li class="select-list">
+                                        <dl id="select2">
+                                            <dt>进程状态：</dt>
+                                            <dd class="select-all selected"><a values='A' style="text-decoration:none;cursor:pointer" onclick="Multiselect(this,'noupdate');">全部进程</a></dd>
+                                            <dd><a values='D' style="text-decoration:none;cursor:pointer" onclick="Multiselect(this,'noupdate');">不可中断(D)&nbsp;</a></dd>
+                                            <dd><a values='S' style="text-decoration:none;cursor:pointer" onclick="Multiselect(this,'noupdate');">休眠状态(S)&nbsp;</a></dd>
+                                            <dd><a values='T' style="text-decoration:none;cursor:pointer" onclick="Multiselect(this,'noupdate');">停止或被追踪(T)&nbsp;</a></dd>
+                                            <dd><a values='R' style="text-decoration:none;cursor:pointer" onclick="Multiselect(this,'noupdate');">正在运行(R)&nbsp;</a></dd>
+                                            <dd><a values='Z' style="text-decoration:none;cursor:pointer" onclick="Multiselect(this,'noupdate');">僵尸进程(Z)&nbsp;</a></dd>
+                                            <dd><a values='O' style="text-decoration:none;cursor:pointer" onclick="Multiselect(this,'noupdate');">其他状态&nbsp;</a></dd>
+                                        </dl>
+                                    </li>
+                                    <li class="select-list">
+                                        <dl id="select3">
+                                            <dt>IP列表：</dt>
+                                            <dd class="select-all selected"><a style="text-decoration:none;cursor:pointer" onclick="Multiselect(this,'noupdate');">全部IP</a></dd>
+                                        </dl>
+                                    </li>
+<!--                                     <li class="select-result">
+                                        <dl>
+                                            <dt>查询记录数：</dt>
+                                            <dd class="select-no">暂时没有选择过滤条件</dd>
+
+                                        </dl>
+                                    </li> -->
+
+                                </ul>
+
+                                <p>
+                                    <div style="float: left;">
+                                        <b style="color: blue">&nbsp;记录数&nbsp;
+                                            <span id='mypublistcount'></span>
+                                        &nbsp;条;</b>
+                                        <b >最后更新时间:<span id='updatetime'></span></b>&nbsp;&nbsp;
+                                    </div>
+<!--                                     <div class="nav-search" style="float: right;">
+                                        <span class="input-icon">
+                                        <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                                        <i class="ace-icon fa fa-search nav-search-icon"></i>
+                                        </span>
+                                    </div> -->
+                                    <div style="float: right;">
+                                        <span class="btn btn-mini btn-success" onclick="Multiselect(this,'updatenow');"><i class="ace-icon fa fa-refresh blue"></i>&nbsp;立即更新</span>
+                                    </div>
+                                </p>
+                                <br>
+                                <hr>
+                                <div class="widget-body">
+                                    <div class="widget-main no-padding">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="thin-border-bottom">
+                                                <tr>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>主机IP</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>USER</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>PID</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>CPU</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>MEM</th>
+                                                    
+                                                    <!-- <th><i class="ace-icon fa fa-caret-right blue"></i>发布状态</th> -->
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>START</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>TIME</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>COMMAND</th>
+
+
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>STAT</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>采集时间</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>进程操作</th>
+                                                    
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id= 'processinfo'>
+
+                                            </tbody>
+                                        </table>
+
+                                        <div id="pageToolbar"></div>
+
+                                    </div>
+                                </div>
+                                
+
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% include "base/template_footer.html" %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        LoadProcessIndex(1,10);
+        // $("#updatetime").html(getNowFormatDate())
+
+    });
+
+
+    function LoadProcessIndex(s_page,page_size){
+
+
+    	// $("#updatetime").html(getNowFormatDate())
+
+        // var modulename = $("#modulelist").children('.label ').children().html()
+    	var modulename = $("#select1").children('dd').children().html()
+
+        console.log(modulename)
+
+        // var processstatus = $("#processstatus").children('.label ').children().attr('values')
+        var processstatus = $("#select2").children('.selected').children().attr('values')
+        
+        // var hostip = $("#iplist").children('.label ').children().html()
+        var hostip = $("#select3").children('dd').children().html()
+
+
+
+        console.log('--------起始加载------'+'模块名称：'+modulename+';进程状态：'+processstatus+';IP列表：'+hostip)
+
+
+        function LoadProcessInfo(s_page,page_size){
+
+            // console.log('模块名称：'+$("#modulelist").children('.label ').children().html()+';进程状态：'+ $("#processstatus").children('.label ').children().attr('values')+';IP列表：'+$("#iplist").children('.label ').children().html())
+
+
+            $.ajax({
+                type:'POST',
+                url:'/processmanage/processitems/',
+                data:{'modulename':modulename,'processstatus':processstatus,'hostip':hostip,'s_page':s_page,'page_size':page_size},
+                // data:{'modulename':modulename,'moduleaction':moduleaction,'serverlist':serverlist},
+                dataType:'json',
+                success:function(val){
+                    console.log('------全部结果------')
+                    console.log(val)
+                    // $("#modulelist").html('模块名称：<span class="label label-success"><a style="text-decoration:none;cursor:pointer" onclick=Multiselect(this,"noupdate");>全部</a></span>&nbsp;&nbsp;')
+                    // $("#select1").html('模块名称：<span class="label label-success"><a style="text-decoration:none;cursor:pointer" onclick=Multiselect(this,"noupdate");>全部</a></span>&nbsp;&nbsp;')
+                    for(var i=0;i<val.modulelist.length;i++){
+                        // $("#modulelist").append('<span ><a style="text-decoration:none;cursor:pointer" onclick=Multiselect(this,"noupdate");>'+val.modulelist[i]['project_name'].substring(1,val.modulelist[i]['project_name'].length-1)+'</a></span>&nbsp;&nbsp;')
+                        // if(i % 25 == 0){$("#modulelist").append('<br>')}
+                        $("#select1").append('<dd><a style="text-decoration:none;cursor:pointer" onclick=Multiselect(this,"noupdate");>'+val.modulelist[i]['project_name'].substring(1,val.modulelist[i]['project_name'].length-1)+'</a></dd>')
+                    }
+
+
+                    // $("#iplist").html('IP列表：<span class="label label-success"><a style="text-decoration:none;cursor:pointer" onclick=Multiselect(this,"noupdate");>全部</a></span>&nbsp;&nbsp;')
+                    for(var j=0;j<val.iplist.length;j++){
+                        // $("#iplist").append('<span><a style="text-decoration:none;cursor:pointer" onclick=Multiselect(this,"noupdate");>'+val.iplist[j]+'</a></span>&nbsp;&nbsp;')
+                        $("#select3").append('<dd><a style="text-decoration:none;cursor:pointer" onclick=Multiselect(this,"noupdate");>'+val.iplist[j]+'</a></dd>')
+                    }
+
+                    if(val.processitems.length == 0){
+                    	$("#mypublistcount").html(val.processitems.length)
+                    }
+
+                    //更新时间
+                    $("#updatetime").html(val.processitems[0]['CollectTime'])
+                    // console.log()
+                    // $("#mypublistcount").html(val.processitems.length)
+                    for(var m=0;m<val.processitems.length;m++){
+                        $("#processinfo").append("<tr>\
+                                                    <td style='width: 5%'>"+val.processitems[m]['HostIP']+"</td>\
+                                                    <td style='width: 5%'>"+val.processitems[m]['USER']+"</td>\
+                                                    <td style='width: 4%'>"+val.processitems[m]['PID']+"</td>\
+                                                    <td style='width: 4%'>"+val.processitems[m]['CPU']+"&nbsp;%</td>\
+                                                    <td style='width: 4%'>"+val.processitems[m]['MEM']+"&nbsp;%</td>\
+                                                    <td style='width: 5%'>"+val.processitems[m]['START']+"</td>\
+                                                    <td style='width: 5%'>"+val.processitems[m]['TIME']+"</td>\
+                                                    <td>"+val.processitems[m]['COMMAND']+"</td>\
+                                                    <td style='width: 4%'>"+val.processitems[m]['STAT']+"</td>\
+                                                    <td style='width: 9%'>"+val.processitems[m]['CollectTime']+"</td>\
+                                                    <td style='width: 9%'><span class='btn  btn-mini btn-success'>启动</span>&nbsp;<span class='btn  btn-mini btn-danger'>停止</span>&nbsp;<span class='btn  btn-mini btn-info'>重启</span></td>\
+                                                    </tr>")
+                    }
+                    
+                },error:function(){
+                    layer.alert('操作失败',{icon: 2})
+                }
+            });
+        };
+    
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/processmanage/processearchcount/',
+            data:{'modulename':modulename,'processstatus':processstatus,'hostip':hostip,'isupdatenow':'noupdate'},
+            dataType:'text',
+            success:function(val){
+                $("#mypublistcount").html(val)
+                // console.log(val)
+                LoadProcessInfo(s_page,page_size);
+
+                //加载页码
+                $('#pageToolbar').html("");
+                $('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                    //page:当前选择页码
+                    //size:当前每页显示数量
+                    //count：当前页码总数(含有多少个size)
+                    $("#processinfo").html("")
+                    // $("#modulelist").html("")
+                    // $("#iplist").html("")
+
+                    LoadProcessInfo(page,10)
+                    }
+                });
+            },error:function(){
+                console.log('error')
+            }
+        });
+
+    };
+
+
+    //获取当前时间格式：2017-01-01 00:00:00
+	function getNowFormatDate() {
+	    var date = new Date();
+	    var seperator1 = "-";
+	    var seperator2 = ":";
+	    var month = date.getMonth() + 1;
+	    var strDate = date.getDate();
+	    var strHour = date.getHours();
+	    var strMinute = date.getMinutes();
+	    var strSecond = date.getSeconds();
+
+	    if (month >= 1 && month <= 9) {
+	        month = "0" + month;
+	    }
+	    if (strDate >= 0 && strDate <= 9) {
+	        strDate = "0" + strDate;
+	    }
+	    if (strHour >= 0 && strHour <= 9) {
+	        strHour = "0" + strHour;
+	    }
+	    if (strMinute >= 0 && strMinute <= 9) {
+	        strMinute = "0" + strMinute;
+	    }
+	    if (strSecond >= 0 && strSecond <= 9) {
+	        strSecond = "0" + strSecond;
+	    }
+
+	    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+	            + " " + strHour + seperator2 + strMinute
+	            + seperator2 + strSecond;
+	    return currentdate;
+	}
+
+    function GetProcessInfo(){
+        $.ajax({
+            type:'POST',
+            url:'/processmanage/GetProcessInfo/',
+            // data:{'modulename':modulename,'moduleaction':moduleaction,'serverlist':serverlist},
+            dataType:'text',
+            success:function(val){
+                console.log(val)
+            },error:function(){
+                layer.alert('操作失败',{icon: 2})
+            }
+        });
+    };
+
+    function Multiselect(ths,val){
+
+        console.log(val)
+        if(val !='updatenow'){
+      //   	$(ths).parent().addClass('label label-success')
+	    	// $(ths).parent().siblings().removeClass('label')
+	    	// $(ths).parent().siblings().removeClass('label-success')
+
+            $(ths).parent().addClass('select-all selected')
+            $(ths).parent().siblings().removeClass('selected')
+            $(ths).parent().siblings().removeClass('select-all')
+            $("#select-result").children('dl').html('<dd class="select-all selected"><a style="text-decoration:none;cursor:pointer">'+1+'</a></dd>')
+
+
+           
+        };
+
+	    // $("#updatetime").html(getNowFormatDate())
+
+
+        function GetMultiselectData(s_page,page_size){
+        
+            // console.log($("#modulelist").children('.label ').children().html())
+	        
+
+            // console.log('模块名称：'+$("#modulelist").children('.label ').children().html()+';进程状态：'+ $("#processstatus").children('.label ').children().attr('values')+';IP列表：'+$("#iplist").children('.label ').children().html())
+	        console.log('--------变更选中------'+'模块名称：'+$("#select1").children('.selected').children().html()+';进程状态：'+ $("#select2").children('.selected').children().attr('values')+';IP列表：'+$("#select3").children('.selected').children().html())
+	           
+
+
+            $.ajax({
+	            type:'POST',
+	            url:'/processmanage/processitems/',
+	            data:{'modulename':modulename,'processstatus':processstatus,'hostip':hostip,'s_page':s_page,'page_size':page_size},
+	            dataType:'json',
+	            success:function(val){
+                    console.log('------变更结果------')
+	                console.log(val)
+	                // $("#mypublistcount").html(val.processitems.length)
+	                $("#processinfo").html('')
+	                if(val.processitems.length == 0){
+	                    $("#processinfo").append('<tr><td colspan="12" style="text-align:center;">当前无记录</td></tr>')
+	                }
+                    $("#updatetime").html(val.processitems[0]['CollectTime'])
+	                
+	                for(var m=0;m<val.processitems.length;m++){
+	                    $("#processinfo").append("<tr>\
+	                                                <td style='width: 5%'>"+val.processitems[m]['HostIP']+"</td>\
+	                                                <td style='width: 5%'>"+val.processitems[m]['USER']+"</td>\
+	                                                <td style='width: 4%'>"+val.processitems[m]['PID']+"</td>\
+	                                                <td style='width: 4%'>"+val.processitems[m]['CPU']+"&nbsp;%</td>\
+	                                                <td style='width: 4%'>"+val.processitems[m]['MEM']+"&nbsp;%</td>\
+	                                                <td style='width: 5%'>"+val.processitems[m]['START']+"</td>\
+	                                                <td style='width: 5%'>"+val.processitems[m]['TIME']+"</td>\
+	                                                <td>"+val.processitems[m]['COMMAND']+"</td>\
+	                                                <td style='width: 4%'>"+val.processitems[m]['STAT']+"</td>\
+	                                                <td style='width: 9%'>"+val.processitems[m]['CollectTime']+"</td>\
+	                                                <td style='width: 9%'><span class='btn  btn-mini btn-success'>启动</span>&nbsp;<span class='btn  btn-mini btn-danger'>停止</span>&nbsp;<span class='btn  btn-mini btn-info'>重启</span></td>\
+	                                                </tr>")
+	                }
+
+                
+	            },error:function(){
+	                layer.alert('操作失败',{icon: 2})
+	            }
+
+	        });
+
+        };
+
+        // var modulename = $("#modulelist").children('.label ').children().html()
+        // var processstatus = $("#processstatus").children('.label ').children().attr('values')
+        // var hostip = $("#iplist").children('.label ').children().html()
+        var modulename = $("#select1").children('.selected').children().html()
+        var processstatus = $("#select2").children('.selected').children().attr('values')
+        var hostip = $("#select3").children('.selected').children().html()
+
+        console.log('-------'+hostip)
+
+        if(val == 'updatenow'){
+            var index = layer.load(0, {
+              content :'<hr><b>同步中...</b>',
+              shade: [0.1,'#fff'] //0.1透明度的白色背景
+            });
+            //更新时间
+            // $("#updatetime").html(getNowFormatDate())
+        }  
+
+        // console.log('1')
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            data:{'modulename':modulename,'processstatus':processstatus,'hostip':hostip,'isupdatenow':val},
+            url:'/processmanage/processearchcount/',
+            dataType:'text',
+            success:function(val){
+                $("#mypublistcount").html(val)
+
+                // console.log(val)
+                GetMultiselectData(1,10);
+
+                //加载页码
+                $('#pageToolbar').html("");
+                $('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                    //page:当前选择页码
+                    //size:当前每页显示数量
+                    //count：当前页码总数(含有多少个size)
+                    $("#processinfo").html("")
+                    // $("#modulelist").html("")
+                    // $("#iplist").html("")
+
+                    GetMultiselectData(page,10)
+                    }
+                });
+                layer.close(index)
+            },error:function(){
+                console.log('error')
+            }
+        });
+        
+    	};
+
+
+    
+</script>
+
+<!--    </body>
+</html> -->

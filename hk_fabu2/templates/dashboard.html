@@ -1,0 +1,559 @@
+{% include "base/template_head.html" %}
+
+<head>
+    <script type="text/javascript">
+        $(document).ready(function(){
+
+        	$.ajax({
+        		type: "GET",
+        		url: "/LoadDashboard/",
+            	dataType: "json",
+            	success: function (val){
+            		if(val == '301'){
+            			layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+            		}else{
+            			console.log(val)
+	            		var LastFivePublishLog = val.LastFivePublishLog
+	            		var OneWeekPublishCount = val.OneWeekPublishCount
+	            		var LastSevenDate = val.LastSevenDate
+	            		// console.log(OneWeekPublishCount[0][7])
+	            		// console.log(val.PublishModuleList)
+	            		// console.log(val.PublishModuleCount)
+
+	            		var DataArray = new Array();
+	            		var OneWeekPublishArray = new Array();
+	            		for(var i=0;i<4;i++){
+	            			OneWeekPublishArray[i]=new Array();
+	            			for(var j=0;j<7;j++){
+	            				OneWeekPublishArray[i][j]="";
+	            			}
+	            		}
+	            		for(var i=0;i< LastFivePublishLog.length;i++){
+	            			$("#LastFive").append('<tr>\
+	                                            <td><span class="label label-info">'+LastFivePublishLog[i]["publish_user"]+'</span></td>\
+	                                            <td><b class="green">'+LastFivePublishLog[i]["publish_module"]+'</b></td>\
+	                                            <td >\
+	                                                <b class="green">'+LastFivePublishLog[i]["publish_type"]+'</b>\
+	                                            </td>\
+	                                            <td>\
+	                                                <b class="red">'+LastFivePublishLog[i]["publish_status"]+'</b>\
+	                                            </td>\
+	                                            <td>\
+	                                                <b class="green">'+LastFivePublishLog[i]["review_time"]+'</b>\
+	                                            </td>\
+	                                        </tr>')
+	            		};
+
+	            		for(var j=0;j<LastSevenDate.length;j++){
+	            			DataArray.unshift(LastSevenDate[j])
+	            		};
+
+
+	            		for(var k=0;k<OneWeekPublishCount.length;k++){
+	            			//OneWeekPublishCount.length =4
+	            			for(var l=0;l<OneWeekPublishCount[k].length;l++){
+	            				//OneWeekPublishCount[k].length = 7
+	            				OneWeekPublishArray[k][l] = OneWeekPublishCount[k][l]
+	            				// console.log(OneWeekPublishCount[k][l])
+	            			}
+	            			// console.log('----------------')
+	            		}
+
+	            		// console.log(OneWeekPublishArray)
+
+	            		// console.log(DataArray)
+
+	            		var myChart01 = echarts.init(document.getElementById('main01'));
+	            		var myChart02 = echarts.init(document.getElementById('main02'));
+	            		var myChart03 = echarts.init(document.getElementById('main03'));
+
+
+
+			            var option01 = {
+			                title: {
+			                    text: '版本满意度',
+			                    subtext: '截止于'+DataArray[5],
+			                    left: 'center'
+			                },
+			             //    itemStyle: {
+				            //     normal: {
+				            //         borderWidth:1,
+				            //         borderColor:'black',
+				            //         color: 'white',
+				            //         label: {
+				            //             show: false
+				            //         }
+				            //     },
+				            //     emphasis: {                 // 也是选中样式
+				            //         borderWidth:2,
+				            //         borderColor:'#fff',
+				            //         color: 'red',
+				            //         label: {
+				            //             show: true,
+				            //             textStyle: {
+				            //                 color: '#fff'
+				            //             }
+				            //         }
+				            //     }
+				            // },
+			                tooltip: {
+			                    trigger: 'item'
+			                },
+			                legend: {
+			                    orient: 'vertical',
+			                    left: 'left',
+			                    data:['版本1','版本2','版本3']
+			                },
+			                visualMap: {
+			                    min: 0,
+			                    max: 2500,
+			                    left: 'left',
+			                    top: 'bottom',
+			                    text: ['高','低'],           // 文本，默认为数值文本
+			                    calculable: true,
+			                    textStyle: {
+			                    	color:'black'
+			                    },
+			                    inRange: {//示例颜色范围
+						            // color: ['#CCCCCC', '#F65327']
+						            color: ['#CAE4C9', '#1FAC39']
+						            // color: ['#F3F3F3', '#006EDD']
+						        },
+			                },
+			                toolbox: {
+			                    show: true,
+			                    orient: 'vertical',
+			                    left: 'right',
+			                    top: 'center',
+			                    feature: {
+			                        dataView: {readOnly: false},
+			                        restore: {},
+			                        saveAsImage: {}
+			                    }
+			                },
+			                series: [
+			                    {
+			                        name: '版本1',
+			                        type: 'map',
+			                        mapType: 'china',
+			                        roam: false,
+			                        label: {
+			                            normal: {
+			                                show: true,
+			                                textStyle:{color:"#438EB9"}//省份标签字体颜色
+			                            },
+			                            emphasis: {//对应的鼠标悬浮效果
+			                                show: true
+			                            }
+			                        },
+			                        data:[
+			                            {name: '北京',value: randomData() },
+			                            {name: '天津',value: randomData() },
+			                            {name: '上海',value: randomData() },
+			                            {name: '重庆',value: randomData() },
+			                            {name: '河北',value: randomData() },
+			                            {name: '河南',value: randomData() },
+			                            {name: '云南',value: randomData() },
+			                            {name: '辽宁',value: randomData() },
+			                            {name: '黑龙江',value: randomData() },
+			                            {name: '湖南',value: randomData() },
+			                            {name: '安徽',value: randomData() },
+			                            {name: '山东',value: randomData() },
+			                            {name: '新疆',value: randomData() },
+			                            {name: '江苏',value: randomData() },
+			                            {name: '浙江',value: randomData() },
+			                            {name: '江西',value: randomData() },
+			                            {name: '湖北',value: randomData() },
+			                            {name: '广西',value: randomData() },
+			                            {name: '甘肃',value: randomData() },
+			                            {name: '山西',value: randomData() },
+			                            {name: '内蒙古',value: randomData() },
+			                            {name: '陕西',value: randomData() },
+			                            {name: '吉林',value: randomData() },
+			                            {name: '福建',value: randomData() },
+			                            {name: '贵州',value: randomData() },
+			                            {name: '广东',value: randomData() },
+			                            {name: '青海',value: randomData() },
+			                            {name: '西藏',value: randomData() },
+			                            {name: '四川',value: randomData() },
+			                            {name: '宁夏',value: randomData() },
+			                            {name: '海南',value: randomData() },
+			                            {name: '台湾',value: randomData() },
+			                            {name: '香港',value: randomData() },
+			                            {name: '澳门',value: randomData() }
+			                        ],
+			                        itemStyle:{//版本图例颜色
+						            	normal:{
+						            		color:'#F65327',
+						            	}
+						            },
+						            inRange: {
+								            color: ['#e0ffff', '#006edd']
+								        },
+				                    },
+				                    {
+			                        name: '版本2',
+			                        type: 'map',
+			                        mapType: 'china',
+			                        label: {
+			                            normal: {
+			                                show: true
+			                            },
+			                            emphasis: {
+			                                show: true
+			                            }
+			                        },
+			                        data:[
+			                            {name: '北京',value: randomData() },
+			                            {name: '天津',value: randomData() },
+			                            {name: '上海',value: randomData() },
+			                            {name: '重庆',value: randomData() },
+			                            {name: '河北',value: randomData() },
+			                            {name: '安徽',value: randomData() },
+			                            {name: '新疆',value: randomData() },
+			                            {name: '浙江',value: randomData() },
+			                            {name: '江西',value: randomData() },
+			                            {name: '山西',value: randomData() },
+			                            {name: '内蒙古',value: randomData() },
+			                            {name: '吉林',value: randomData() },
+			                            {name: '福建',value: randomData() },
+			                            {name: '广东',value: randomData() },
+			                            {name: '西藏',value: randomData() },
+			                            {name: '四川',value: randomData() },
+			                            {name: '宁夏',value: randomData() },
+			                            {name: '香港',value: randomData() },
+			                            {name: '澳门',value: randomData() }
+			                        ]
+			                    },
+			                    {
+			                        name: '版本3',
+			                        type: 'map',
+			                        mapType: 'china',
+			                        label: {
+			                            normal: {
+			                                show: true
+			                            },
+			                            emphasis: {
+			                                show: true
+			                            }
+			                        },
+			                        data:[
+			                            {name: '北京',value: randomData() },
+			                            {name: '天津',value: randomData() },
+			                            {name: '上海',value: randomData() },
+			                            {name: '广东',value: randomData() },
+			                            {name: '台湾',value: randomData() },
+			                            {name: '香港',value: randomData() },
+			                            {name: '澳门',value: randomData() }
+			                        ]
+			                    }
+			                ]
+			            };
+
+			            var option02 = {
+			                title: {
+			                    // text: '一周版本发布统计折线'
+			                },
+			                tooltip : {
+			                    trigger: 'axis'
+			                },
+			                legend: {
+			                    data:['开发一组','开发二组','开发三组','开发四组','发布总计']
+			                },
+			                toolbox: {
+			                    feature: {
+			                        saveAsImage: {}
+			                    }
+			                },
+			                grid: {
+			                    left: '3%',
+			                    right: '5%',
+			                    bottom: '3%',
+			                    containLabel: true
+			                },
+			                xAxis : [
+			                    {
+			                        type : 'category',
+			                        boundaryGap : false,
+			                        data : DataArray
+			                    }
+			                ],
+			                yAxis : [
+			                    {
+			                        type : 'value'
+			                    }
+			                ],
+			                series : [
+			                    {
+			                        name:'开发一组',
+			                        type:'line',
+			                        stack: '总量',
+			                        areaStyle: {normal: {}},
+			                        data:OneWeekPublishArray[0]
+			                    },
+			                    {
+			                        name:'开发二组',
+			                        type:'line',
+			                        stack: '总量',
+			                        areaStyle: {normal: {}},
+			                        data:OneWeekPublishArray[1]
+			                    },
+			                    {
+			                        name:'开发三组',
+			                        type:'line',
+			                        stack: '总量',
+			                        areaStyle: {normal: {}},
+			                        data:OneWeekPublishArray[2]
+			                    },
+			                    {
+			                        name:'开发四组',
+			                        type:'line',
+			                        stack: '总量',
+			                        areaStyle: {normal: {}},
+			                        data:OneWeekPublishArray[3]
+			                    },
+			                    {
+			                        name:'发布总计',
+			                        type:'line',
+			                        stack: '总量',
+			                        label: {
+			                            normal: {
+			                                show: true,
+			                                position: 'top'
+			                            }
+			                        },
+			                        areaStyle: {normal: {}},
+			                        data:[OneWeekPublishArray[0][0]+OneWeekPublishArray[1][0]+OneWeekPublishArray[2][0]+OneWeekPublishArray[3][0],OneWeekPublishArray[0][1]+OneWeekPublishArray[1][1]+OneWeekPublishArray[2][1]+OneWeekPublishArray[3][1],OneWeekPublishArray[0][2]+OneWeekPublishArray[1][2]+OneWeekPublishArray[2][2]+OneWeekPublishArray[3][2],OneWeekPublishArray[0][3]+OneWeekPublishArray[1][3]+OneWeekPublishArray[2][3]+OneWeekPublishArray[3][3],OneWeekPublishArray[0][4]+OneWeekPublishArray[1][4]+OneWeekPublishArray[2][4]+OneWeekPublishArray[3][4],OneWeekPublishArray[0][5]+OneWeekPublishArray[1][5]+OneWeekPublishArray[2][5]+OneWeekPublishArray[3][5],OneWeekPublishArray[0][6]+OneWeekPublishArray[1][6]+OneWeekPublishArray[2][6]+OneWeekPublishArray[3][6]]
+			                    }
+			                ]
+			            };
+
+					    // var option03 = {
+					    // 	title: {
+			      //               text: '模块发布次数统计',
+			      //               subtext: '统计周期:7天',
+			      //           },
+			      //           color: ['#3398DB'],
+			      //           tooltip : {
+			      //               trigger: 'axis',
+			      //               axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+			      //                   type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+			      //               }
+			      //           },
+			      //           grid: {
+			      //               left: '3%',
+			      //               right: '4%',
+			      //               bottom: '3%',
+			      //               containLabel: true
+			      //           },
+			      //           xAxis : [
+			      //               {
+			      //                   type : 'category',
+			      //                   data : val.PublishModuleList,
+			      //                   axisTick: {
+			      //                       alignWithLabel: true
+			      //                   }
+			      //               }
+			      //           ],
+			      //           yAxis : [
+			      //               {
+			      //                   type : 'value'
+			      //               }
+			      //           ],
+			      //           series : [
+			      //               {
+			      //                   name:'发布次数',
+			      //                   type:'bar',
+			      //                   barWidth: '60%',
+			      //                   data:val.PublishModuleCount
+			      //               }
+			      //           ]
+			      //       };
+
+						var option03 = {
+						    title : {
+						        text: '模块发布审核统计',
+						        subtext: '统计周期:7天'
+						    },
+						    tooltip : {
+						        trigger: 'axis'
+						    },
+						    grid: {
+			                    left: '1%',
+			                    right: '4%',
+			                    bottom: '3%',
+			                    containLabel: true
+			                },
+						    legend: {
+						        data:['通过审核/已发布','未通过审核/禁止发布']
+						    },
+						    toolbox: {
+						        show : true,
+						        feature : {
+						            dataView : {show: true, readOnly: false},
+						            magicType : {show: true, type: ['line', 'bar']},
+						            restore : {show: true},
+						            saveAsImage : {show: true}
+						        }
+						    },
+						    calculable : true,
+						    xAxis : [
+						        {
+						            type : 'category',
+						            data : val.PublishModuleList
+						        }
+						    ],
+						    yAxis : [
+						        {
+						            type : 'value'
+						        }
+						    ],
+						    series : [
+						        {
+						            name:'通过审核/已发布',
+						            type:'bar',
+						            // data:[1, 1, 1, 0, 0, 0, 0, 1, 2, 2],
+						            data:val.PublishModuleCount,
+						            markPoint : {
+						                data : [
+						                    {type : 'max', name: '最大值'},
+						                    {type : 'min', name: '最小值'}
+						                ]
+						            },
+						            markLine : {
+						                data : [
+						                    {type : 'average', name: '平均值'}
+						                ]
+						            },
+						            itemStyle:{
+						            	normal:{
+						            		color:'#177BD0',
+						            	}
+						            }
+						        },
+						        {
+						            name:'未通过审核/禁止发布',
+						            type:'bar',
+						            data:val.PublishModuleRejectCount,
+						            markPoint : {
+						                data : [
+						                    {type : 'max', name: '最大值'},
+						                    {type : 'min', name: '最小值'},						                
+						                    // {name : '年最高', value : 182.2, xAxis: 7, yAxis: 183},
+						                    // {name : '年最低', value : 2.3, xAxis: 11, yAxis: 3}
+						                ]
+						            },
+						            markLine : {
+						                data : [
+						                    {type : 'average', name : '平均值'}
+						                ]
+						            },
+						            itemStyle:{
+						            	normal:{
+						            		color:'#F65327',
+						            	}
+						            }
+						        }
+						    ]
+						};
+
+
+
+			            myChart01.setOption(option01);
+	            		myChart02.setOption(option02);
+	            		myChart03.setOption(option03);
+            		}
+            	},error:function(){
+            		layer.alert('数据请求失败,错误代码：101',{icon: 2})
+            		// console.log('首页数据加载失败')
+            	}
+        	});
+
+            function randomData(){
+                return Math.round(Math.random()*1000);
+            }
+        })
+    </script>
+
+</head>
+<!--new code-->
+
+<div class="row">
+    <div class="col-lg-7 col-md-7 col-sm-7">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+            	<!-- <div> -->
+					<h4 style="color: #438EB9"><b>新版本用户满意度分布情况<b></h4><hr style="color: #438EB9">
+				<!-- </div> -->
+                <ul class="list-unstyled spaced bigger-150">
+                <!-- <div id="main01" style="width: 100%;height:560px;"><div style="text-align: center; margin-top: 280px;" >版本满意度数据加载中...</div></div> -->
+                <div id="main01" style="width: 100%;height:510px;"><div style="text-align: center; margin-top: 280px;" >版本满意度数据加载中...</div></div>
+                </ul>
+                <ul class="list-unstyled spaced bigger-150">
+                <!-- <div id="main03" style="width: 100%;height:170px;"><div style="text-align: center; " >模块排行统计数据加载中...</div></div> -->
+                <div id="main03" style="width: 100%;height:150px;"><div style="text-align: center; " >模块排行统计数据加载中...</div></div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5 col-md-5 col-sm-5">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+            	<!-- <div class="page-header"> -->
+					<h4 style="color: #438EB9"><b>一周发布折线图<b></h4><hr>
+				<!-- </div> -->
+                <ul class="list-unstyled spaced bigger-150">
+                    <!-- <div id="main02" style="width: 100%;height:420px;"><div style="text-align: center; margin-top: 210px;" >发布折线数据加载中...</div></div> -->
+                    <div id="main02" style="width: 100%;height:380px;"><div style="text-align: center; margin-top: 210px;" >发布折线数据加载中...</div></div>
+                </ul>
+            </div>
+
+            <div class="col-lg-12">
+                <h4 class="header" style="color: #438EB9"><b>最近五次发布</b></h4>
+                <div class="spaced bigger-100">
+                    <div class="widget-box transparent">
+                        <div class="widget-header widget-header-flat">
+                        	<div class="widget-body">
+                            	<div class="widget-main no-padding">
+	                                <table class="table table-bordered table-striped">
+	                                    <thead class="thin-border-bottom">
+	                                        <tr>
+	                                            <th>
+	                                                <i class="ace-icon fa fa-caret-right blue"></i>发布者
+	                                            </th>
+	                                            <th>
+	                                                <i class="ace-icon fa fa-caret-right blue"></i>模块名
+	                                            </th>
+	                                            <th>
+	                                                <i class="ace-icon fa fa-caret-right blue"></i>部署类型
+	                                            </th>
+	                                            <th>
+	                                                <i class="ace-icon fa fa-caret-right blue"></i>发布状态
+	                                            </th>
+	                                            <th>
+	                                                <i class="ace-icon fa fa-caret-right blue"></i>部署时间
+	                                            </th>
+	                                        </tr>
+	                                    </thead>
+
+	                                    <tbody id='LastFive'>
+	                                    </tbody>
+	                                </table>
+                            	</div><!-- /.widget-main -->
+                        	</div><!-- /.widget-body -->
+                    	</div><!-- /.widget-box -->
+                	</div><!-- /.col -->
+        		</div>
+
+    		</div>
+    	</div>
+    </div>
+</div>
+
+{% include "base/template_footer.html" %}
+
+<style type="text/css">
+
+.font-mono { margin:0; padding:0; font-family: Menlo, Consolas, "Source Code Pro", Inconsolata, Monaco, "Courier New"}
+
+</style>

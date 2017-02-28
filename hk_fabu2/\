@@ -1,0 +1,10 @@
+#!/usr/lib/expect -f 
+
+spawn su fabu
+expect "*$"
+spawn ssh -p 9055 10.0.0.95
+expect {
+"*yes/no" { send "yes\r"; exp_continue}
+}
+send "exit\r"
+send "exit\r"

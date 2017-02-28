@@ -1,0 +1,719 @@
+{% include "base/template_head.html" %}
+{% load static %}
+
+<link rel="stylesheet" href="/static/css/paging.css">
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/query.js"></script>
+<script type="text/javascript" src="/static/js/paging.js"></script>
+<script type="text/javascript" src="{% static "plugins/tinymce/js/tinymce/jquery.js" %}"></script>
+<script type="text/javascript" src="{% static "plugins/tinymce/js/tinymce/tinymce.min.js"%}"></script>
+<script type="text/javascript" src="{% static "plugins/tinymce/js/tinymce/jquery.tinymce.min.js"%}"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+            "table contextmenu directionality emoticons template textcolor paste fullpage textcolor"
+        ],
+
+
+        // toolbar1: "undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+        // toolbar2: " searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image media code | inserttime preview | forecolor backcolor",
+        // toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+
+        toolbar1: "undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect |\
+        searchreplace | bullist numlist | outdent indent blockquote",
+        toolbar2: "link unlink anchor image media code | inserttime preview | forecolor backcolor | table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+
+        menubar: false,
+        toolbar_items_size: 'small',
+
+        style_formats: [
+            {title: 'Bold text', inline: 'b'},
+            {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+            {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+            {title: 'Example 1', inline: 'span', classes: 'example1'},
+            {title: 'Example 2', inline: 'span', classes: 'example2'},
+            {title: 'Table styles'},
+            {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+        ],
+
+        templates: [
+            {title: 'Test template 1', publish_detail: 'Test 1'},
+            {title: 'Test template 2', publish_detail: 'Test 2'}
+        ],
+        language:'zh_CN'
+    });
+</script>
+<div class="row">
+
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 class="header"><b>测试管理</b></h2>
+                <ul class="list-unstyled spaced">
+                    <div class="tabbable">
+                        <ul class="nav nav-tabs" id="myTab">
+                            <li class="active">
+                                <a data-toggle="tab" href="#mytest" onclick="GetLastTestInfo()">
+                                    <i class="blue ace-icon fa fa-stethoscope bigger-120"></i>
+                                    最近一次测试
+                                </a>
+                            </li>
+                            <li >
+                                <a data-toggle="tab" href="#fortest" onclick="GetTestList(1,10)">
+                                    <i class="orange ace-icon fa fa-check-square-o bigger-120"></i>
+                                    待测试验证 &nbsp;<span class="badge badge-danger" id='pretestcount'></span>
+                                </a>            
+                            </li>
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <i class="purple ace-icon fa fa-th-list bigger-120"></i>
+                                    测试完成 &nbsp;
+                                    <i class="ace-icon fa fa-caret-down bigger-110 width-auto"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-info dropdown-100">
+                                    <li>
+                                        <a data-toggle="tab" href="#dropdown1" onclick="GetAcceptReviewList(0,1,10)"><i class="green ace-icon fa fa-check bigger-120"></i>&nbsp;&nbsp;测试已通过&nbsp;</a>
+                                    </li>
+
+                                    <li>
+                                        <a data-toggle="tab" href="#dropdown2" onclick="GetAcceptReviewList(1,1,10)"><i class="red ace-icon fa fa-close bigger-120"></i>&nbsp;&nbsp;测试不通过&nbsp;</a>
+                                    </li>
+                                </ul>
+                            </li>
+<!--                             <li >
+                                <a data-toggle="tab" href="#forreview" onclick="GetReviewList(1,10)">
+                                    <i class="green ace-icon fa fa-stethoscope bigger-120"></i>
+                                    我的测试 &nbsp;<span class="badge badge-danger" id='previewlistcount'></span>
+                                </a>            
+                            </li> -->
+                        </ul>
+
+                        <div class="tab-content" >
+                            <div id="mytest" class="tab-pane fade in active" style="width: 98%;margin:auto;">
+                                <span style="float: left;color: blue"><b><i class="ace-icon fa fa-bolt"></i>&nbsp;展示最近的一次测试项</b></span>
+                                <div id="SearchBar">
+	                                <div class="nav-search" style="float: right;">
+	                                    <span class="input-icon">
+	                                    <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+	                                    <i class="ace-icon fa fa-search nav-search-icon"></i>
+	                                    </span>
+	                                </div>                                  
+
+                                </div>
+
+                                <br>
+                                <hr>
+                                <!-- <div class="widget-body"> -->
+                                    <!-- <div class="widget-main no-padding"> -->
+                                        <!-- <div class="row col-md-10 col-lg-offset-1"> -->
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>文件上传</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>文件名称：
+                                                    <b id="publish_filename" class="red">-</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>上传时间：
+                                                    <b id="upload_time" class="red">-</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>流程发起</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布ID：
+                                                    <b id="publish_id" class="red">-</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布类型：
+                                                    <b id="publish_type" class="red">-</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布时间：
+                                                    <b id="create_time" class="red">-</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布人员：
+                                                    <b id="publish_user" class="red">-</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>模块名称：
+                                                    <b id="publish_module" class="red">-</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>发布审核</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>审核人员：
+                                                    <b id="review_owner" class="red">-</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>审核时间：
+                                                    <b id="review_time" class="red">-</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>审核意见：
+                                                    <b class="green">同意发布</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-success arrowed-in arrowed-right">
+                                                <b>系统部署</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>发布状态：
+                                                    <b class="green">成功</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>开始时间：
+                                                    <b id="publish_stime" class="red">-</b>
+                                                </li>
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束时间：
+                                                    <b id="publish_etime" class="red">-</b>
+                                                </li>                                                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-info arrowed-in arrowed-right">
+                                                <b>系统测试</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>测试状态：
+                                                    <b class="green">进行中</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>开始时间：
+                                                    <b id="publish_etime" class="red">-</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束时间：
+                                                    <b class="green">进行中</b>
+                                                </li>
+
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>测试结论：
+                                                    <b class="green">进行中</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="row">
+                                            <div class="col-xs-11 label label-lg label-default arrowed-in arrowed-right">
+                                                <b>发布完成</b>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <ul class="list-unstyled list-striped pricing-table-header">
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束状态：
+                                                    <b class="grey">未开始</b>
+                                                </li>
+
+                                                <li>
+                                                    <i class="ace-icon fa fa-caret-right blue"></i>结束时间：
+                                                    <b class="grey">未开始</b>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="space-2"></div>                                        
+                                        <!-- </div> -->
+                                    <!-- </div> -->
+                                <!-- </div> -->
+                                <!-- <br> -->
+                                <!-- <hr> -->
+                                <div class="row">
+                                    <div class="col-md-12 pricing-box">
+                                        <div class="widget-box widget-color-red3">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>发布详情</b></h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <li>
+                                                        <i class="ace-icon fa fa-caret-right blue"></i>发布主机：
+                                                        <b id="publish_serverlist" class="red"></b>
+                                                    </li>
+                                                    <li>
+                                                        <i class="ace-icon fa fa-caret-right blue"></i>发布详情：
+                                                    </li><br>
+                                                    <li id="publish_detail">-
+                                                    </li>
+                                                </div>
+
+                                            </div>
+                                        </div>
+<!--                                     </div>
+                                    <div class="col-md-12 pricing-box"> -->
+                                        <div class="widget-box widget-color-orange">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>审批意见</b></h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <span id="review_info">-</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+<!--                                     </div>
+                                    <div class="col-md-12 pricing-box"> -->
+                                        <div class="widget-box widget-color-blue">
+                                            <div class="widget-header">
+                                                <h5 class="widget-title bigger lighter" style="font-family: 'Microsoft YaHei';"><b>测试总结</b></h5>
+                                            </div>
+
+                                            <div class="widget-body">
+                                                <div class="widget-main">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <textarea class="autosize-transition form-control" rows="20" cols="100" name="publish_detail" id="publish_detail" placeholder="请补充发布信息,例如：1、更新了某某bug...">
+                                                            <b style="font-family: 'Microsoft YaHei';color: red">
+                                                            1、支持直接复制excel表格,建议表格宽度设置为1;<br>
+                                                            2、excel表格总宽度请保持在1000px以内;<br>
+                                                            3、发布时请将本说明信息清空!</b></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="space-2"></div>
+                                                            <button type="button" class="btn btn-primary pull-right" onclick="PublishSubmit()"><b>提 交</b></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                                       
+                                <!-- <div id="pageToolbar"></div> -->
+                            </div>
+
+                            <div id="fortest" class="tab-pane fade">
+                                <span style="float: left;color: orange"><b><i class="ace-icon fa fa-bolt"></i>&nbsp;列出待测试项目</b></span>
+                                <div class="nav-search" style="float: right;">
+                                    <span class="input-icon">
+                                    <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                                    <i class="ace-icon fa fa-search nav-search-icon"></i>
+                                    </span>
+                                </div>
+                                <br>
+                                <hr>
+                                <div class="widget-body">
+                                    <div class="widget-main no-padding">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="thin-border-bottom">
+                                                <tr>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布ID</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>部署类型</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布者</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>模块名</th>
+                                                    <!-- <th><i class="ace-icon fa fa-caret-right blue"></i>压缩文件包</th> -->
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布状态</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发起时间</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布主机</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布说明</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>测试</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id= 'pretest'>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <br>
+                                <hr>                                
+                                <!-- <div id="pageToolbar"></div> -->
+                            </div>
+
+                            <div id="dropdown1" class="tab-pane fade">
+                                <span style="float: left;color: green"><b><i class="ace-icon fa fa-bolt"></i>&nbsp;列出所有经我来测试通过已发布项目</b></span>
+                                <div class="nav-search" style="float: right;">
+                                    <span class="input-icon">
+                                    <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                                    <i class="ace-icon fa fa-search nav-search-icon"></i>
+                                    </span>
+                                </div>
+                                <br>
+                                <hr>
+                                <div class="widget-body">
+                                    <div class="widget-main no-padding">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="thin-border-bottom">
+                                                <tr>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布ID</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>部署类型</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布者</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>模块名</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>压缩文件包</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布状态</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发起时间</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布主机</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>审核者</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>审核/发布时间</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>审核意见</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id= 'reviewed_0'>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <br>
+                                <hr>                                
+                                <!-- <div id="pageToolbar"></div> -->
+                            </div>
+
+                            <div id="dropdown2" class="tab-pane fade">
+                                <span style="float: left;color: red"><b><i class="ace-icon fa fa-bolt"></i>&nbsp;列出所有经我来测试不通过已发布项目</b></span>
+                                <div class="nav-search" style="float: right;">
+                                    <span class="input-icon">
+                                    <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+                                    <i class="ace-icon fa fa-search nav-search-icon"></i>
+                                    </span>
+                                </div>
+                                <br>
+                                <hr>
+                                <div class="widget-body">
+                                    <div class="widget-main no-padding">
+                                        <table class="table table-bordered table-striped">
+                                            <thead class="thin-border-bottom">
+                                                <tr>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布ID</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>部署类型</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布者</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>模块名</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>压缩文件包</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布状态</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发起时间</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>发布主机</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>审核者</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>审核/发布时间</th>
+                                                    <th><i class="ace-icon fa fa-caret-right blue"></i>审核意见</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id= 'reviewed_1'>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <br>
+                                <hr>                                
+                                <!-- <div id="pageToolbar"></div> -->
+                            </div>
+
+                            <div id="pageToolbar"></div>
+                        </div>
+
+                    </div>
+
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7 col-lg-offset-1">
+
+        <div class="row">
+            <div class="col-lg-12">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+{% include "base/template_footer.html" %}
+<script>
+
+    function GetLastTestInfo(){
+        var item_list = ['publish_id','publish_status','publish_type','publish_module','publish_filename','publish_user','create_time','publish_serverlist','publish_detail','review_owner','review_time','review_info']
+        //取出LastTestInfo
+        $.ajax({
+            type:'POST',
+            url:'/softwaretest/LastTestInfo/',
+            dataType:'json',
+            success:function(val){
+                console.log(val)
+                // console.log(val.LastSoftwareTest)
+                // console.log(val.LastSoftwareTest[0]['publish_id'])
+                console.log(val.LastSoftwareTest[0][item_list[0]])
+
+                for(var i =0;i<item_list.length;i++){
+                    $("#"+(item_list[i])+"").html(val.LastSoftwareTest[0][item_list[i]])
+                }
+            },error:function(){
+                console.log('error')
+            }
+        }); 
+    }
+
+
+
+    $(document).ready(function(){
+        GetLastTestInfo();
+        $("#nav-search-input").keydown(function(e) {  
+          if (e.keyCode == 13) {
+            if($("#nav-search-input").val() != "")
+                layer.alert($("#nav-search-input").val())
+          }
+      });
+
+
+
+    });
+
+
+
+    function GetTestList(s_page,page_size) {
+        //取出单页数据
+        function GetTestListInfo(s_page,page_size){
+            $.ajax({
+                type:'POST',
+                url:'/softwaretest/SoftwareTestList/',
+                data:{'s_page':s_page,'page_size':page_size},
+                dataType:'json',
+                success:function(val){
+                    console.log(val)
+                    var detail = val.TestQsetList
+                    // $("#previewlist").html("")
+                    // $('#previewlistcount').html(detail.length)
+                    if(detail.length==0){
+                        $("#pretest").html('<tr><td colspan="9" style="text-align:center;">当前无记录</td></tr>')
+                    }else{
+                        $("#pretest").html("")
+                    }
+                    for (var i=0;i < detail.length;i++){
+                        // $("#per_publish_user").html(val.review_data[i].publish_user)
+                        // console.log(val.review_data[i].publish_user)
+                        var review_id = detail[i]['id']
+                    
+                    $("#pretest").append("<tr>\
+                            <td id='review_"+(review_id)+"_id'></td>\
+                            <td id='review_"+(review_id)+"_type'></td>\
+                            <td id='review_"+(review_id)+"_user'></td>\
+                            <td id='review_"+(review_id)+"_module'></td>\
+                            <td id='review_"+(review_id)+"_status'></td>\
+                            <td id='review_"+(review_id)+"_createtime'></td>\
+                            <td id='review_"+(review_id)+"_serverlist'></td>\
+                            <td id='review_"+(review_id)+"_detail'></td>\
+                            <td id='review_"+(review_id)+"_action'></td></tr>")
+
+                    //加载数据
+
+                    $("#review_"+(review_id)+"_id").html('<a href="/review/review_handle/'+(review_id)+'/"><span class="badge">'+review_id+'</span></a>')
+                    $("#review_"+(review_id)+"_type").html(detail[i].publish_type)
+                    $("#review_"+(review_id)+"_user").html(detail[i].publish_user)
+                    $("#review_"+(review_id)+"_module").html(detail[i].publish_module)
+                    $("#review_"+(review_id)+"_filename").html(detail[i].publish_filename)
+                    $("#review_"+(review_id)+"_status").html('<span class="badge badge-warning">'+detail[i].publish_status+'</span>')
+                    $("#review_"+(review_id)+"_createtime").html(detail[i].create_time)
+                    $("#review_"+(review_id)+"_serverlist").html(detail[i].publish_serverlist)
+                    $("#review_"+(review_id)+"_detail").html(detail[i].publish_detail+"..."+"<a href='/review/review_handle/"+(review_id)+"/'><span class='badge badge-info'>查看详情</span></a>")
+                    $("#review_"+(review_id)+"_action").html('<a href="/review/review_handle/'+(review_id)+'/"><div class="btn btn-primary btn-mini">测试</div></a>')
+                    }
+                    // $('#pageToolbar').html("");
+                    // $('#pageToolbar').Paging({pagesize:10,count:detail.length,callback:function(page,size,count){alert('1')}});
+
+                },error:function(){
+                    console.log('error')
+                }
+            })          
+        };
+
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/softwaretest/SoftwareTestPageCount/',
+            dataType:'text',
+            success:function(val){
+                $("#pretestcount").html(val);
+                GetTestListInfo(s_page,page_size);
+                //加载页码
+                $('#pageToolbar').html("");
+                $('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                    //page:当前选择页码
+                    //size:当前每页显示数量
+                    //count：当前页码总数(含有多少个size)
+                    GetTestListInfo(page,10)
+                    }
+                });
+            },error:function(){
+                console.log('error')
+            }
+        });     
+
+
+    };
+
+    function GetAcceptReviewList(args,s_page,page_size){
+        //取出单页数据
+        function NewGetAcceptReviewInfo(args,s_page,page_size){
+            $.ajax({
+                type:'POST',
+                url:'/review/ReviewActionList/',
+                data:{'args':args,'s_page':s_page,'page_size':page_size},
+                dataType:'json',
+                success:function(val){
+                    console.log(val)
+                    // console.log(args)
+                    var detail = val.review_data
+                    // $('#reviewaccept').html(detail.length)
+                    if(detail.length==0){
+                        $("#reviewed_"+(args)).html('<tr><td colspan="10" style="text-align:center;">当前无记录</td></tr>')
+                    }else{
+                        $("#reviewed_"+(args)).html("")
+                    }
+                    // $("#reviewed_"+(args)).html("")
+                    for (var i=0;i < detail.length;i++){
+                        // $("#per_publish_user").html(val.review_data[i].publish_user)
+                        // console.log(val.review_data[i].publish_user)
+                        var publish_id = detail[i]['publish_id']
+
+                            $("#reviewed_"+(args)).append("<tr>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_id'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_type'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_user'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_module'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_filename'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_status'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_createtime'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_serverlist'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_review_owner'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_review_time'></td>\
+                            <td id='reviewed_"+(args)+(publish_id)+"_review_info'></td></tr>")
+
+                            //加载数据
+
+                            $("#reviewed_"+(args)+(publish_id)+"_id").html('<a href="/review/publish_report/'+(publish_id)+'/"><span class="badge">'+publish_id+'</span></a>')
+                            $("#reviewed_"+(args)+(publish_id)+"_type").html(detail[i].publish_type)
+                            $("#reviewed_"+(args)+(publish_id)+"_user").html(detail[i].publish_user)
+                            $("#reviewed_"+(args)+(publish_id)+"_module").html(detail[i].publish_module)
+                            $("#reviewed_"+(args)+(publish_id)+"_filename").html(detail[i].publish_filename)
+                            if(args == 0){
+                                $("#reviewed_"+(args)+(publish_id)+"_status").html('<span class="badge badge-success">'+detail[i].publish_status+'</span>')
+                            }else{
+                                $("#reviewed_"+(args)+(publish_id)+"_status").html('<span class="badge badge-danger">'+detail[i].publish_status+'</span>')
+                            }
+                            
+                            $("#reviewed_"+(args)+(publish_id)+"_createtime").html(detail[i].create_time)
+                            $("#reviewed_"+(args)+(publish_id)+"_serverlist").html(detail[i].publish_serverlist)
+                            $("#reviewed_"+(args)+(publish_id)+"_review_owner").html(detail[i].review_owner)
+                            $("#reviewed_"+(args)+(publish_id)+"_review_time").html(detail[i].review_time)
+                            $("#reviewed_"+(args)+(publish_id)+"_review_info").html(detail[i].review_info.substring(0,10)+"..."+"<a href='/review/publish_report/"+(publish_id)+"/'><span class='badge badge-info'>查看详情</span></a>")
+                    
+                    }
+                    console.log(detail.length)
+                    return detail.length;
+                    // console.log(detail.length)
+
+                    // $('#pageToolbar').html("");
+                    // $('#pageToolbar').Paging({pagesize:10,count:val.page_total,callback:function(page,size,count){
+                    //  //page:当前选择页码
+                    //  //size:当前每页显示数量
+                    //  //count：当前页码总数(含有多少个size)
+                    //  console.log('当前页是第'+page+'页')
+                    //  }
+                    // });
+                },error:function(){
+                    console.log('error')
+                }
+            });
+        };
+
+
+        //取出总页数
+        $.ajax({
+            type:'POST',
+            url:'/review/ReviewActionListPageCount/',
+            data:{'args':args},
+            dataType:'text',
+            success:function(val){
+                $("#actioncount").html(val);
+                NewGetAcceptReviewInfo(args,s_page,page_size);
+                //加载页码
+                $('#pageToolbar').html("");
+                $('#pageToolbar').Paging({pagesize:10,count:val,callback:function(page,size,count){
+                    //page:当前选择页码
+                    //size:当前每页显示数量
+                    //count：当前页码总数(含有多少个size)
+                    NewGetAcceptReviewInfo(args,page,10)
+                    }
+                });
+            },error:function(){
+                console.log('error')
+            }
+        });
+
+
+
+
+    };
+
+
+
+    
+</script>

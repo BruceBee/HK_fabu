@@ -1,0 +1,516 @@
+{% include "base/template_head.html" %}
+{% load static %}
+
+<script type="text/javascript" src="{% static "plugins/tinymce/js/tinymce/jquery.js" %}"></script>
+<script type="text/javascript" src="{% static "plugins/tinymce/js/tinymce/tinymce.min.js"%}"></script>
+<script type="text/javascript" src="{% static "plugins/tinymce/js/tinymce/jquery.tinymce.min.js"%}"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: "textarea",
+        plugins: [
+            "advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker",
+            "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+            "table contextmenu directionality emoticons template textcolor paste fullpage textcolor"
+        ],
+
+
+        // toolbar1: "undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect",
+        // toolbar2: " searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image media code | inserttime preview | forecolor backcolor",
+        // toolbar3: "table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+
+        toolbar1: "undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | styleselect formatselect fontselect fontsizeselect |\
+        searchreplace | bullist numlist | outdent indent blockquote",
+        toolbar2: "link unlink anchor image media code | inserttime preview | forecolor backcolor | table | hr removeformat | subscript superscript | charmap emoticons | print fullscreen | ltr rtl | spellchecker | visualchars visualblocks nonbreaking template pagebreak restoredraft",
+
+        menubar: false,
+        toolbar_items_size: 'small',
+
+        style_formats: [
+            {title: 'Bold text', inline: 'b'},
+            {title: 'Red text', inline: 'span', styles: {color: '#ff0000'}},
+            {title: 'Red header', block: 'h1', styles: {color: '#ff0000'}},
+            {title: 'Example 1', inline: 'span', classes: 'example1'},
+            {title: 'Example 2', inline: 'span', classes: 'example2'},
+            {title: 'Table styles'},
+            {title: 'Table row 1', selector: 'tr', classes: 'tablerow1'}
+        ],
+
+        templates: [
+            {title: 'Test template 1', publish_detail: 'Test 1'},
+            {title: 'Test template 2', publish_detail: 'Test 2'}
+        ],
+        language:'zh_CN'
+    });
+</script>
+
+<!--new code-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="page-header">
+            <h1>系统发布</h1>
+        </div>
+        <!-- <h3 class="header"><b>系统发布</b></h3> -->
+        <!-- {{ err_msg }} -->
+        <div class="col-lg-4">
+            <ul class="list-unstyled spaced bigger-150">
+                <li>
+                    <b><i class="ace-icon fa fa-cloud-upload" style="color: #21ADE5"></i>
+                    &nbsp;&nbsp;上传压缩文件(zip, tar, tar.gz, tgz)</b>
+                    <div class="space-2"></div>
+                    <div class="row">
+                        <div class="col-lg-11">
+                            <input multiple="" type="file" id="frm"  name='inputfile'/>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-8">
+            <ul class="list-unstyled spaced bigger-150">
+                <li>
+                    <b class="blue"><i class="ace-icon fa fa-sitemap bigger-110" aria-hidden="true" style="color: #438EB9"></i>&nbsp;&nbsp;发布流程</b>
+                </li>
+                
+            </ul>
+            <div class="row">
+            <br>
+                <ul class="steps">
+                    <li data-step="1" class="active">
+                        <span class="step">1</span>
+                        <span class="title">文件上传</span>
+                    </li>
+                    <li data-step="2" class="active">
+                        <span class="step">2</span>
+                        <span class="title">流程发起</span>
+                    </li>
+                    <li data-step="3" class="active">
+                        <span class="step">3</span>
+                        <span class="title">发布审核</span>
+                    </li>
+                    <li data-step="4" class="active">
+                        <span class="step">4</span>
+                        <span class="title">系统部署</span>
+                    </li>
+                    <li data-step="4" class="active">
+                        <span class="step">5</span>
+                        <span class="title">系统测试</span>
+                    </li>
+                    <li data-step="4" class="active">
+                        <span class="step">6</span>
+                        <span class="title">发布完成</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <form name="login" action="/Deployment/" method="POST" >
+        <div class="col-lg-4">
+            <div class="row">
+                <div class="col-lg-11">
+                    <h4 class="header"><b>File message</b></h4>
+                    <ul class="list-unstyled spaced bigger-150">
+                    
+                    <!-- <form name="login" action="/Deployment/" method="POST" > -->
+                        {% csrf_token %}
+                        <li>
+                            <!-- <i class="ace-icon fa fa-angle-right bigger-110"></i> -->
+                            <b><i class="ace-icon fa fa-fire bigger-110" style="color: #ED6D47"></i>
+                             &nbsp;&nbsp;增量/全新部署</b>
+                            <div class="space-2"></div>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    {#<div class="space-1"></div>#}
+                                    <input name="newfabu" class="ace ace-switch ace-switch-2" type="checkbox">
+                                    <span class="lbl"></span>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <b><i class="ace-icon fa fa-folder-open-o bigger-110" style="color: #6EB92B"></i>
+                            &nbsp;&nbsp;欲发布的压缩文件</b>
+                            <div class="space-2"></div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <select name="project_pack" id="project_pack" data-placeholder="选择欲发布的压缩文件"  class="chosen-select">
+                                        <option selected>-----请选择-----</option>
+                                        {% for each_file in project_pack %}
+                                        <option value="{{ each_file }}">{{ each_file }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <b><i class="ace-icon fa fa-code bigger-100" style="color: #90C31F"></i>
+                            &nbsp;&nbsp;此压缩包的MD5值</b>
+                            <div class="space-2"></div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <input type="text" class="form-control " name="md5check" id="md5check" maxlength="32" />
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <b><i class="ace-icon fa fa-user bigger-110" style="color: #FED90B"></i>
+                            &nbsp;发布审核人</b>
+                            <div class="space-2"></div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                <select onchange="return GetReviewer()" name="reviewer_name" id="reviewer_name" data-placeholder="请选择需要提交的审核人" class="chosen-select">
+	                                <option selected >-----请选择-----</option>
+	                                {% for each_reviewer in reviewer_list %}
+	                                <option value="{{ each_reviewer }}">{{ each_reviewer }}</option>
+	                                {% endfor %}
+                                </select>
+
+                                </div>
+
+                            </div>
+                        </li>
+<!--                         <li>
+                            <b><i class="ace-icon fa fa-gavel bigger-110" style="color: #FED90B"></i>
+                            &nbsp;&nbsp;请选择项目模块</b>
+                            <div class="space-2"></div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                <select onchange="return GetProjectServerIP()" name="project_name" id="project_name" data-placeholder="请选择项目模块" class="chosen-select">
+                                <option selected>=====请选择=====</option>
+                                {% for each_project in project_lists %}
+                                <option value="{{ each_project }}">{{ each_project }}</option>
+                                {% endfor %}
+                                </select>
+                                </div>
+                            </div>
+                        </li> -->
+                        <li>
+                            <b><i class="ace-icon fa fa-gavel bigger-110" style="color: #FED90B" for="project_name" class="block"></i>
+                            &nbsp;&nbsp;项目模块</b>
+                            <div class="space-2"></div>
+                            <div class="row">
+                                <div class="col-md-6" style="font-size: 15px">
+                                    <select class="form-control" name="project_name" id="project_name" data-placeholder="请选择项目模块" onchange="return GetProjectServerIP() ">
+                                    <option selected>-----请选择-----</option>
+                                    {% for each_project in project_lists %}
+                                    <option value="{{ each_project }}">{{ each_project }}</option>
+                                    {% endfor %}
+
+                                    </select>
+                                </div>   
+                            </div>
+                        </li>
+                    <!-- </form> -->
+
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-11">
+                    <table class="table table-bordered table-striped" style="display: none">
+                        <thead bgcolor="#808080">
+                        <!-- <caption class="center red"><h4><b>！！发布生效IP！！</b></h4></caption> -->
+                        <tr>
+                            <th>模块名</th>
+                            <th>模块端口</th>
+                            <th>目标服务器</th>
+                        </tr>
+                        </thead>
+                        <tbody id="showserver"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-lg-11">
+
+                    <h4 class="header"><b>Publish message</b></h4>
+                    <ul class="list-unstyled spaced bigger-150">
+
+<!--                         <li>
+                            <b><i class="ace-icon fa fa-user bigger-110" style="color: #FED90B"></i>
+                            &nbsp;发布审核人</b>
+                            <div class="space-2"></div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                <select onchange="return GetReviewer()" name="reviewer_name" id="reviewer_name" data-placeholder="请选择需要提交的审核人" class="chosen-select">
+                                <option selected>=====请选择=====</option>
+                                {% for each_reviewer in reviewer_list %}
+                                <option value="{{ each_reviewer }}">{{ each_reviewer }}</option>
+                                {% endfor %}
+                                </select>
+
+                                </div>
+
+                            </div>
+                        </li> -->
+                        <li>
+                            <b><i class="ace-icon fa fa-file-text bigger-110" style="color: #ED6D47"></i>
+                            &nbsp;发布信息</b>
+                            <div class="space-2"></div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <textarea class="autosize-transition form-control" rows="13" cols="100" name="publish_detail" id="publish_detail" placeholder="请补充发布信息,例如：1、更新了某某bug...">
+                                    <b style="font-family: 'Microsoft YaHei';color: red">
+                                    1、支持直接复制excel表格,建议表格宽度设置为1;<br>
+                                    2、excel表格总宽度请保持在1000px以内;<br>
+                                    3、发布时请将本说明信息清空!</b></textarea>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="space-2"></div>
+                                    <button type="button" class="btn btn-primary pull-right" onclick="PublishSubmit()"><b>发 布</b></button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<!--new code-->
+
+
+{#</body>#}
+{% include "base/template_footer.html" %}
+<script type="text/javascript">
+
+$('#project_name').hover(
+  function(){
+   $(this).find('#project_name').slideDown();
+  },
+  function(){
+   $(this).find('#project_name').slideUp();
+  }
+)
+
+$('#reviewer_name').hover(
+  function(){
+   $(this).find('#reviewer_name').slideDown();
+  },
+  function(){
+   $(this).find('#reviewer_name').slideUp();
+  }
+)
+
+
+function PublishSubmit(argument) {
+
+
+    // var publish_type = $("input[type='checkbox']").is(':checked')
+    // var publish_detail = $("#publish_detail").val();
+    var publish_detail = tinyMCE.get('publish_detail').getContent();
+    console.log(tinyMCE.get('publish_detail').getContent());
+    var project_name = $("#project_name option:selected").text();
+    var project_pack = $("#project_pack option:selected").text();
+    var md5check = $("#md5check").val();
+    var reviewer_name = $("#reviewer_name").val();
+    // publish_code
+    // 0-全新发布
+    // 1-增量发布
+    var publish_type = ($("input[type='checkbox']").is(':checked') == true) ? '全新部署' :  '增量部署';
+    var publish_code = ($("input[type='checkbox']").is(':checked') == true) ? '0' :  '1';
+    var detail_count = $("#mceu_77").html() //获取富文本区域字数长度
+
+    // var tablewidth = $("textarea").find("table:first").width();
+    // var w = $("table").width();
+
+    // console.log(tablewidth)
+
+    if(detail_count=="字数：0" || md5check ==""){
+        // e.preventDefault();
+        layer.alert("所有字段均不能为空",{icon: 2});
+        // return false;
+    }else if(project_pack == "-----请选择-----" || project_name == "-----请选择-----" || reviewer_name == "-----请选择-----"){
+        layer.alert("请选择正确的发布选项",{icon: 2});
+    }else{
+        $.ajax({
+            type: "POST",
+            url: "check_md5/",
+            data: {'project_name':project_name,'project_pack':project_pack,'md5check':md5check,'publish_code':publish_code},
+            dataType: "text",
+            success: function (data) {
+                console.log(data)
+                if (data == '201') {
+                    layer.alert('数据加载异常,错误代码：'+val,{icon: 2})
+                }else if (data == 'ModuleIsNoExist') {
+                    layer.alert('<b>目标服务器上无此模块,请确认发布方式!</b>',{icon: 2,skin: 'layer-ext-moon'})
+                }else if (data == 'Md5MisMatch') {
+                    layer.alert('<b>MD5值不匹配,请确认MD5值!</b>',{icon: 2,skin: 'layer-ext-moon'})
+                }else{
+
+                	layer.msg('<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>部署类型：</b>'+publish_type+
+                		'<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>模块名称：</b>'+project_name+
+                        '<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>文件MD5：</b>'+md5check+
+                        '<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>压缩文件：</b>'+project_pack+
+                        '<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>目标服务器：</b>'+project_pack+
+                        '<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>发布审核人：</b>'+reviewer_name+
+                        '<br>&nbsp;&nbsp;&nbsp;&nbsp;<b>发布详情：</b><br>'+'&nbsp;&nbsp;&nbsp;&nbsp;'+publish_detail, {
+                        	// icon:6
+                        	title: '发布申请信息'
+                        	,type:1
+                        	,skin: 'layui-layer-lan' //蓝色皮肤
+                        	// ,skin: 'layui-layer-demo' //默认皮肤
+                        	,shade: 0.8 //阴影比
+                        	// ,closeBtn: [0 , true]
+                        	,area: ['60%','500px'] //[宽，高]
+						  	,time: 0 //不自动关闭
+						  	,btn: ['确认申请', '我再想想']
+						  ,yes: function(index){
+						    layer.close(index);
+						    layer.msg('正在提交...');
+						    $("form").submit()
+						  }
+						}); 
+
+                }
+            },
+            error: function (err) {
+                layer.alert("发布申请提交异常,错误代码：104",{icon: 2});
+            }
+        })
+    }
+}
+
+
+function GetProjectServerIP(){
+  var project_name=document.getElementById("project_name").value;
+  console.log(project_name)
+    if (project_name != "-----请选择-----") {
+    	// console.log('111')
+        $.ajax({
+            type: "Get",
+            url: "GetProjectServerIP/",
+            data: "project_name=" + project_name,
+            // dataType:'text',
+            // success:function(data){
+            //     console.log(data)
+            // },
+            dataType: "json",
+            success: function (data) {
+                console.log(data)
+                if (data.project_name == project_name) {
+                      $("#showserver").parent().show();
+                      $("#showserver").empty();
+                      console.log((data.project_server).split(";").length)
+                      // +data.project_server+"</td></tr");
+                      $("#showserver").append("<tr><td>"+data.project_name+"</td><td>"
+                              +data.project_port+"</td><td id='aa'></td></tr");
+                              
+                      for(var a =0;a<(data.project_server).split(";").length -1;a++ ){
+                        $("#aa").append((data.project_server).split(";")[a]+'<br>')
+                      }
+                      
+                }
+            },
+
+            error: function (err) {
+                                layer.alert("获取发布服务器IP信息失败",{icon: 2});
+            }
+        });
+                return false;
+    }else{$("#showserver").parent().hide();}
+}
+
+$(function () {
+    $("#showserver").parent().hide();
+})
+
+function GetReviewer() {
+    $.ajax({
+        type: "GET",
+        url: "/GetReviewer/",
+        dataType: "json",
+        success: function (data) {
+            console.log(data)
+
+        },error: function (err) {
+            layer.alert("获取审核人名单信息失败",{icon: 2});
+        }
+    });
+    // body...
+}
+
+
+$('#frm').ace_file_input({
+    style:'well',
+    btn_choose:'点击选择需要上传的文件或文件拖放至此',
+    btn_change:null,
+    no_icon:'ace-icon fa fa-cloud-upload',
+    droppable:true,
+    thumbnail:'small'//large | fit
+    //,icon_remove:null//set null, to hide remove/reset button
+    /**,before_change:function(files, dropped) {
+        //Check an example below
+        //or examples/file-upload.html
+        return true;
+    }*/
+    /**,before_remove : function() {
+        return true;
+    }*/
+    ,
+    preview_error : function(filename, error_code) {
+        //name of the file that failed
+        //error_code values
+        //1 = 'FILE_LOAD_FAILED',
+        //2 = 'IMAGE_LOAD_FAILED',
+        //3 = 'THUMBNAIL_FAILED'
+        layer.alert(error_code);
+    }
+
+}).on('change', function(){
+
+    btnAdd();
+});
+
+    function btnAdd() {
+        // var formData = new FormData($("#frm")[0]);
+        var fileobj = $("#frm")[0].files[0];
+        var formData = new FormData();
+        formData.append('file',fileobj)
+        //loading层
+        var index = layer.load(0, {
+          content :'<hr><b>上传中...</b>',
+          shade: [0.1,'#fff'] //0.1透明度的白色背景
+        });
+      
+     
+      $.ajax({
+        url: "/fileupload/",
+        type: "POST",
+        data: formData,
+        contentType: false, //必须false才会避开jQuery对 formdata 的默认处理 XMLHttpRequest会对 formdata 进行正确的处理  
+        processData: false, //必须false才会自动加上正确的Content-Type
+        success: function (data) {
+          if (data == "OK") {
+            layer.alert("上传成功");
+            // $.iDialog("close"); //刷新父页面
+            layer.close(index);
+            location.reload()
+            // $('#frm').val("")
+          }
+          else {
+            layer.alert("上传失败：" + data);
+          }
+        }
+      });
+    }
+
+</script>
+<style type="text/css">
+
+.font-mono { margin:0; padding:0; font-family: Menlo, Consolas, "Source Code Pro", Inconsolata, Monaco, "Courier New"}
+
+</style>
+	</body>
+</html>

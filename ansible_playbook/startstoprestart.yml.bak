@@ -1,0 +1,26 @@
+---
+- hosts: "{{ project_host }}"
+  gather_facts: no
+#  vars:
+#    date_time: "{{ vars }}"
+  remote_user: tomcat
+
+  tasks:
+
+    - name: stop
+      shell: ps aux|grep tomcat_{{ project_name }}|grep -v grep|awk '{print $2}'|xargs -i kill -9 {}
+      file: dest=/opt/tomcat_{{ project_name }}/work 
+      tags: 
+        - stop
+
+    - name: restart
+      shell: ps aux|grep tomcat_{{ project_name }}|grep -v grep|awk '{print $2}'|xargs -i kill -9 {}
+      tags: 
+        - restart
+        - start
+      notify: restart_start
+
+  handlers:
+    - name: restart_start
+      shell: chdir=/opt/tomcat_{{ project_name }}/bin/ nohup ./startup.sh &
+
