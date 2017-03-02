@@ -9,22 +9,64 @@
 <script type="text/javascript" src="/static/js/paging.js"></script>
 <!-- <script type="text/javascript" src="/static/js/ace-extra.js"></script> -->
 
+<!-- <link rel="stylesheet" href="/static/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+<link rel="stylesheet" href="/static/css/chosen.css" />
+<script type="text/javascript" src="/static/js/chosen.jquery.js"></script>
+<script type="text/javascript" src="/static/js/ace/ace.js"></script>
+<script type="text/javascript" src="/static/js/ace/ace.searchbox-autocomplete.js"></script> -->
 
+
+
+<!-- 左右多选css -->
+<link rel="stylesheet" href="/static/css/bootstrap-duallistbox.css" />
+<link rel="stylesheet" href="/static/css/bootstrap-multiselect.css" />
+<link rel="stylesheet" href="/static/css/select2.css" />
+<!-- 左右多选css -->
+
+<!-- 面板折叠css-->
+<link rel="stylesheet" href="/static/css/jquery-ui.css" />
+<!-- 面板折叠css -->
+
+<!-- 左右多选js -->
+<script type="text/javascript" src="/static/js/jquery.bootstrap-duallistbox.js"></script>
+<script type="text/javascript" src="/static/js/jquery.raty.js"></script>
+<script type="text/javascript" src="/static/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="/static/js/select2.js"></script>
+<script type="text/javascript" src="/static/js/typeahead.jquery.js"></script>
+<!-- 左右多选js -->
+
+
+<!-- 面板折叠js -->
+<script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+<script type="text/javascript" src="/static/js/jquery.ui.touch-punch.js"></script>
+<!-- 面板折叠js -->
+
+<style type="text/css">
+    h1,h2,h3,h4,h5,h6,p {
+        font-family: Microsoft YaHei;
+    }
+</style>
 
 <div class="row">
     <div class="col-lg-12">
         <div class="row">
             <div class="col-lg-12">
-            	<div class="page-header">
+            	<!-- <div class="page-header">
 					<h1>邮件通知管理</h1>
-				</div>
+				</div> -->
 	            <!-- <h2 class="header"><b>邮件通知管理</b></h2> -->
 	            <ul class="list-unstyled spaced">
 	            	<div class="tabbable">
 						<ul class="nav nav-tabs" id="myTab">
 							<li class="active">
-								<a data-toggle="tab" href="#mypublist" onclick="GetLoginList(1,10)">
+								<a data-toggle="tab" href="#mailserver" onclick="GetLoginList(1,10)">
 									<i class="blue ace-icon fa fa-envelope-open bigger-120"></i>
+									邮件服务器详情
+								</a>
+							</li>
+							<li >
+								<a data-toggle="tab" href="#mypublist" onclick="GetLoginList(1,10)">
+									<i class="blue ace-icon fa fa-cog bigger-120"></i>
 									邮件通知配置
 								</a>
 							</li>
@@ -37,8 +79,7 @@
 						</ul>
 
 						<div class="tab-content">
-
-							<div id="mypublist" class="tab-pane fade in active">
+							<div id="mailserver" class="tab-pane fade in active">
 								<div class="page-header">
 									<!-- <h2> -->
 										邮箱基本信息
@@ -49,27 +90,54 @@
 									<!-- </h2> -->
 								</div>
 
+<!-- 								<div class="row">
+									<div class="col-lg-1">选择邮箱</div>
+	                                <div class="col-lg-11">
+		                                <select data-placeholder="请选择需要提交的审核人" class="chosen-select">
+			                                <option selected >请选择</option>
+			                                <option>1</option>
+			                                <option>1</option>
+			                                <option>1</option>
+			                                <option>1</option>
+			                                <option>1</option>
+		                                </select>
+
+	                                </div>
+
+	                            </div> -->
+
 								<div class="row">
 									<div class="col-xs-12">
 										<!-- PAGE CONTENT BEGINS -->
 										<form class="form-horizontal" role="form">
-
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮箱用户名 </label>
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮箱SMTP服务器 </label>
 
 												<div class="col-sm-9">
-													<input type="text" id="form-field-1" placeholder="例如：admin@hk515.mail.com" class="col-xs-10 col-sm-5" />
+													<input type="text" id="form-field-1" placeholder="例如：smtp.126.com" class="col-xs-10 col-sm-5" />
 												</div>
 											</div>
 
 											<div class="space-4"></div>
 
 											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 邮箱密码 </label>
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮箱用户名 </label>
 
 												<div class="col-sm-9">
-													<input type="password" id="form-field-2" placeholder="Password" class="col-xs-10 col-sm-5" />
+													<input type="text" id="form-field-1" placeholder="例如：myemail@126.com" class="col-xs-10 col-sm-5" />
 												</div>
+											</div>
+
+											<div class="space-4"></div>
+
+											<div class="form-group">
+												<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 邮箱密码(授权码)</label>
+
+												<div class="col-sm-8">
+													<input type="password" id="form-field-2" placeholder="Password" class="col-xs-10 col-sm-5" />
+													<p class="col-xs-5" ><span class="popover-success" data-rel="popover" title="什么是邮箱授权码" data-content="授权码是用于登录第三方邮件客户端的专用密码,通常在邮箱SMTP设置中获取"><i class="ace-icon fa fa-question-circle bigger-110"></i></span></p>
+												</div>
+
 											</div>
 
 											<!-- <div class="clearfix form-actions"> -->
@@ -97,143 +165,337 @@
 									</div>
 								</div>
 
-								<!-- 申请通知 -->
-								<div class="page-header">
-									<h1>
-										发布通知
-										<small>
-											<i class="ace-icon fa fa-angle-double-right"></i>
-											Common form elements and layouts
-										</small>
-									</h1>
-								</div>
 
-								<div class="row">
-									<div class="col-xs-12">
-										<!-- PAGE CONTENT BEGINS -->
-										<form class="form-horizontal" role="form">
-											<!-- <div class="clearfix form-actions"> -->
-											<div class="form-group">
-												<label class="control-label col-xs-12 col-sm-3">是否启用通知</label>
-												<div class="col-xs-3">
-													<label>
-														<input name="switch-field-1" class="ace ace-switch ace-switch-5" type="checkbox" />
-														<span class="lbl"></span>
-													</label>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮箱用户名 </label>
+							</div>
 
-												<div class="col-sm-9">
-													<input type="text" id="form-field-1" placeholder="例如：admin@hk515.mail.com" class="col-xs-10 col-sm-5" />
-												</div>
-											</div>
 
-											<div class="space-4"></div>
+							<div id="mypublist" class="tab-pane fade">
+								<div class="col-xs-12 col-sm-12">
+									<div class="widget-box transparent">
 
-											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 邮箱密码 </label>
 
-												<div class="col-sm-9">
-													<input type="password" id="form-field-2" placeholder="Password" class="col-xs-10 col-sm-5" />
-												</div>
-											</div>
-										</form>
+
+										<div class="widget-header widget-header-small">
+											<h4 class="widget-title smaller">
+												<i class="ace-icon fa fa-check-square-o bigger-110"></i>
+												基础选择
+											</h4>
 										</div>
-								</div>
 
-								<!-- 审核通知 -->
-								<div class="page-header">
-									<h1>
-										审核通知
-										<small>
-											<i class="ace-icon fa fa-angle-double-right"></i>
-											Common form elements and layouts
-										</small>
-									</h1>
-								</div>
+										<div class="space-4"></div>
+										
+										<div class="widget-body">
+											<div class="widget-main">
 
-								<div class="row">
-									<div class="col-xs-12">
-										<!-- PAGE CONTENT BEGINS -->
-										<form class="form-horizontal" role="form">
-											<!-- <div class="clearfix form-actions"> -->
-											<div class="form-group">
-												<label class="control-label col-xs-12 col-sm-3">是否启用通知</label>
-												<div class="col-xs-3">
-													<label>
-														<input name="switch-field-1" class="ace ace-switch ace-switch-5" type="checkbox" />
-														<span class="lbl"></span>
-													</label>
+												<div class="profile-user-info profile-user-info-striped">
+													<div class="profile-info-row">
+														<div class="profile-info-name"> 选择告警邮箱 </div>
+
+														<div class="profile-info-value">
+															<span >
+																<!-- <div class="col-sm-3" id='aaaa'>
+										                             <select data-placeholder="选择欲发布的压缩文件" class="chosen-select">
+								                                        <option selected >abc@126.com</option>
+								                                        <option >abc@163.com</option>
+								                                        <option >abc@qq.com</option>
+								                                        <option >abc@sina.com</option>
+								                                        <option >abc@gmail.com</option>
+								                                    </select>
+							                                	</div> -->
+							                                	<div class="col-sm-5">
+										                             <select>
+								                                        <option selected >---请选择邮箱---</option>
+								                                        <option >abc@126.com</option>
+								                                        <option >abc@163.com</option>
+								                                        <option >abc@qq.com</option>
+								                                        <option >abc@sina.com</option>
+								                                        <option >abc@gmail.com</option>
+								                                    </select>
+							                                	</div>
+							                                </span>
+														</div>
+													</div>
 												</div>
+
 											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮箱用户名 </label>
-
-												<div class="col-sm-9">
-													<input type="text" id="form-field-1" placeholder="例如：admin@hk515.mail.com" class="col-xs-10 col-sm-5" />
-												</div>
-											</div>
-
-											<div class="space-4"></div>
-
-											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 邮箱密码 </label>
-
-												<div class="col-sm-9">
-													<input type="password" id="form-field-2" placeholder="Password" class="col-xs-10 col-sm-5" />
-												</div>
-											</div>
-										</form>
 										</div>
+									</div>
 								</div>
+								
 
-								<!-- 测试通知 -->
-								<div class="page-header">
-									<h1>
-										测试通知
-										<small>
-											<i class="ace-icon fa fa-angle-double-right"></i>
-											Common form elements and layouts
-										</small>
-									</h1>
-								</div>
 
-								<div class="row">
-									<div class="col-xs-12">
-										<!-- PAGE CONTENT BEGINS -->
-										<form class="form-horizontal" role="form">
-											<!-- <div class="clearfix form-actions"> -->
-											<div class="form-group">
-												<label class="control-label col-xs-12 col-sm-3">是否启用通知</label>
-												<div class="col-xs-3">
-													<label>
-														<input id="sbutton" name="switch-field-1" class="ace ace-switch ace-switch-5" type="checkbox" onclick="Getstatus()"; />
-														<span class="lbl"></span>
-													</label>
-												</div>
-											</div>
-											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 邮箱用户名 </label>
-
-												<div class="col-sm-9">
-													<input type="text" id="form-field-1" placeholder="例如：admin@hk515.mail.com" class="col-xs-10 col-sm-5" />
-												</div>
-											</div>
-
-											<div class="space-4"></div>
-
-											<div class="form-group">
-												<label class="col-sm-3 control-label no-padding-right" for="form-field-2"> 邮箱密码 </label>
-
-												<div class="col-sm-9">
-													<input type="password" id="form-field-2" placeholder="Password" class="col-xs-10 col-sm-5" />
-												</div>
-											</div>
-										</form>
+								<div class="col-xs-12 col-sm-12">
+									<div class="widget-box transparent">
+										<div class="widget-header widget-header-small">
+											<h4 class="widget-title smaller">
+												<i class="ace-icon fa fa-check-square-o bigger-110"></i>
+												通知配置
+											</h4>
+											<span class="btn btn-mini btn-success" style="float: right;" onclick="layer.alert('保存')">保存修改</span>
 										</div>
+
+										<div class="widget-body">
+											<div class="widget-main">
+												<div id="accordion" class="accordion-style2">
+													<div class="group">
+														<h3 class="accordion-header">发布通知</h3>
+														<div>
+															<dl id="dt-list-1">
+																<div class="row">
+																	<div class="col-xs-12">
+																		<!-- PAGE CONTENT BEGINS -->
+																		<form class="form-horizontal" role="form">
+																			<!-- <div class="clearfix form-actions"> -->
+
+																			<div class="form-group">
+																				<label class="control-label col-xs-12 col-sm-3">是否启用通知</label>
+																				<div class="col-xs-3">
+																					<label>
+																						<input name="switch-field-1" class="ace ace-switch ace-switch-5" type="checkbox" />
+																						<span class="lbl"></span>
+																					</label>
+																				</div>
+																			</div>
+
+																			<div class="form-group">
+											                                	<label class="control-label col-xs-12 col-sm-3">通知间隔</label>
+
+												                                <div class="col-sm-5">
+
+												                                    <select class="form-control">
+												                                        <option >每2分钟</option>
+												                                        <option selected >每5分钟</option>
+												                                        <option >每10分钟</option>
+												                                        <option >每15分钟</option>
+												                                        <option >每30分钟</option>
+												                                        <option >每60分钟</option>
+												                                    </select>
+
+												                                </div>
+												                            </div>
+																			<div class="form-group">
+											                                	<label class="control-label col-xs-12 col-sm-3">通知次数</label>
+
+												                                <div class="col-sm-5" id='aaaa'>
+
+												                                    <select class="form-control">
+												                                        <option >只通知1次</option>
+												                                        <option selected >只通知5次</option>
+												                                        <option >只通知10次</option>
+												                                        <option >每次都通知</option>
+												                                    </select>
+
+												                                </div>
+												                            </div>
+
+												                            <div class="form-group " >
+																				<label class="col-sm-3  col-xs-12 control-label" for="duallist"> 通知邮箱 </label>
+
+																				<div class="col-sm-5">
+
+																					<select multiple="multiple" size="10" name="duallistbox_demo1[]" id="duallist">
+																						<option value="option1">test001@hk515.com</option>
+																						<option value="option2">test002@hk515.com</option>
+																						<option value="option3" selected="selected">test003@hk515.com</option>
+																						<option value="option4">test004@hk515.com</option>
+																						<option value="option5">test005@hk515.com</option>
+																						<option value="option6" selected="selected">test006@hk515.com</option>
+																						<option value="option7">test007@hk515.com</option>
+																						<option value="option8">test008@hk515.com</option>
+																						<option value="option9">test009@hk515.com</option>
+																						<option value="option0">test010@hk515.com</option>
+																						<option value="option11" selected="selected">test011@hk515.com</option>
+																					</select>
+
+
+																					<div class="hr hr-16 hr-dotted"></div>
+																				</div>
+																			</div>
+
+
+																			
+								
+																			</form>
+																		</div>
+																</div>
+
+															</dl>
+														</div>
+													</div>
+
+													<div class="space-4"></div>
+													<div class="group">
+														<h3 class="accordion-header">审核通知</h3>
+
+														<div>
+															<dl id="dt-list-2">
+
+																<div class="row">
+																	<div class="col-xs-12">
+																		<!-- PAGE CONTENT BEGINS -->
+																		<form class="form-horizontal" role="form">
+																			<!-- <div class="clearfix form-actions"> -->
+																			<div class="form-group">
+																				<label class="control-label col-xs-12 col-sm-3">是否启用通知</label>
+																				<div class="col-xs-3">
+																					<label>
+																						<input name="switch-field-1" class="ace ace-switch ace-switch-5" type="checkbox" />
+																						<span class="lbl"></span>
+																					</label>
+																				</div>
+																			</div>
+																			<div class="form-group">
+											                                	<label class="control-label col-xs-12 col-sm-3">通知间隔</label>
+
+												                                <div class="col-sm-3" id='aaaa'>
+
+												                                    <select class="form-control">
+												                                        <option >每2分钟</option>
+												                                        <option selected >每5分钟</option>
+												                                        <option >每10分钟</option>
+												                                        <option >每15分钟</option>
+												                                        <option >每30分钟</option>
+												                                        <option >每60分钟</option>
+												                                    </select>
+
+												                                </div>
+												                            </div>
+																			<div class="form-group">
+											                                	<label class="control-label col-xs-12 col-sm-3">通知次数</label>
+
+												                                <div class="col-sm-3" id='aaaa'>
+
+												                                    <select class="form-control">
+												                                        <option >只通知1次</option>
+												                                        <option selected >只通知5次</option>
+												                                        <option >只通知10次</option>
+												                                        <option >每次都通知</option>
+												                                    </select>
+
+												                                </div>
+												                            </div>
+																			<div class="form-group " >
+																				<label class="col-sm-3  col-xs-12 control-label" for="duallist"> 通知邮箱 </label>
+
+																				<div class="col-sm-5">
+
+																					<select multiple="multiple" size="10" name="duallistbox_demo1[]" id="duallist">
+																						<option value="option1">test001@hk515.com</option>
+																						<option value="option2">test002@hk515.com</option>
+																						<option value="option3" selected="selected">test003@hk515.com</option>
+																						<option value="option4">test004@hk515.com</option>
+																						<option value="option5">test005@hk515.com</option>
+																						<option value="option6" selected="selected">test006@hk515.com</option>
+																						<option value="option7">test007@hk515.com</option>
+																						<option value="option8">test008@hk515.com</option>
+																						<option value="option9">test009@hk515.com</option>
+																						<option value="option0">test010@hk515.com</option>
+																						<option value="option11" selected="selected">test011@hk515.com</option>
+																					</select>
+
+
+																					<div class="hr hr-16 hr-dotted"></div>
+																				</div>
+																			</div>
+																		</form>
+																		</div>
+																</div>
+
+															</dl>
+														</div>
+													</div>
+
+													<div class="space-4"></div>
+													<div class="group">
+														<h3 class="accordion-header">测试通知</h3>
+
+
+														<div>
+															<dl id="dt-list-3">
+
+																<div class="row">
+																	<div class="col-xs-12">
+																		<!-- PAGE CONTENT BEGINS -->
+																		<form class="form-horizontal" role="form">
+																			<!-- <div class="clearfix form-actions"> -->
+																			<div class="form-group">
+																				<label class="control-label col-xs-12 col-sm-3">是否启用通知</label>
+																				<div class="col-xs-3">
+																					<label>
+																						<input name="switch-field-1" class="ace ace-switch ace-switch-5" type="checkbox" />
+																						<span class="lbl"></span>
+																					</label>
+																				</div>
+																			</div>
+																			<div class="form-group">
+											                                	<label class="control-label col-xs-12 col-sm-3">通知间隔</label>
+
+												                                <div class="col-sm-3">
+
+												                                    <select class="form-control">
+												                                        <option >每2分钟</option>
+												                                        <option selected >每5分钟</option>
+												                                        <option >每10分钟</option>
+												                                        <option >每15分钟</option>
+												                                        <option >每30分钟</option>
+												                                        <option >每60分钟</option>
+												                                    </select>
+
+												                                </div>
+												                            </div>
+																			<div class="form-group">
+											                                	<label class="control-label col-xs-12 col-sm-3">通知次数</label>
+
+												                                <div class="col-sm-3" id='aaaa'>
+
+												                                    <select class="form-control">
+												                                        <option >只通知1次</option>
+												                                        <option selected >只通知5次</option>
+												                                        <option >只通知10次</option>
+												                                        <option >每次都通知</option>
+												                                    </select>
+
+												                                </div>
+												                            </div>
+																			<div class="form-group " >
+																				<label class="col-sm-3 col-xs-12 control-label" for="duallist"> 通知邮箱 </label>
+
+																				<div class="col-sm-5">
+
+																					<select multiple="multiple" size="10" name="duallistbox_demo1[]" id="duallist">
+																						<option value="option1">test001@hk515.com</option>
+																						<option value="option2">test002@hk515.com</option>
+																						<option value="option3" selected="selected">test003@hk515.com</option>
+																						<option value="option4">test004@hk515.com</option>
+																						<option value="option5">test005@hk515.com</option>
+																						<option value="option6" selected="selected">test006@hk515.com</option>
+																						<option value="option7">test007@hk515.com</option>
+																						<option value="option8">test008@hk515.com</option>
+																						<option value="option9">test009@hk515.com</option>
+																						<option value="option0">test010@hk515.com</option>
+																						<option value="option11" selected="selected">test011@hk515.com</option>
+																					</select>
+
+
+																					<div class="hr hr-16 hr-dotted"></div>
+																				</div>
+																			</div>
+																		</form>
+																		</div>
+																</div>
+
+															</dl>
+														</div>
+													</div>
+												</div><!-- #accordion -->
+												
+
+											</div>
+										</div>
+									</div>
 								</div>
+
+								<div class="row"></div>
 
 							</div>
 
@@ -288,6 +550,195 @@
 </div>
 {% include "base/template_footer.html" %}
 <script>
+
+	jQuery(function($){
+
+		if(!ace.vars['touch']) {
+			$('.chosen-select').chosen({allow_single_deselect:true}); 
+			//resize the chosen on window resize
+	
+			$(window)
+			.off('resize.chosen')
+			.on('resize.chosen', function() {
+				$('.chosen-select').each(function() {
+					 var $this = $(this);
+					 $this.next().css({'width': $this.parent().width()});
+				})
+			}).trigger('resize.chosen');
+			//resize chosen on sidebar collapse/expand
+			$(document).on('settings.ace.chosen', function(e, event_name, event_val) {
+				if(event_name != 'sidebar_collapsed') return;
+				$('.chosen-select').each(function() {
+					 var $this = $(this);
+					 $this.next().css({'width': $this.parent().width()});
+				})
+			});
+	
+	
+			$('#chosen-multiple-style .btn').on('click', function(e){
+				var target = $(this).find('input[type=radio]');
+				var which = parseInt(target.val());
+				if(which == 2) $('#form-field-select-4').addClass('tag-input-style');
+				 else $('#form-field-select-4').removeClass('tag-input-style');
+			});
+		}
+
+		//chosen plugin inside a modal will have a zero width because the select element is originally hidden
+		//and its width cannot be determined.
+		//so we set the width after modal is show
+		$('#modal-form').on('shown.bs.modal', function () {
+			if(!ace.vars['touch']) {
+				$(this).find('.chosen-container').each(function(){
+					$(this).find('a:first-child').css('width' , '210px');
+					$(this).find('.chosen-drop').css('width' , '210px');
+					$(this).find('.chosen-search input').css('width' , '200px');
+				});
+			}
+		})
+		/**
+		//or you can activate the chosen plugin after modal is shown
+		//this way select element becomes visible with dimensions and chosen works as expected
+		$('#modal-form').on('shown', function () {
+			$(this).find('.modal-chosen').chosen();
+		})
+		*/
+
+
+		//问号提示框
+		$('[data-rel=tooltip]').tooltip();
+		$('[data-rel=popover]').popover({html:true});
+
+
+		//启用折叠框
+		window.prettyPrint && prettyPrint();
+		$('#id-check-horizontal-1').removeAttr('checked').on('click', function(){
+			// $('#dt-list-1').toggleClass('dl-horizontal').prev().html(this.checked ? '&lt;dl class="dl-horizontal"&gt;' : '&lt;dl&gt;');
+			$('#dt-list-1').toggleClass('hidden')
+		});
+		$('#id-check-horizontal-2').removeAttr('checked').on('click', function(){
+			// $('#dt-list-1').toggleClass('dl-horizontal').prev().html(this.checked ? '&lt;dl class="dl-horizontal"&gt;' : '&lt;dl&gt;');
+			$('#dt-list-2').toggleClass('hidden')
+		});
+		$('#id-check-horizontal-3').removeAttr('checked').on('click', function(){
+			// $('#dt-list-1').toggleClass('dl-horizontal').prev().html(this.checked ? '&lt;dl class="dl-horizontal"&gt;' : '&lt;dl&gt;');
+			$('#dt-list-3').toggleClass('hidden')
+		});
+
+
+		//面板折叠ui
+		$( "#accordion" ).accordion({
+			collapsible: true ,
+			heightStyle: "content",
+			animate: 250,
+			header: ".accordion-header"
+		}).sortable({
+			axis: "y",
+			handle: ".accordion-header",
+			stop: function( event, ui ) {
+				// IE doesn't register the blur when sorting
+				// so trigger focusout handlers to remove .ui-state-focus
+				ui.item.children( ".accordion-header" ).triggerHandler( "focusout" );
+			}
+		});
+
+		//左右多选
+		var demo1 = $('select[name="duallistbox_demo1[]"]').bootstrapDualListbox({infoTextFiltered: '<span class="label label-purple label-lg">Filtered</span>'});
+		var container1 = demo1.bootstrapDualListbox('getContainer');
+		container1.find('.btn').addClass('btn-white btn-info btn-bold');
+
+		/**var setRatingColors = function() {
+			$(this).find('.star-on-png,.star-half-png').addClass('orange2').removeClass('grey');
+			$(this).find('.star-off-png').removeClass('orange2').addClass('grey');
+		}*/
+		$('.rating').raty({
+			'cancel' : true,
+			'half': true,
+			'starType' : 'i'
+			/**,
+			
+			'click': function() {
+				setRatingColors.call(this);
+			},
+			'mouseover': function() {
+				setRatingColors.call(this);
+			},
+			'mouseout': function() {
+				setRatingColors.call(this);
+			}*/
+		})//.find('i:not(.star-raty)').addClass('grey');
+		
+		
+		
+		
+		//////////////////
+		$('.multiselect').multiselect({
+		 enableFiltering: true,
+		 buttonClass: 'btn btn-white btn-primary',
+		 templates: {
+			button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"></button>',
+			ul: '<ul class="multiselect-container dropdown-menu"></ul>',
+			filter: '<li class="multiselect-item filter"><div class="input-group"><span class="input-group-addon"><i class="fa fa-search"></i></span><input class="form-control multiselect-search" type="text"></div></li>',
+			filterClearBtn: '<span class="input-group-btn"><button class="btn btn-default btn-white btn-grey multiselect-clear-filter" type="button"><i class="fa fa-times-circle red2"></i></button></span>',
+			li: '<li><a href="javascript:void(0);"><label></label></a></li>',
+			divider: '<li class="multiselect-item divider"></li>',
+			liGroup: '<li class="multiselect-item group"><label class="multiselect-group"></label></li>'
+		 }
+		});
+		
+		
+		///////////////////
+			
+		//typeahead.js
+		//example taken from plugin's page at: https://twitter.github.io/typeahead.js/examples/
+		var substringMatcher = function(strs) {
+			return function findMatches(q, cb) {
+				var matches, substringRegex;
+			 
+				// an array that will be populated with substring matches
+				matches = [];
+			 
+				// regex used to determine if a string contains the substring `q`
+				substrRegex = new RegExp(q, 'i');
+			 
+				// iterate through the pool of strings and for any string that
+				// contains the substring `q`, add it to the `matches` array
+				$.each(strs, function(i, str) {
+					if (substrRegex.test(str)) {
+						// the typeahead jQuery plugin expects suggestions to a
+						// JavaScript object, refer to typeahead docs for more info
+						matches.push({ value: str });
+					}
+				});
+
+				cb(matches);
+			}
+		 }
+
+		 $('input.typeahead').typeahead({
+			hint: true,
+			highlight: true,
+			minLength: 1
+		 }, {
+			name: 'states',
+			displayKey: 'value',
+			source: substringMatcher(ace.vars['US_STATES'])
+		 });
+			
+			
+		///////////////
+		
+		
+		//in ajax mode, remove remaining elements before leaving page
+		$(document).one('ajaxloadstart.page', function(e) {
+			$('[class*=select2]').remove();
+			$('select[name="duallistbox_demo1[]"]').bootstrapDualListbox('destroy');
+			$('.rating').raty('destroy');
+			$('.multiselect').multiselect('destroy');
+		});
+
+
+
+	})
  
 
 
